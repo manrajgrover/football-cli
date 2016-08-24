@@ -1,0 +1,25 @@
+{
+  "name": "football-cli",
+  "version": "1.0.0",
+  "description": "Command Line Interface for next fixtures, live scores and more",
+  "main": "cli.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ManrajGrover/football-cli.git"
+  },
+  "keywords": [
+    "football",
+    "scores",
+    "fixtures",
+    "cli"
+  ],
+  "author": "Manraj Singh <manrajsinghgrover@gmail.com> (http://manrajsingh.in)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ManrajGrover/football-cli/issues"
+  },
+  "homepage": "https://github.com/ManrajGrover/football-cli#readme"
+}
