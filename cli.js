@@ -2,7 +2,7 @@
 * @Author: Manraj Singh
 * @Date:   2016-08-24 12:21:30
 * @Last Modified by:   Manraj Singh
-* @Last Modified time: 2016-08-24 21:26:53
+* @Last Modified time: 2016-08-26 17:55:49
 */
 
 'use strict';
@@ -14,12 +14,16 @@ const chalk = require('chalk');
 const request = require('request');
 const Table = require('cli-table');
 const config = require('./config');
+const league_ids = require('./league_ids');
 
 const API_URL = 'API_URL';
+const headers = {
+  'X-Auth-Token': config.API_KEY
+};
 
 const argv = yargs
   .usage('$0 <command>')
-  .command('run', 'Run code on HackerRank server', (yargs) => {
+  .command('run', '', (yargs) => {
     var argv = yargs
       .usage('Usage: $0 run <options>')
       .demand(['s', 'i', 'o'])
