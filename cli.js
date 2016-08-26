@@ -1,8 +1,10 @@
+#!/usr/bin/env node
+
 /*
 * @Author: Manraj Singh
 * @Date:   2016-08-24 12:21:30
 * @Last Modified by:   Manraj Singh
-* @Last Modified time: 2016-08-26 17:55:49
+* @Last Modified time: 2016-08-26 18:22:27
 */
 
 'use strict';
@@ -23,16 +25,7 @@ const headers = {
 
 const argv = yargs
   .usage('$0 <command>')
-  .command('run', '', (yargs) => {
-    var argv = yargs
-      .usage('Usage: $0 run <options>')
-      .demand(['s', 'i', 'o'])
-      .alias('s', 'source').describe('s', 'Source Code file path')
-      .alias('i', 'input').describe('i', 'Input file path')
-      .alias('l', 'language').describe('l', 'Language. Change `config` for default.')
-      .alias('o', 'output').describe('o', 'Output file path')
-      .example('$0 run -s A.cpp -i Input00.in -o Output.txt -l 2')
-      .argv;
+  .command('run', 'Runs', (yargs) => {
   })
   .help('h')
   .alias('h', 'help')

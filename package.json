@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "bin": {
-    "football": "cli.js"
+    "football": "./cli.js"
   },
   "engines": {
     "node": ">=4.4.7"
