@@ -4,7 +4,7 @@
 * @Author: Manraj Singh
 * @Date:   2016-08-24 12:21:30
 * @Last Modified by:   Manraj Singh
-* @Last Modified time: 2016-08-26 20:50:50
+* @Last Modified time: 2016-08-27 00:27:10
 */
 
 'use strict';
@@ -15,6 +15,7 @@ const ora = require('ora');
 const chalk = require('chalk');
 const request = require('request');
 const inquirer = require('inquirer');
+const path = require('path');
 const Table = require('cli-table');
 const config = require('./config');
 const league_ids = require('./league_ids');
@@ -31,19 +32,53 @@ const getURL = (endPoint) => {
 const argv = yargs
   .usage('$0 <command>')
   .command('scores', 'Get scores of past and live fixtures', (yargs) => {
-
+    var argv = yargs
+      .usage('Usage: $0 scores [options]')
+      .alias('l', 'live').describe('l', 'Live scores')
+      .example('sudo $0 scores -l')
+      .argv;
   })
-  .command('scores', 'Get scores of past and live fixtures', (yargs) => {
+  .command('standings', 'Get standings of particular league', (yargs) => {
+    var argv = yargs
+      .usage('Usage: $0 standings [options]')
+      .demand('l')
+      .alias('l', 'league').describe('l', 'League to be searched')
+      .example('sudo $0 standings -l')
+      .argv;
+    let id = league_ids[argv.l].id;
 
+    request({ "url": getURL(`competitions/${id}/leagueTable`), "headers": headers }, (err, res, body) => {
+      if(err){
+        console.log("Sorry, an error occured");
+      }
+      else{
+        var data = JSON.parse(body);
+        var standing = data.standing;
+        if(Array.isArray(standing)){
+          var table = new Table({
+            head: ['Rank', 'Team', 'Played', 'Goal Diff', 'Points'],
+            colWidths: [ 7, 25, 10, 15, 10]
+          });
+          for(let i=0; i < standing.length; i++){
+            let team = standing[i];
+            table.push([ team.position, team.teamName, team.playedGames, team.goalDifference, team.points]);
+          }
+          console.log(table.toString());
+        }
+        else{
+
+        }
+      }
+    });
   })
-  .command('list', 'Get scores of past and live fixtures', (yargs) => {
+  .command('list', 'List of codes of various competitions', (yargs) => {
     var argv = yargs
       .usage('Usage: sudo $0 list [options]')
       .alias('r', 'refresh').describe('r', 'Refresh league ids').boolean('r')
       .example('sudo $0 config -r')
       .argv;
     if (argv.r){
-      request({ "url": getURL("competitions"), "headers": headers }, function (err, res, body) {
+      request({ "url": getURL("competitions"), "headers": headers }, (err, res, body) => {
         if(err){
           console.log("Sorry, an error occured");
         }
