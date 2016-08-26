@@ -4,7 +4,7 @@
 * @Author: Manraj Singh
 * @Date:   2016-08-24 12:21:30
 * @Last Modified by:   Manraj Singh
-* @Last Modified time: 2016-08-26 20:48:21
+* @Last Modified time: 2016-08-26 20:50:50
 */
 
 'use strict';
@@ -24,6 +24,10 @@ const headers = {
   'X-Auth-Token': config.API_KEY
 };
 
+const getURL = (endPoint) => {
+  return API_URL+endPoint;
+}
+
 const argv = yargs
   .usage('$0 <command>')
   .command('scores', 'Get scores of past and live fixtures', (yargs) => {
@@ -39,7 +43,7 @@ const argv = yargs
       .example('sudo $0 config -r')
       .argv;
     if (argv.r){
-      request({ "url": API_URL+"competitions", "headers": headers }, function (err, res, body) {
+      request({ "url": getURL("competitions"), "headers": headers }, function (err, res, body) {
         if(err){
           console.log("Sorry, an error occured");
         }
@@ -53,8 +57,7 @@ const argv = yargs
               "caption": comp.caption
             };
           }
-          console.log(JSON.stringify(newLeagueIDs, null, 2));
-          //fs.writeFileSync(__dirname+'/league_ids.json', JSON.stringify(newLeagueIDs, null, 2), 'utf8');
+          fs.writeFileSync(__dirname+'/league_ids.json', JSON.stringify(newLeagueIDs, null, 2), 'utf8');
         }
       });
     }
