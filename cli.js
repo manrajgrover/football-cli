@@ -4,7 +4,7 @@
 * @Author: Manraj Singh
 * @Date:   2016-08-24 12:21:30
 * @Last Modified by:   Manraj Singh
-* @Last Modified time: 2016-08-26 19:14:21
+* @Last Modified time: 2016-08-26 19:40:27
 */
 
 'use strict';
@@ -14,6 +14,7 @@ const fs = require('fs');
 const ora = require('ora');
 const chalk = require('chalk');
 const request = require('request');
+const inquirer = require('inquirer');
 const Table = require('cli-table');
 const config = require('./config');
 const league_ids = require('./league_ids');
@@ -31,8 +32,15 @@ const argv = yargs
   .command('scores', 'Get scores of past and live fixtures', (yargs) => {
 
   })
-  .command('scores', 'Get scores of past and live fixtures', (yargs) => {
-
+  .command('list', 'Get scores of past and live fixtures', (yargs) => {
+    var table = new Table({
+      head: ['League', 'League Code'],
+      colWidths: [ 40, 20]
+    });
+    for(let league in league_ids){
+      table.push([ league_ids[league].caption, league]);
+    }
+    console.log(table.toString());
   })
   .command('config', 'Change configuration and defaults', (yargs) => {
     const questions = [{
