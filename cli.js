@@ -4,7 +4,7 @@
 * @Author: Manraj Singh
 * @Date:   2016-08-24 12:21:30
 * @Last Modified by:   Manraj Singh
-* @Last Modified time: 2016-08-27 00:27:10
+* @Last Modified time: 2016-08-27 02:02:41
 */
 
 'use strict';
@@ -46,27 +46,42 @@ const argv = yargs
       .example('sudo $0 standings -l')
       .argv;
     let id = league_ids[argv.l].id;
-
+    console.log(id);
+    console.log(getURL(`competitions/${id}/leagueTable`));
     request({ "url": getURL(`competitions/${id}/leagueTable`), "headers": headers }, (err, res, body) => {
       if(err){
         console.log("Sorry, an error occured");
       }
       else{
-        var data = JSON.parse(body);
-        var standing = data.standing;
-        if(Array.isArray(standing)){
-          var table = new Table({
+        var data = JSON.parse(body), table;
+
+        if(data["standing"] !== undefined){
+          let standing = data["standing"];
+          table = new Table({
             head: ['Rank', 'Team', 'Played', 'Goal Diff', 'Points'],
-            colWidths: [ 7, 25, 10, 15, 10]
+            colWidths: [ 7, 20, 10, 15, 10]
           });
-          for(let i=0; i < standing.length; i++){
+          for(let i = 0; i < standing.length; i++){
             let team = standing[i];
             table.push([ team.position, team.teamName, team.playedGames, team.goalDifference, team.points]);
           }
           console.log(table.toString());
         }
         else{
-
+          let standings = data["standings"];
+          for(let table in standings){
+            console.log(table);
+            let group = standings[table];
+            table = new Table({
+              head: ['Rank', 'Team', 'Played', 'Goal Diff', 'Points'],
+              colWidths: [ 7, 20, 10, 15, 10]
+            });
+            for(let i = 0; i < group.length; i++){
+              let team = group[i];
+              table.push([ team.rank, team.team, team.playedGames, team.goalDifference, team.points]);
+            }
+            console.log(table.toString());
+          }
         }
       }
     });
