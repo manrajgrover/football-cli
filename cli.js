@@ -4,7 +4,7 @@
 * @Author: Manraj Singh
 * @Date:   2016-08-24 12:21:30
 * @Last Modified by:   Manraj Singh
-* @Last Modified time: 2016-08-27 18:16:59
+* @Last Modified time: 2016-08-27 18:22:37
 */
 
 'use strict';
@@ -128,7 +128,10 @@ const fixturesHelper = (league, name, team, body) => {
 
       name = (league === undefined) ? getLeagueName(fixture) : name;
       if(homeTeam.indexOf(team) !== -1 || awayTeam.indexOf(team) !== -1){
-        let time = moment(fixture.date).calendar();
+        let time = (fixture.status === "IN_PLAY") ? "LIVE" : moment(fixture.date).calendar();
+        if(fixture.status === "IN_PLAY"){
+          time = "LIVE";
+        }
         console.log(`${chalk.green(name)}  ${chalk.cyan(homeTeam)} ${chalk.cyan(goalsHomeTeam)} vs. ${chalk.red(goalsAwayTeam)} ${chalk.red(awayTeam)} ${chalk.yellow(time)}`);
       }
     }
@@ -144,7 +147,7 @@ const fixturesHelper = (league, name, team, body) => {
           goalsAwayTeam = (fixture.result.goalsAwayTeam === null) ? "-1" : fixture.result.goalsAwayTeam;
 
       name = (league === undefined) ? getLeagueName(fixture) : name;
-      let time = moment(fixture.date).calendar();
+      let time = (fixture.status === "IN_PLAY") ? "LIVE" : moment(fixture.date).calendar();
       console.log(`${chalk.green(name)}  ${chalk.cyan(homeTeam)} ${chalk.cyan(goalsHomeTeam)} vs. ${chalk.red(goalsAwayTeam)} ${chalk.red(awayTeam)} ${chalk.yellow(time)}`);
     }
   }
