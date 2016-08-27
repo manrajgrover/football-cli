@@ -4,7 +4,7 @@
 * @Author: Manraj Singh
 * @Date:   2016-08-24 12:21:30
 * @Last Modified by:   Manraj Singh
-* @Last Modified time: 2016-08-27 15:50:00
+* @Last Modified time: 2016-08-27 16:33:35
 */
 
 'use strict';
@@ -122,26 +122,65 @@ const argv = yargs
       .alias('l', 'league').describe('l', 'League')
       .alias('t', 'team').describe('t', 'Team name or substring of it')
       .alias('n', 'next').describe('n', 'Next or upcoming matches').boolean('n')
-      .example('sudo $0 fixtures -d 10 -t Manchester United')
+      .example('sudo $0 fixtures -d 10 -t "Manchester United"')
       .argv;
       
     let days = argv.d || 10,
         league = argv.l,
         team = argv.t,
-        timeFrame = argv.n == undefined ? "p" : "n";
+        time = argv.n == undefined ? "p" : "n";
 
-    console.log(team);
+    let timeFrame = `${time}${days}`;
+
     if(league !== undefined){
-
       if(league_ids[league] == undefined){
         throw new Error("No league found. Please check the League Code entered with the list `football list`.");
       }
 
-      let id = league_ids[league].id;
+      let id = league_ids[league].id,
+          name = league_ids[league].name;
 
-      request({ "url": getURL(`competitions/${id}/fixtures`), "headers": headers }, standings);
+      request({ "url": getURL(`competitions/${id}/fixtures?${timeFrame}`), "headers": headers }, (err, res, body) =>{
+        if(err){
+          console.log(err);
+        }
+        else{
+          let data = JSON.parse(body),
+              fixtures = data.fixtures;
+
+          if(team !== undefined) {
+            for(let fixture in fixtures){
+              let homeTeam = fixture.homeTeamName,
+                  awayTeam = fixture.awayTeamName,
+                  goalsHomeTeam = fixtures.result.goalsHomeTeam || -1,
+                  goalsAwayTeam = fixtures.result.goalsAwayTeam || -1;
+
+              if(homeTeam.indexOf(team) !== -1 || awayTeam.indexOf(team) !== -1){
+                let time = moment(fixture.date).calendar();;
+                console.log(`${name}  ${homeTeam} ${goalsHomeTeam} vs. ${goalsAwayTeam} ${awayTeam} ${time}`);
+              }
+            }
+          }
+          else {
+            for(let fixture in fixtures){
+              let homeTeam = fixture.homeTeamName,
+                  awayTeam = fixture.awayTeamName,
+                  goalsHomeTeam = fixtures.result.goalsHomeTeam || -1,
+                  goalsAwayTeam = fixtures.result.goalsAwayTeam || -1;
+
+              let time = moment(fixture.date).calendar();;
+              console.log(`${name}  ${homeTeam} ${goalsHomeTeam} vs. ${goalsAwayTeam} ${awayTeam} ${time}`);
+            }
+          }
+        }
+      });
+
     }
+    else {
 
+
+
+    }
   })
   .command('standings', 'Get standings of particular league', (yargs) => {
 
