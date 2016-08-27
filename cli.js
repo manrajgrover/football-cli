@@ -4,7 +4,7 @@
 * @Author: Manraj Singh
 * @Date:   2016-08-24 12:21:30
 * @Last Modified by:   Manraj Singh
-* @Last Modified time: 2016-08-27 17:42:01
+* @Last Modified time: 2016-08-27 17:58:53
 */
 
 'use strict';
@@ -35,7 +35,7 @@ const standings = (err, res, body) => {
   if(err){
     throw new Error("Sorry, an error occured");
   }
-  else{
+  else {
 
     let data = JSON.parse(body), table;
 
@@ -55,7 +55,7 @@ const standings = (err, res, body) => {
 
       console.log(table.toString());
     }
-    else{
+    else {
 
       let standings = data["standings"];
 
@@ -69,7 +69,7 @@ const standings = (err, res, body) => {
           colWidths: [ 7, 20, 10, 15, 10]
         });
 
-        for(let i = 0; i < group.length; i++){
+        for(let i = 0; i < group.length; i++) {
           let team = group[i];
           table.push([ team.rank, team.team, team.playedGames, team.goalDifference, team.points]);
         }
@@ -125,6 +125,7 @@ const fixturesHelper = (league, name, team, body) => {
           awayTeam = fixture.awayTeamName,
           goalsHomeTeam = (fixture.result.goalsHomeTeam === null) ? "-1" : fixture.result.goalsHomeTeam,
           goalsAwayTeam = (fixture.result.goalsAwayTeam === null) ? "-1" : fixture.result.goalsAwayTeam;
+
       name = (league === undefined) ? getLeagueName(fixture) : name;
       if(homeTeam.indexOf(team) !== -1 || awayTeam.indexOf(team) !== -1){
         let time = moment(fixture.date).calendar();
@@ -162,15 +163,15 @@ const argv = yargs
 
 
   })
-  .command('fixtures', 'Get scores of past and live fixtures', (yargs) => {
+  .command('fixtures', 'Get upcoming and past fixtures of a league and team', (yargs) => {
 
     const argv = yargs
-      .usage('Usage: $0 scores [options]')
+      .usage('Usage: $0 fixtures [options]')
       .alias('d', 'days').describe('t', 'Number of days')
       .alias('l', 'league').describe('l', 'League')
       .alias('t', 'team').describe('t', 'Team name or substring of it')
       .alias('n', 'next').describe('n', 'Next or upcoming matches').boolean('n')
-      .example('sudo $0 fixtures -d 10 -t "Manchester United"')
+      .example('sudo $0 fixtures -d 10 -t "Manchester United" -n')
       .argv;
       
     let days = argv.d || 10,
@@ -208,11 +209,9 @@ const argv = yargs
     }
   })
   .command('standings', 'Get standings of particular league', (yargs) => {
-
     const argv = yargs
       .usage('Usage: $0 standings [options]')
-      .demand('l')
-      .alias('l', 'league').describe('l', 'League to be searched')
+      .alias('l', 'league').describe('l', 'League to be searched').demand('l')
       .example('sudo $0 standings -l')
       .argv;
 
@@ -221,20 +220,16 @@ const argv = yargs
     request({ "url": getURL(`competitions/${id}/leagueTable`), "headers": headers }, standings);
   })
   .command('list', 'List of codes of various competitions', (yargs) => {
-
     const argv = yargs
       .usage('Usage: sudo $0 list [options]')
       .alias('r', 'refresh').describe('r', 'Refresh league ids').boolean('r')
-      .example('sudo $0 config -r')
+      .example('sudo $0 list -r')
       .argv;
 
     if (argv.r){
-
       request({ "url": getURL("competitions"), "headers": headers }, refresh);
-
     }
     else{
-
       let table = new Table({
         head: ['League', 'League Code'],
         colWidths: [ 40, 20]
@@ -248,7 +243,6 @@ const argv = yargs
     }
   })
   .command('config', 'Change configuration and defaults', (yargs) => {
-
     const questions = [{
       type: 'input',
       name: 'API_KEY',
