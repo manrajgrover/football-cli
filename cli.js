@@ -4,7 +4,7 @@
 * @Author: Manraj Singh
 * @Date:   2016-08-24 12:21:30
 * @Last Modified by:   Manraj Singh
-* @Last Modified time: 2016-08-27 18:22:37
+* @Last Modified time: 2016-08-27 20:13:16
 */
 
 'use strict';
@@ -33,14 +33,13 @@ const getURL = (endPoint) => {
 
 const standings = (err, res, body) => {
   if(err){
-    throw new Error("Sorry, an error occured");
+    console.log(chalk.red("Sorry, an error occured"));
   }
   else {
 
     let data = JSON.parse(body), table;
 
     if(data["standing"] !== undefined) {
-
       let standing = data["standing"];
 
       table = new Table({
@@ -56,7 +55,6 @@ const standings = (err, res, body) => {
       console.log(table.toString());
     }
     else {
-
       let standings = data["standings"];
 
       for(let groupCode in standings) {
@@ -82,14 +80,12 @@ const standings = (err, res, body) => {
 
 const refresh = (err, res, body) => {
   if(err){
-    console.log("Sorry, an error occured");
+    console.log(chalk.red("Sorry, an error occured"));
   }
   else {
-    let data = JSON.parse(body);
-    let newLeagueIDs = {};
+    let data = JSON.parse(body), newLeagueIDs = {};
 
     for(let i = 0; i < data.length; i++) {
-
       let comp = data[i];
 
       newLeagueIDs[comp.league] = {
@@ -127,11 +123,9 @@ const fixturesHelper = (league, name, team, body) => {
           goalsAwayTeam = (fixture.result.goalsAwayTeam === null) ? "-1" : fixture.result.goalsAwayTeam;
 
       name = (league === undefined) ? getLeagueName(fixture) : name;
+
       if(homeTeam.indexOf(team) !== -1 || awayTeam.indexOf(team) !== -1){
         let time = (fixture.status === "IN_PLAY") ? "LIVE" : moment(fixture.date).calendar();
-        if(fixture.status === "IN_PLAY"){
-          time = "LIVE";
-        }
         console.log(`${chalk.green(name)}  ${chalk.cyan(homeTeam)} ${chalk.cyan(goalsHomeTeam)} vs. ${chalk.red(goalsAwayTeam)} ${chalk.red(awayTeam)} ${chalk.yellow(time)}`);
       }
     }
@@ -147,6 +141,7 @@ const fixturesHelper = (league, name, team, body) => {
           goalsAwayTeam = (fixture.result.goalsAwayTeam === null) ? "-1" : fixture.result.goalsAwayTeam;
 
       name = (league === undefined) ? getLeagueName(fixture) : name;
+
       let time = (fixture.status === "IN_PLAY") ? "LIVE" : moment(fixture.date).calendar();
       console.log(`${chalk.green(name)}  ${chalk.cyan(homeTeam)} ${chalk.cyan(goalsHomeTeam)} vs. ${chalk.red(goalsAwayTeam)} ${chalk.red(awayTeam)} ${chalk.yellow(time)}`);
     }
@@ -158,12 +153,86 @@ const argv = yargs
   .command('scores', 'Get scores of past and live fixtures', (yargs) => {
     const argv = yargs
       .usage('Usage: $0 scores [options]')
-      .alias('l', 'live').describe('l', 'Live scores')
+      .alias('l', 'live').describe('l', 'Live scores').boolean('l')
       .alias('t', 'team').describe('t', 'Select team')
       .example('sudo $0 scores -l')
       .argv;
 
+    let url = undefined,
+        team = (argv.t === undefined) ? '' : argv.t,
+        timeFrameStart = undefined,
+        timeFrameEnd = undefined;
 
+    if(argv.l){
+      timeFrameStart = moment().format("YYYY-MM-DD");
+      timeFrameEnd = moment().add(1, "days").format("YYYY-MM-DD");
+      url = `/fixtures?timeFrameStart=${timeFrameStart}&timeFrameEnd=${timeFrameEnd}`;
+    }
+    else{
+      timeFrameStart = moment().subtract(1, "days").format("YYYY-MM-DD");
+      timeFrameEnd = moment().add(1, "days").format("YYYY-MM-DD");
+      url = `/fixtures?timeFrameStart=${timeFrameStart}&timeFrameEnd=${timeFrameEnd}`;
+    }
+
+    request({ "url": getURL(url), "headers": headers }, (err, res, body) =>{
+      if(err) {
+        console.log(chalk.red("Sorry, an error occured"));
+      }
+      else {
+        let data = JSON.parse(body),
+            fixtures = data.fixtures,
+            live = [], scores = [];
+
+        for(let i = 0; i < fixtures.length; i++){
+          let fixture = fixtures[i],
+              homeTeam = fixture.homeTeamName,
+              awayTeam = fixture.awayTeamName;
+
+          if(fixture.status == "IN_PLAY" && (homeTeam.indexOf(team) !== -1 || awayTeam.indexOf(team) !== -1)) {
+            live.push(fixture);
+            scores.push(fixture);
+          }
+          else if(fixture.status == "FINISHED" && (homeTeam.indexOf(team) !== -1 || awayTeam.indexOf(team) !== -1)){
+            scores.push(fixture);
+          }
+        }
+
+        if(argv.l){
+          if(live.length !== 0){
+            for(let i = 0; i < live.length; i++){
+              let fixture = live[i];
+              let name = getLeagueName(fixture),
+                  homeTeam = fixture.homeTeamName,
+                  awayTeam = fixture.awayTeamName,
+                  goalsHomeTeam = (fixture.result.goalsHomeTeam === null) ? "-1" : fixture.result.goalsHomeTeam,
+                  goalsAwayTeam = (fixture.result.goalsAwayTeam === null) ? "-1" : fixture.result.goalsAwayTeam,
+                  time = "LIVE";
+              console.log(`${chalk.green(name)}  ${chalk.cyan(homeTeam)} ${chalk.cyan(goalsHomeTeam)} vs. ${chalk.red(goalsAwayTeam)} ${chalk.red(awayTeam)} ${chalk.yellow(time)}`);
+            }
+          }
+          else{
+            console.log("Sorry, no live match right now");
+          }
+        }
+        else{
+          if(scores.length !== 0){
+            for(let i = 0; i < scores.length; i++){
+              let fixture = scores[i];
+              let name = getLeagueName(fixture),
+                  homeTeam = fixture.homeTeamName,
+                  awayTeam = fixture.awayTeamName,
+                  goalsHomeTeam = (fixture.result.goalsHomeTeam === null) ? "-1" : fixture.result.goalsHomeTeam,
+                  goalsAwayTeam = (fixture.result.goalsAwayTeam === null) ? "-1" : fixture.result.goalsAwayTeam,
+                  time = moment(fixture.date).calendar();
+              console.log(`${chalk.green(name)}  ${chalk.cyan(homeTeam)} ${chalk.cyan(goalsHomeTeam)} vs. ${chalk.red(goalsAwayTeam)} ${chalk.red(awayTeam)} ${chalk.yellow(time)}`);
+            }
+          }
+          else{
+            console.log("Sorry, no scores to show right now");
+          }
+        }
+      }
+    });
   })
   .command('fixtures', 'Get upcoming and past fixtures of a league and team', (yargs) => {
 
