@@ -4,7 +4,7 @@
 * @Author: Manraj Singh
 * @Date:   2016-08-24 12:21:30
 * @Last Modified by:   Manraj Singh
-* @Last Modified time: 2016-08-27 16:33:35
+* @Last Modified time: 2016-08-27 16:51:28
 */
 
 'use strict';
@@ -14,6 +14,7 @@ const fs = require('fs');
 const ora = require('ora');
 const chalk = require('chalk');
 const request = require('request');
+const moment = require('moment');
 const inquirer = require('inquirer');
 const path = require('path');
 const Table = require('cli-table');
@@ -128,45 +129,54 @@ const argv = yargs
     let days = argv.d || 10,
         league = argv.l,
         team = argv.t,
-        time = argv.n == undefined ? "p" : "n";
+        time = (argv.n == true) ? "n" : "p";
 
     let timeFrame = `${time}${days}`;
-
     if(league !== undefined){
       if(league_ids[league] == undefined){
         throw new Error("No league found. Please check the League Code entered with the list `football list`.");
       }
 
       let id = league_ids[league].id,
-          name = league_ids[league].name;
+          name = league_ids[league].caption;
 
-      request({ "url": getURL(`competitions/${id}/fixtures?${timeFrame}`), "headers": headers }, (err, res, body) =>{
+      console.log(id +" "+ name);
+      console.log(timeFrame);
+
+      request({ "url": getURL(`competitions/${id}/fixtures?timeFrame=${timeFrame}`), "headers": headers }, (err, res, body) =>{
         if(err){
-          console.log(err);
+          console.log(chalk.red("Sorry, an error occured"));
         }
         else{
           let data = JSON.parse(body),
               fixtures = data.fixtures;
 
+          //console.log(fixtures);
           if(team !== undefined) {
-            for(let fixture in fixtures){
+            for(let i = 0; i< fixtures.length; i++) {
+              let fixture = fixtures[i];
+
               let homeTeam = fixture.homeTeamName,
                   awayTeam = fixture.awayTeamName,
-                  goalsHomeTeam = fixtures.result.goalsHomeTeam || -1,
-                  goalsAwayTeam = fixtures.result.goalsAwayTeam || -1;
+                  goalsHomeTeam = (fixture.result.goalsHomeTeam === null) ? "-1" : fixture.result.goalsHomeTeam,
+                  goalsAwayTeam = (fixture.result.goalsAwayTeam === null) ? "-1" : fixture.result.goalsAwayTeam;
 
               if(homeTeam.indexOf(team) !== -1 || awayTeam.indexOf(team) !== -1){
                 let time = moment(fixture.date).calendar();;
                 console.log(`${name}  ${homeTeam} ${goalsHomeTeam} vs. ${goalsAwayTeam} ${awayTeam} ${time}`);
               }
+
             }
           }
           else {
-            for(let fixture in fixtures){
+
+            for(let i = 0; i< fixtures.length; i++) {
+              let fixture = fixtures[i];
+
               let homeTeam = fixture.homeTeamName,
                   awayTeam = fixture.awayTeamName,
-                  goalsHomeTeam = fixtures.result.goalsHomeTeam || -1,
-                  goalsAwayTeam = fixtures.result.goalsAwayTeam || -1;
+                  goalsHomeTeam = (fixture.result.goalsHomeTeam === null) ? "-1" : fixture.result.goalsHomeTeam,
+                  goalsAwayTeam = (fixture.result.goalsAwayTeam === null) ? "-1" : fixture.result.goalsAwayTeam;
 
               let time = moment(fixture.date).calendar();;
               console.log(`${name}  ${homeTeam} ${goalsHomeTeam} vs. ${goalsAwayTeam} ${awayTeam} ${time}`);
