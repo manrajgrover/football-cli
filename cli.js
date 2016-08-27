@@ -4,7 +4,7 @@
 * @Author: Manraj Singh
 * @Date:   2016-08-24 12:21:30
 * @Last Modified by:   Manraj Singh
-* @Last Modified time: 2016-08-27 20:39:08
+* @Last Modified time: 2016-08-27 21:01:01
 */
 
 'use strict';
@@ -20,82 +20,15 @@ const path = require('path');
 const Table = require('cli-table');
 const config = require('./config');
 const league_ids = require('./league_ids');
+const helpers = require('./helpers');
 
-const API_URL = 'http://api.football-data.org/v1/';
+const getURL = helpers.getURL,
+      standings = helpers.standings,
+      refresh = helpers.refresh;
 
 const headers = {
   'X-Auth-Token': config.API_KEY
 };
-
-const getURL = (endPoint) => {
-  return API_URL + endPoint;
-}
-
-const standings = (err, res, body) => {
-  if(err){
-    console.log(chalk.red("Sorry, an error occured"));
-  }
-  else {
-    let data = JSON.parse(body), table;
-
-    if(data["standing"] !== undefined) {
-      let standing = data["standing"];
-
-      table = new Table({
-        head: ['Rank', 'Team', 'Played', 'Goal Diff', 'Points'],
-        colWidths: [ 7, 20, 10, 15, 10]
-      });
-
-      for(let i = 0; i < standing.length; i++) {
-        let team = standing[i];
-        table.push([ team.position, team.teamName, team.playedGames, team.goalDifference, team.points]);
-      }
-
-      console.log(table.toString());
-    }
-    else {
-      let standings = data["standings"];
-
-      for(let groupCode in standings) {
-        console.log(groupCode);
-
-        let group = standings[groupCode];
-
-        table = new Table({
-          head: ['Rank', 'Team', 'Played', 'Goal Diff', 'Points'],
-          colWidths: [ 7, 20, 10, 15, 10]
-        });
-
-        for(let i = 0; i < group.length; i++) {
-          let team = group[i];
-          table.push([ team.rank, team.team, team.playedGames, team.goalDifference, team.points]);
-        }
-
-        console.log(table.toString());
-      }
-    }
-  }
-}
-
-const refresh = (err, res, body) => {
-  if(err){
-    console.log(chalk.red("Sorry, an error occured"));
-  }
-  else {
-    let data = JSON.parse(body), newLeagueIDs = {};
-
-    for(let i = 0; i < data.length; i++) {
-      let comp = data[i];
-
-      newLeagueIDs[comp.league] = {
-        "id": comp.id,
-        "caption": comp.caption
-      };
-    }
-
-    fs.writeFileSync(__dirname+'/league_ids.json', JSON.stringify(newLeagueIDs, null, 2), 'utf8');
-  }
-}
 
 const getLeagueName = (fixture) => {
   let compUrl = fixture._links.competition.href;
@@ -286,17 +219,32 @@ const argv = yargs
 
     let id = league_ids[argv.l].id;
 
-    request({ "url": getURL(`competitions/${id}/leagueTable`), "headers": headers }, standings);
+    request({ "url": getURL(`competitions/${id}/leagueTable`), "headers": headers }, (err, res, body) => {
+      if(err) {
+        console.log(chalk.red("Sorry, an error occured"));
+      }
+      else {
+        standings(body);
+      }
+    });
   })
-  .command('list', 'List of codes of various competitions', (yargs) => {
+  .command('lists', 'List of codes of various competitions', (yargs) => {
     const argv = yargs
-      .usage('Usage: sudo $0 list [options]')
+      .usage('Usage: sudo $0 lists [options]')
       .alias('r', 'refresh').describe('r', 'Refresh league ids').boolean('r')
-      .example('sudo $0 list -r')
+      .example('sudo $0 lists -r')
       .argv;
 
     if (argv.r) {
-      request({ "url": getURL("competitions"), "headers": headers }, refresh);
+      request({ "url": getURL("competitions"), "headers": headers }, (err, res, body) => {
+        if(err) {
+          console.log(chalk.red("Sorry, an error occured"));
+        }
+        else {
+          let newLeagueIDs = refresh(body);
+          fs.writeFileSync(__dirname+'/league_ids.json', JSON.stringify(newLeagueIDs, null, 2), 'utf8');
+        }
+      });
     }
     else {
       let table = new Table({
