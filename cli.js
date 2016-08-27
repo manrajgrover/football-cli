@@ -4,7 +4,7 @@
 * @Author: Manraj Singh
 * @Date:   2016-08-24 12:21:30
 * @Last Modified by:   Manraj Singh
-* @Last Modified time: 2016-08-27 16:52:43
+* @Last Modified time: 2016-08-27 17:42:01
 */
 
 'use strict';
@@ -102,6 +102,53 @@ const refresh = (err, res, body) => {
   }
 }
 
+const getLeagueName = (fixture) => {
+  let compUrl = fixture._links.competition.href;
+  let parts = compUrl.split('/');
+  let id = parts[parts.length-1];
+  for(let league in league_ids){
+    if(league_ids[league].id == id){
+      return league_ids[league].caption;
+    }
+  }
+  return "";
+}
+
+const fixturesHelper = (league, name, team, body) => {
+  let data = JSON.parse(body),
+      fixtures = data.fixtures;
+  if(team !== undefined) {
+    for(let i = 0; i< fixtures.length; i++) {
+      let fixture = fixtures[i];
+
+      let homeTeam = fixture.homeTeamName,
+          awayTeam = fixture.awayTeamName,
+          goalsHomeTeam = (fixture.result.goalsHomeTeam === null) ? "-1" : fixture.result.goalsHomeTeam,
+          goalsAwayTeam = (fixture.result.goalsAwayTeam === null) ? "-1" : fixture.result.goalsAwayTeam;
+      name = (league === undefined) ? getLeagueName(fixture) : name;
+      if(homeTeam.indexOf(team) !== -1 || awayTeam.indexOf(team) !== -1){
+        let time = moment(fixture.date).calendar();
+        console.log(`${name}  ${homeTeam} ${goalsHomeTeam} vs. ${goalsAwayTeam} ${awayTeam} ${time}`);
+      }
+    }
+  }
+  else {
+
+    for(let i = 0; i< fixtures.length; i++) {
+      let fixture = fixtures[i];
+
+      let homeTeam = fixture.homeTeamName,
+          awayTeam = fixture.awayTeamName,
+          goalsHomeTeam = (fixture.result.goalsHomeTeam === null) ? "-1" : fixture.result.goalsHomeTeam,
+          goalsAwayTeam = (fixture.result.goalsAwayTeam === null) ? "-1" : fixture.result.goalsAwayTeam;
+
+      name = (league === undefined) ? getLeagueName(fixture) : name;
+      let time = moment(fixture.date).calendar();
+      console.log(`${name}  ${homeTeam} ${goalsHomeTeam} vs. ${goalsAwayTeam} ${awayTeam} ${time}`);
+    }
+  }
+}
+
 const argv = yargs
   .usage('$0 <command>')
   .command('scores', 'Get scores of past and live fixtures', (yargs) => {
@@ -141,50 +188,23 @@ const argv = yargs
           name = league_ids[league].caption;
 
       request({ "url": getURL(`competitions/${id}/fixtures?timeFrame=${timeFrame}`), "headers": headers }, (err, res, body) =>{
-        if(err){
+        if(err) {
           console.log(chalk.red("Sorry, an error occured"));
         }
-        else{
-          let data = JSON.parse(body),
-              fixtures = data.fixtures;
-          if(team !== undefined) {
-            for(let i = 0; i< fixtures.length; i++) {
-              let fixture = fixtures[i];
-
-              let homeTeam = fixture.homeTeamName,
-                  awayTeam = fixture.awayTeamName,
-                  goalsHomeTeam = (fixture.result.goalsHomeTeam === null) ? "-1" : fixture.result.goalsHomeTeam,
-                  goalsAwayTeam = (fixture.result.goalsAwayTeam === null) ? "-1" : fixture.result.goalsAwayTeam;
-
-              if(homeTeam.indexOf(team) !== -1 || awayTeam.indexOf(team) !== -1){
-                let time = moment(fixture.date).calendar();;
-                console.log(`${name}  ${homeTeam} ${goalsHomeTeam} vs. ${goalsAwayTeam} ${awayTeam} ${time}`);
-              }
-
-            }
-          }
-          else {
-
-            for(let i = 0; i< fixtures.length; i++) {
-              let fixture = fixtures[i];
-
-              let homeTeam = fixture.homeTeamName,
-                  awayTeam = fixture.awayTeamName,
-                  goalsHomeTeam = (fixture.result.goalsHomeTeam === null) ? "-1" : fixture.result.goalsHomeTeam,
-                  goalsAwayTeam = (fixture.result.goalsAwayTeam === null) ? "-1" : fixture.result.goalsAwayTeam;
-
-              let time = moment(fixture.date).calendar();;
-              console.log(`${name}  ${homeTeam} ${goalsHomeTeam} vs. ${goalsAwayTeam} ${awayTeam} ${time}`);
-            }
-          }
+        else {
+          fixturesHelper(league, name, team, body);
         }
       });
-
     }
     else {
-
-
-
+      request({ "url": getURL(`fixtures?timeFrame=${timeFrame}`), "headers": headers }, (err, res, body) => {
+        if(err) {
+          console.log(chalk.red("Sorry, an error occured"));
+        }
+        else {
+          fixturesHelper(league, undefined, team, body);
+        }
+      });
     }
   })
   .command('standings', 'Get standings of particular league', (yargs) => {
