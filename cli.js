@@ -4,7 +4,7 @@
 * @Author: Manraj Singh
 * @Date:   2016-08-24 12:21:30
 * @Last Modified by:   Manraj Singh
-* @Last Modified time: 2016-08-27 17:58:53
+* @Last Modified time: 2016-08-27 18:16:59
 */
 
 'use strict';
@@ -107,7 +107,7 @@ const getLeagueName = (fixture) => {
   let parts = compUrl.split('/');
   let id = parts[parts.length-1];
   for(let league in league_ids){
-    if(league_ids[league].id == id){
+    if(league_ids[league].id == id) {
       return league_ids[league].caption;
     }
   }
@@ -129,7 +129,7 @@ const fixturesHelper = (league, name, team, body) => {
       name = (league === undefined) ? getLeagueName(fixture) : name;
       if(homeTeam.indexOf(team) !== -1 || awayTeam.indexOf(team) !== -1){
         let time = moment(fixture.date).calendar();
-        console.log(`${name}  ${homeTeam} ${goalsHomeTeam} vs. ${goalsAwayTeam} ${awayTeam} ${time}`);
+        console.log(`${chalk.green(name)}  ${chalk.cyan(homeTeam)} ${chalk.cyan(goalsHomeTeam)} vs. ${chalk.red(goalsAwayTeam)} ${chalk.red(awayTeam)} ${chalk.yellow(time)}`);
       }
     }
   }
@@ -145,7 +145,7 @@ const fixturesHelper = (league, name, team, body) => {
 
       name = (league === undefined) ? getLeagueName(fixture) : name;
       let time = moment(fixture.date).calendar();
-      console.log(`${name}  ${homeTeam} ${goalsHomeTeam} vs. ${goalsAwayTeam} ${awayTeam} ${time}`);
+      console.log(`${chalk.green(name)}  ${chalk.cyan(homeTeam)} ${chalk.cyan(goalsHomeTeam)} vs. ${chalk.red(goalsAwayTeam)} ${chalk.red(awayTeam)} ${chalk.yellow(time)}`);
     }
   }
 }
@@ -153,7 +153,6 @@ const fixturesHelper = (league, name, team, body) => {
 const argv = yargs
   .usage('$0 <command>')
   .command('scores', 'Get scores of past and live fixtures', (yargs) => {
-
     const argv = yargs
       .usage('Usage: $0 scores [options]')
       .alias('l', 'live').describe('l', 'Live scores')
@@ -226,10 +225,10 @@ const argv = yargs
       .example('sudo $0 list -r')
       .argv;
 
-    if (argv.r){
+    if (argv.r) {
       request({ "url": getURL("competitions"), "headers": headers }, refresh);
     }
-    else{
+    else {
       let table = new Table({
         head: ['League', 'League Code'],
         colWidths: [ 40, 20]
