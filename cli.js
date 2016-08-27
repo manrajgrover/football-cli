@@ -4,7 +4,7 @@
 * @Author: Manraj Singh
 * @Date:   2016-08-24 12:21:30
 * @Last Modified by:   Manraj Singh
-* @Last Modified time: 2016-08-27 02:24:52
+* @Last Modified time: 2016-08-27 15:50:00
 */
 
 'use strict';
@@ -35,9 +35,10 @@ const standings = (err, res, body) => {
     throw new Error("Sorry, an error occured");
   }
   else{
+
     let data = JSON.parse(body), table;
 
-    if(data["standing"] !== undefined){
+    if(data["standing"] !== undefined) {
 
       let standing = data["standing"];
 
@@ -52,15 +53,14 @@ const standings = (err, res, body) => {
       }
 
       console.log(table.toString());
-
     }
     else{
 
       let standings = data["standings"];
 
       for(let groupCode in standings) {
-
         console.log(groupCode);
+
         let group = standings[groupCode];
 
         table = new Table({
@@ -72,7 +72,7 @@ const standings = (err, res, body) => {
           let team = group[i];
           table.push([ team.rank, team.team, team.playedGames, team.goalDifference, team.points]);
         }
-        
+
         console.log(table.toString());
       }
     }
@@ -80,14 +80,10 @@ const standings = (err, res, body) => {
 }
 
 const refresh = (err, res, body) => {
-
   if(err){
-
     console.log("Sorry, an error occured");
-
   }
   else {
-
     let data = JSON.parse(body);
     let newLeagueIDs = {};
 
@@ -99,7 +95,6 @@ const refresh = (err, res, body) => {
         "id": comp.id,
         "caption": comp.caption
       };
-
     }
 
     fs.writeFileSync(__dirname+'/league_ids.json', JSON.stringify(newLeagueIDs, null, 2), 'utf8');
@@ -113,8 +108,39 @@ const argv = yargs
     const argv = yargs
       .usage('Usage: $0 scores [options]')
       .alias('l', 'live').describe('l', 'Live scores')
+      .alias('t', 'team').describe('t', 'Select team')
       .example('sudo $0 scores -l')
       .argv;
+
+
+  })
+  .command('fixtures', 'Get scores of past and live fixtures', (yargs) => {
+
+    const argv = yargs
+      .usage('Usage: $0 scores [options]')
+      .alias('d', 'days').describe('t', 'Number of days')
+      .alias('l', 'league').describe('l', 'League')
+      .alias('t', 'team').describe('t', 'Team name or substring of it')
+      .alias('n', 'next').describe('n', 'Next or upcoming matches').boolean('n')
+      .example('sudo $0 fixtures -d 10 -t Manchester United')
+      .argv;
+      
+    let days = argv.d || 10,
+        league = argv.l,
+        team = argv.t,
+        timeFrame = argv.n == undefined ? "p" : "n";
+
+    console.log(team);
+    if(league !== undefined){
+
+      if(league_ids[league] == undefined){
+        throw new Error("No league found. Please check the League Code entered with the list `football list`.");
+      }
+
+      let id = league_ids[league].id;
+
+      request({ "url": getURL(`competitions/${id}/fixtures`), "headers": headers }, standings);
+    }
 
   })
   .command('standings', 'Get standings of particular league', (yargs) => {
@@ -129,7 +155,6 @@ const argv = yargs
     let id = league_ids[argv.l].id;
 
     request({ "url": getURL(`competitions/${id}/leagueTable`), "headers": headers }, standings);
-
   })
   .command('list', 'List of codes of various competitions', (yargs) => {
 
@@ -175,7 +200,6 @@ const argv = yargs
 
       fs.writeFileSync(__dirname+'/config.json', JSON.stringify(obj, null, 2), 'utf8');
     });
-
   })
   .help('h')
   .alias('h', 'help')
