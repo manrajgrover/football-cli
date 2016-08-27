@@ -4,7 +4,7 @@
 * @Author: Manraj Singh
 * @Date:   2016-08-24 12:21:30
 * @Last Modified by:   Manraj Singh
-* @Last Modified time: 2016-08-27 21:01:01
+* @Last Modified time: 2016-08-27 21:11:45
 */
 
 'use strict';
@@ -16,7 +16,6 @@ const chalk = require('chalk');
 const request = require('request');
 const moment = require('moment');
 const inquirer = require('inquirer');
-const path = require('path');
 const Table = require('cli-table');
 const config = require('./config');
 const league_ids = require('./league_ids');
@@ -24,111 +23,15 @@ const helpers = require('./helpers');
 
 const getURL = helpers.getURL,
       standings = helpers.standings,
-      refresh = helpers.refresh;
+      refresh = helpers.refresh,
+      getLeagueName = helpers.getLeagueName,
+      fixturesHelper = helpers.fixturesHelper,
+      printScores = helpers.printScores,
+      scoresHelper = helpers.scoresHelper;
 
 const headers = {
   'X-Auth-Token': config.API_KEY
 };
-
-const getLeagueName = (fixture) => {
-  let compUrl = fixture._links.competition.href;
-  let parts = compUrl.split('/');
-  let id = parts[parts.length-1];
-  for(let league in league_ids){
-    if(league_ids[league].id == id) {
-      return league_ids[league].caption;
-    }
-  }
-  return "";
-}
-
-const fixturesHelper = (league, name, team, body) => {
-  let data = JSON.parse(body),
-      fixtures = data.fixtures;
-  if(team !== undefined) {
-    for(let i = 0; i< fixtures.length; i++) {
-      let fixture = fixtures[i];
-
-      let homeTeam = fixture.homeTeamName,
-          awayTeam = fixture.awayTeamName,
-          goalsHomeTeam = (fixture.result.goalsHomeTeam === null) ? "-1" : fixture.result.goalsHomeTeam,
-          goalsAwayTeam = (fixture.result.goalsAwayTeam === null) ? "-1" : fixture.result.goalsAwayTeam;
-
-      name = (league === undefined) ? getLeagueName(fixture) : name;
-
-      if(homeTeam.indexOf(team) !== -1 || awayTeam.indexOf(team) !== -1){
-        let time = (fixture.status === "IN_PLAY") ? "LIVE" : moment(fixture.date).calendar();
-        console.log(`${chalk.green(name)}  ${chalk.cyan(homeTeam)} ${chalk.cyan(goalsHomeTeam)} vs. ${chalk.red(goalsAwayTeam)} ${chalk.red(awayTeam)} ${chalk.yellow(time)}`);
-      }
-    }
-  }
-  else {
-
-    for(let i = 0; i< fixtures.length; i++) {
-      let fixture = fixtures[i];
-
-      let homeTeam = fixture.homeTeamName,
-          awayTeam = fixture.awayTeamName,
-          goalsHomeTeam = (fixture.result.goalsHomeTeam === null) ? "-1" : fixture.result.goalsHomeTeam,
-          goalsAwayTeam = (fixture.result.goalsAwayTeam === null) ? "-1" : fixture.result.goalsAwayTeam;
-
-      name = (league === undefined) ? getLeagueName(fixture) : name;
-
-      let time = (fixture.status === "IN_PLAY") ? "LIVE" : moment(fixture.date).calendar();
-      console.log(`${chalk.green(name)}  ${chalk.cyan(homeTeam)} ${chalk.cyan(goalsHomeTeam)} vs. ${chalk.red(goalsAwayTeam)} ${chalk.red(awayTeam)} ${chalk.yellow(time)}`);
-    }
-  }
-}
-
-const printScores = (arr, live) => {
-  for(let i = 0; i < arr.length; i++){
-    let fixture = arr[i];
-    let name = getLeagueName(fixture),
-        homeTeam = fixture.homeTeamName,
-        awayTeam = fixture.awayTeamName,
-        goalsHomeTeam = (fixture.result.goalsHomeTeam === null) ? "-1" : fixture.result.goalsHomeTeam,
-        goalsAwayTeam = (fixture.result.goalsAwayTeam === null) ? "-1" : fixture.result.goalsAwayTeam,
-        time = (live === true) ? "LIVE": moment(fixture.date).calendar();
-    console.log(`${chalk.green(name)}  ${chalk.cyan(homeTeam)} ${chalk.cyan(goalsHomeTeam)} vs. ${chalk.red(goalsAwayTeam)} ${chalk.red(awayTeam)} ${chalk.yellow(time)}`);
-  }
-}
-
-const scoresHelper = (l, team, body) => {
-  let data = JSON.parse(body),
-      fixtures = data.fixtures,
-      live = [], scores = [];
-
-  for(let i = 0; i < fixtures.length; i++){
-    let fixture = fixtures[i],
-        homeTeam = fixture.homeTeamName,
-        awayTeam = fixture.awayTeamName;
-
-    if(fixture.status == "IN_PLAY" && (homeTeam.indexOf(team) !== -1 || awayTeam.indexOf(team) !== -1)) {
-      live.push(fixture);
-      scores.push(fixture);
-    }
-    else if(fixture.status == "FINISHED" && (homeTeam.indexOf(team) !== -1 || awayTeam.indexOf(team) !== -1)){
-      scores.push(fixture);
-    }
-  }
-
-  if(argv.l){
-    if(live.length !== 0){
-      printScores(live, true);
-    }
-    else{
-      console.log(chalk.cyan("Sorry, no live match right now"));
-    }
-  }
-  else{
-    if(scores.length !== 0){
-      printScores(scores, false);
-    }
-    else{
-      console.log(chalk.cyan("Sorry, no scores to show right now"));
-    }
-  }
-}
 
 const argv = yargs
   .usage('$0 <command>')
@@ -166,7 +69,6 @@ const argv = yargs
     });
   })
   .command('fixtures', 'Get upcoming and past fixtures of a league and team', (yargs) => {
-
     const argv = yargs
       .usage('Usage: $0 fixtures [options]')
       .alias('d', 'days').describe('t', 'Number of days')
