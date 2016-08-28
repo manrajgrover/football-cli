@@ -24,9 +24,7 @@ const helpers = require('./helpers');
 const getURL = helpers.getURL,
       standings = helpers.standings,
       refresh = helpers.refresh,
-      getLeagueName = helpers.getLeagueName,
       fixturesHelper = helpers.fixturesHelper,
-      printScores = helpers.printScores,
       scoresHelper = helpers.scoresHelper;
 
 const headers = {
@@ -48,16 +46,9 @@ const argv = yargs
         timeFrameStart = undefined,
         timeFrameEnd = undefined;
 
-    if(argv.l){
-      timeFrameStart = moment().format("YYYY-MM-DD");
-      timeFrameEnd = moment().add(1, "days").format("YYYY-MM-DD");
-      url = `fixtures?timeFrameStart=${timeFrameStart}&timeFrameEnd=${timeFrameEnd}`;
-    }
-    else{
-      timeFrameStart = moment().subtract(1, "days").format("YYYY-MM-DD");
-      timeFrameEnd = moment().add(1, "days").format("YYYY-MM-DD");
-      url = `fixtures?timeFrameStart=${timeFrameStart}&timeFrameEnd=${timeFrameEnd}`;
-    }
+    timeFrameStart = moment().subtract(1, "days").format("YYYY-MM-DD");
+    timeFrameEnd = moment().add(1, "days").format("YYYY-MM-DD");
+    url = `fixtures?timeFrameStart=${timeFrameStart}&timeFrameEnd=${timeFrameEnd}`;
 
     request({ "url": getURL(url), "headers": headers }, (err, res, body) => {
       if(err) {
