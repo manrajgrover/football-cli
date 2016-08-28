@@ -92,7 +92,7 @@ const argv = yargs
       let id = league_ids[league].id,
           name = league_ids[league].caption;
 
-      request({ "url": getURL(`competitions/${id}/fixtures?timeFrame=${timeFrame}`), "headers": headers }, (err, res, body) =>{
+      request({ "url": getURL(`competitions/${id}/fixtures?timeFrame=${timeFrame}`), "headers": headers }, (err, res, body) => {
         if(err) {
           console.log(chalk.red("Sorry, an error occured"));
         }

@@ -25,12 +25,12 @@ module.exports.standings = (body) => {
 
     table = new Table({
       head: ['Rank', 'Team', 'Played', 'Goal Diff', 'Points'],
-      colWidths: [ 7, 20, 10, 15, 10]
+      colWidths: [ 7, 25, 10, 15, 10]
     });
 
     for(let i = 0; i < standing.length; i++) {
       let team = standing[i];
-      table.push([ team.position, team.teamName, team.playedGames, team.goalDifference, team.points]);
+      table.push([ chalk.magenta(team.position), chalk.cyan(team.teamName), chalk.yellow(team.playedGames), chalk.blue(team.goalDifference), chalk.green(team.points)]);
     }
 
     console.log(table.toString());
