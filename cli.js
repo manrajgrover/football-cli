@@ -42,7 +42,7 @@ const argv = yargs
       .argv;
 
     let url = undefined,
-        team = (argv.t === undefined) ? '' : argv.t,
+        team = (argv.t === undefined) ? '' : (argv.t).toLowerCase(),
         timeFrameStart = undefined,
         timeFrameEnd = undefined;
 
@@ -72,11 +72,11 @@ const argv = yargs
     let days = argv.d || 10,
         league = argv.l,
         team = argv.t,
-        time = (argv.n == true) ? "n" : "p";
+        time = (argv.n === true) ? "n" : "p";
 
     let timeFrame = `${time}${days}`;
     if(league !== undefined){
-      if(league_ids[league] == undefined){
+      if(league_ids[league] === undefined){
         throw new Error("No league found. Please check the League Code entered with the list `football list`.");
       }
 

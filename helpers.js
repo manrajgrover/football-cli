@@ -101,7 +101,7 @@ module.exports.fixturesHelper = (league, name, team, body) => {
 
       name = (league === undefined) ? getLeagueName(fixture) : name;
 
-      if(homeTeam.indexOf(team) !== -1 || awayTeam.indexOf(team) !== -1){
+      if((homeTeam.toLowerCase()).indexOf((team).toLowerCase()) !== -1 || (awayTeam.toLowerCase()).indexOf((team).toLowerCase()) !== -1){
         let time = (fixture.status === "IN_PLAY") ? "LIVE" : moment(fixture.date).calendar();
         console.log(`${chalk.green.bold(name)}  ${chalk.cyan.bold(homeTeam)} ${chalk.cyan.bold(goalsHomeTeam)} vs. ${chalk.red.bold(goalsAwayTeam)} ${chalk.red.bold(awayTeam)} ${chalk.yellow.bold(time)}`);
       }
@@ -145,14 +145,16 @@ module.exports.scoresHelper = (l, team, body) => {
 
   for(let i = 0; i < fixtures.length; i++){
     let fixture = fixtures[i],
-        homeTeam = fixture.homeTeamName,
-        awayTeam = fixture.awayTeamName;
+        homeTeam = (fixture.homeTeamName).toLowerCase(),
+        awayTeam = (fixture.awayTeamName).toLowerCase();
 
-    if(fixture.status == "IN_PLAY" && (homeTeam.indexOf(team) !== -1 || awayTeam.indexOf(team) !== -1)) {
+    team = team.toLowerCase();
+
+    if(fixture.status === "IN_PLAY" && (homeTeam.indexOf(team) !== -1 || awayTeam.indexOf(team) !== -1)) {
       live.push(fixture);
       scores.push(fixture);
     }
-    else if(fixture.status == "FINISHED" && (homeTeam.indexOf(team) !== -1 || awayTeam.indexOf(team) !== -1)){
+    else if(fixture.status === "FINISHED" && (homeTeam.indexOf(team) !== -1 || awayTeam.indexOf(team) !== -1)){
       scores.push(fixture);
     }
   }
