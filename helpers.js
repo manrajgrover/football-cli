@@ -114,6 +114,11 @@ const getLeagueName = (fixture) => {
 module.exports.fixturesHelper = (league, name, team, body) => {
   let data = JSON.parse(body),
       fixtures = data.fixtures;
+
+  if(fixtures.length === 0){
+    console.log(chalk.bold.cyan("Sorry, no fixtures to show right now"));
+    return;
+  }
   if(team !== undefined) {
     for(let i = 0; i< fixtures.length; i++) {
       let fixture = fixtures[i];

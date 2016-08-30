@@ -79,7 +79,7 @@ const argv = yargs
         time = (argv.n === true) ? "n" : "p";
 
     let timeFrame = `${time}${days}`;
-    if(league !== undefined){
+    if(league !== undefined) {
       if(league_ids[league] === undefined){
         spinner.stop();
         throw new Error(chalk.red.bold("No league found. Please check the League Code entered with the list `football lists`."));
