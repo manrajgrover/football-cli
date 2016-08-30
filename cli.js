@@ -39,7 +39,7 @@ const argv = yargs
     const argv = yargs
       .usage('Usage: $0 scores [options]')
       .alias('l', 'live').describe('l', 'Live scores').boolean('l')
-      .alias('t', 'team').describe('t', 'Select team')
+      .alias('t', 'team').describe('t', 'Select team').string('t')
       .example('$0 scores -t "Manchester United" -l')
       .argv;
 
@@ -113,7 +113,7 @@ const argv = yargs
     if(league_ids[league] === undefined){
       throw new Error(chalk.red.bold("No league found. Please check the League Code entered with the list `football lists`."));
     }
-    
+
     let id = league_ids[argv.l].id;
 
     request({ "url": getURL(`competitions/${id}/leagueTable`), "headers": headers }, (err, res, body) => {
@@ -145,12 +145,12 @@ const argv = yargs
     }
     else {
       let table = new Table({
-        head: ['League', 'League Code'],
+        head: [chalk.bold.white.bgCyan('League'), chalk.bold.white.bgCyan('League Code')],
         colWidths: [ 40, 20]
       });
 
       for(let league in league_ids){
-        table.push([ league_ids[league].caption, league]);
+        table.push([ chalk.bold.cyan(league_ids[league].caption), chalk.bold.green(league)]);
       }
 
       console.log(table.toString());

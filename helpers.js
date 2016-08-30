@@ -164,7 +164,7 @@ module.exports.scoresHelper = (l, team, body) => {
       printScores(live, true);
     }
     else{
-      console.log(chalk.cyan("Sorry, no live match right now"));
+      console.log(chalk.cyan.bold("Sorry, no live match right now"));
     }
   }
   else{
@@ -172,7 +172,7 @@ module.exports.scoresHelper = (l, team, body) => {
       printScores(scores, false);
     }
     else{
-      console.log(chalk.cyan("Sorry, no scores to show right now"));
+      console.log(chalk.cyan.bold("Sorry, no scores to show right now"));
     }
   }
 }
