@@ -44,12 +44,10 @@ const argv = yargs
       .argv;
 
     let url = undefined,
-        team = (argv.t === undefined) ? '' : (argv.t).toLowerCase(),
-        timeFrameStart = undefined,
-        timeFrameEnd = undefined;
+        team = (argv.t === undefined) ? '' : (argv.t).toLowerCase();
 
-    timeFrameStart = moment().subtract(1, "days").format("YYYY-MM-DD");
-    timeFrameEnd = moment().add(1, "days").format("YYYY-MM-DD");
+    let timeFrameStart = moment().subtract(1, "days").format("YYYY-MM-DD"),
+        timeFrameEnd = moment().add(1, "days").format("YYYY-MM-DD");
     url = `fixtures?timeFrameStart=${timeFrameStart}&timeFrameEnd=${timeFrameEnd}`;
 
     request({ "url": getURL(url), "headers": headers }, (err, res, body) => {
@@ -72,8 +70,8 @@ const argv = yargs
       .argv;
       
     let days = argv.d || 10,
-        league = (argv.l === undefined) ? "" : argv.l,
-        team = (argv.t === undefined) ? "" : argv.t,
+        league = argv.l,
+        team = argv.t || "",
         time = (argv.n === true) ? "n" : "p";
 
     let timeFrame = `${time}${days}`;
@@ -112,6 +110,10 @@ const argv = yargs
       .example('$0 standings -l PL')
       .argv;
 
+    if(league_ids[league] === undefined){
+      throw new Error(chalk.red.bold("No league found. Please check the League Code entered with the list `football lists`."));
+    }
+    
     let id = league_ids[argv.l].id;
 
     request({ "url": getURL(`competitions/${id}/leagueTable`), "headers": headers }, (err, res, body) => {
