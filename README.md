@@ -95,7 +95,7 @@ Examples:
 Usage: sudo football config
 
 Options:
-  -h, --help  Show help                                                [boolean]
+  -h, --help  Show help                                           [boolean]
 
 Examples:
   sudo football config
