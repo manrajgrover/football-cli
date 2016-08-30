@@ -38,7 +38,7 @@ const argv = yargs
       .usage('Usage: $0 scores [options]')
       .alias('l', 'live').describe('l', 'Live scores').boolean('l')
       .alias('t', 'team').describe('t', 'Select team')
-      .example('sudo $0 scores -l')
+      .example('sudo $0 scores -l -t "Manchester United"')
       .argv;
 
     let url = undefined,
@@ -66,7 +66,7 @@ const argv = yargs
       .alias('l', 'league').describe('l', 'League')
       .alias('t', 'team').describe('t', 'Team name or substring of it')
       .alias('n', 'next').describe('n', 'Next or upcoming matches').boolean('n')
-      .example('sudo $0 fixtures -d 10 -t "Manchester United" -n')
+      .example('sudo $0 fixtures -l PL -d 5 -t "Manchester United" -n')
       .argv;
       
     let days = argv.d || 10,
@@ -107,7 +107,7 @@ const argv = yargs
     const argv = yargs
       .usage('Usage: $0 standings [options]')
       .alias('l', 'league').describe('l', 'League to be searched').demand('l')
-      .example('sudo $0 standings -l')
+      .example('sudo $0 standings -l PL')
       .argv;
 
     let id = league_ids[argv.l].id;
