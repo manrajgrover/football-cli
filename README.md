@@ -12,6 +12,10 @@
 $ npm install -g footballcli
 ```
 
+## How to get API Key?
+
+Please register on [football-data.org](http://api.football-data.org/register) to get your API Key. Then run `sudo football config` to add your API Key.
+
 ## Usage
 
 ### Commands available
