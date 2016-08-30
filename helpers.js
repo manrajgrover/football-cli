@@ -25,13 +25,25 @@ module.exports.standings = (body) => {
     let standing = data["standing"];
 
     table = new Table({
-      head: [chalk.bold.white.bgCyan('Rank'), chalk.bold.white.bgCyan('Team'), chalk.bold.white.bgCyan('Played'), chalk.bold.white.bgCyan('Goal Diff'), chalk.bold.white.bgCyan('Points')],
+      head: [
+        chalk.bold.white.bgCyan('Rank'),
+        chalk.bold.white.bgCyan('Team'),
+        chalk.bold.white.bgCyan('Played'),
+        chalk.bold.white.bgCyan('Goal Diff'),
+        chalk.bold.white.bgCyan('Points')
+      ],
       colWidths: [ 7, 25, 10, 15, 10]
     });
 
     for(let i = 0; i < standing.length; i++) {
       let team = standing[i];
-      table.push([ chalk.bold.magenta(team.position), chalk.bold.cyan(team.teamName), chalk.bold.yellow(team.playedGames), chalk.bold.blue(team.goalDifference), chalk.bold.green(team.points)]);
+      table.push([
+        chalk.bold.magenta(team.position),
+        chalk.bold.cyan(team.teamName),
+        chalk.bold.yellow(team.playedGames),
+        chalk.bold.blue(team.goalDifference),
+        chalk.bold.green(team.points)
+      ]);
     }
 
     console.log(table.toString());
@@ -45,13 +57,25 @@ module.exports.standings = (body) => {
       let group = standings[groupCode];
 
       table = new Table({
-        head: [chalk.bold.white.bgCyan('Rank'), chalk.bold.white.bgCyan('Team'), chalk.bold.white.bgCyan('Played'), chalk.bold.white.bgCyan('Goal Diff'), chalk.bold.white.bgCyan('Points')],
+        head: [
+          chalk.bold.white.bgCyan('Rank'),
+          chalk.bold.white.bgCyan('Team'),
+          chalk.bold.white.bgCyan('Played'),
+          chalk.bold.white.bgCyan('Goal Diff'),
+          chalk.bold.white.bgCyan('Points')
+        ],
         colWidths: [ 7, 25, 10, 15, 10]
       });
 
       for(let i = 0; i < group.length; i++) {
         let team = group[i];
-        table.push([ chalk.bold.magenta(team.rank), chalk.bold.cyan(team.team), chalk.bold.yellow(team.playedGames), chalk.bold.blue(team.goalDifference), chalk.bold.green(team.points)]);
+        table.push([
+          chalk.bold.magenta(team.rank),
+          chalk.bold.cyan(team.team),
+          chalk.bold.yellow(team.playedGames),
+          chalk.bold.blue(team.goalDifference),
+          chalk.bold.green(team.points)
+        ]);
       }
 
       console.log(table.toString());

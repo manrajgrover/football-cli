@@ -145,12 +145,18 @@ const argv = yargs
     }
     else {
       let table = new Table({
-        head: [chalk.bold.white.bgCyan('League'), chalk.bold.white.bgCyan('League Code')],
+        head: [
+          chalk.bold.white.bgCyan('League'),
+          chalk.bold.white.bgCyan('League Code')
+        ],
         colWidths: [ 40, 20]
       });
 
       for(let league in league_ids){
-        table.push([ chalk.bold.cyan(league_ids[league].caption), chalk.bold.green(league)]);
+        table.push([
+          chalk.bold.cyan(league_ids[league].caption),
+          chalk.bold.green(league)
+        ]);
       }
 
       console.log(table.toString());
