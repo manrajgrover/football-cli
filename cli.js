@@ -184,6 +184,15 @@ const argv = yargs
     }
   })
   .command('config', 'Change configuration and defaults', (yargs) => {
+    const argv = yargs
+      .usage('Usage: sudo $0 config')
+      .example('sudo $0 config')
+      .argv;
+
+    if(argv.h){
+      return;
+    }
+
     const questions = [{
       type: 'input',
       name: 'API_KEY',
@@ -198,6 +207,7 @@ const argv = yargs
       }
 
       fs.writeFileSync(__dirname+'/config.json', JSON.stringify(obj, null, 2), 'utf8');
+      console.log(chalk.cyan.bold("API KEY has been updated."));
     });
   })
   .help('h')
