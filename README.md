@@ -14,7 +14,7 @@ $ npm install -g footballcli
 
 ## How to get API Key?
 
-Please register on [football-data.org](http://api.football-data.org/register) to get your API Key. Then run `sudo football config` to add your API Key.
+Please register on [football-data.org](http://api.football-data.org/register) to get your API Key. Then run `$ sudo football config` to add your API Key.
 
 ## Usage
 
@@ -113,6 +113,10 @@ Examples:
   sudo football config
   
 ```
+
+## Get in touch
+
+Say hi on [twitter](https://twitter.com/manrajsgrover) and share this project by clicking [here](https://twitter.com/home?status=Checkout%20command%20line%20tool%20for%20checking%20live%20scores,%20fixtures%20and%20more%20on%20Github%20by%20%40manrajsgrover%20https%3A//github.com/ManrajGrover/football-cli)
 
 ## License
 
