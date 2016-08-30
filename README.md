@@ -1,7 +1,7 @@
 # football-cli
 > Command line interface for Hackers who love football ⚽
 
-![Standings](https://github.com/ManrajGrover/football-cli/blob/master/assets/football-standings.gif)
+![Standings](https://raw.githubusercontent.com/ManrajGrover/football-cli/master/assets/football-standings.gif)
 
 ## Installation
 
