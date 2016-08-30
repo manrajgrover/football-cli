@@ -63,6 +63,8 @@ Examples:
 
 ```
 
+![Fixtures](https://raw.githubusercontent.com/ManrajGrover/football-cli/master/assets/football-fixtures.gif)
+
 #### Command `standings`
 Get standings of particular league
 
