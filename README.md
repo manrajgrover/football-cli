@@ -31,6 +31,7 @@ Options:
 ```
 
 #### Command `scores`
+Get scores of past and live fixtures
 
 ```
 Usage: football scores [options]
@@ -46,6 +47,7 @@ Examples:
 ```
 
 #### Command `fixtures`
+Get upcoming and past fixtures of a league and team
 
 ```
 Usage: football fixtures [options]
@@ -62,6 +64,7 @@ Examples:
 ```
 
 #### Command `standings`
+Get standings of particular league
 
 ```
 Usage: football standings [options]
@@ -76,6 +79,7 @@ Examples:
 ```
 
 #### Command `lists`
+List of codes of various competitions
 
 ```
 Usage: sudo football lists [options]
@@ -90,6 +94,7 @@ Examples:
 ```
 
 #### Command `config`
+Change configuration and defaults
 
 ```
 Usage: sudo football config
