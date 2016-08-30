@@ -43,6 +43,7 @@ const argv = yargs
       .example('$0 scores -t "Manchester United" -l')
       .argv;
 
+    const spinner = ora('Fetching data').start();
     let url = undefined,
         team = (argv.t === undefined) ? '' : (argv.t).toLowerCase();
 
@@ -52,9 +53,11 @@ const argv = yargs
 
     request({ "url": getURL(url), "headers": headers }, (err, res, body) => {
       if(err) {
+        spinner.stop();
         console.log(chalk.red.bold(`Sorry, an error occured. Please report issues to ${BUGS_URL} if problem persists.`));
       }
       else {
+        spinner.stop();
         scoresHelper(argv.l, team, body);
       }
     });
@@ -68,7 +71,8 @@ const argv = yargs
       .alias('n', 'next').describe('n', 'Next or upcoming matches').boolean('n')
       .example('$0 fixtures -l PL -d 5 -t "Manchester United" -n')
       .argv;
-      
+    
+    const spinner = ora('Fetching data').start();
     let days = argv.d || 10,
         league = argv.l,
         team = argv.t || "",
@@ -77,6 +81,7 @@ const argv = yargs
     let timeFrame = `${time}${days}`;
     if(league !== undefined){
       if(league_ids[league] === undefined){
+        spinner.stop();
         throw new Error(chalk.red.bold("No league found. Please check the League Code entered with the list `football lists`."));
       }
 
@@ -85,9 +90,11 @@ const argv = yargs
 
       request({ "url": getURL(`competitions/${id}/fixtures?timeFrame=${timeFrame}`), "headers": headers }, (err, res, body) => {
         if(err) {
+          spinner.stop();
           console.log(chalk.red.bold(`Sorry, an error occured. Please report issues to ${BUGS_URL} if problem persists.`));
         }
         else {
+          spinner.stop();
           fixturesHelper(league, name, team, body);
         }
       });
@@ -95,9 +102,11 @@ const argv = yargs
     else {
       request({ "url": getURL(`fixtures?timeFrame=${timeFrame}`), "headers": headers }, (err, res, body) => {
         if(err) {
+          spinner.stop();
           console.log(chalk.red.bold(`Sorry, an error occured. Please report issues to ${BUGS_URL} if problem persists.`));
         }
         else {
+          spinner.stop();
           fixturesHelper(league, undefined, team, body);
         }
       });
@@ -110,17 +119,24 @@ const argv = yargs
       .example('$0 standings -l PL')
       .argv;
 
+    const spinner = ora('Fetching data').start();
+
+    let league = argv.l;
+
     if(league_ids[league] === undefined){
+      spinner.stop();
       throw new Error(chalk.red.bold("No league found. Please check the League Code entered with the list `football lists`."));
     }
 
-    let id = league_ids[argv.l].id;
+    let id = league_ids[league].id;
 
     request({ "url": getURL(`competitions/${id}/leagueTable`), "headers": headers }, (err, res, body) => {
       if(err) {
+        spinner.stop();
         console.log(chalk.red.bold(`Sorry, an error occured. Please report issues to ${BUGS_URL} if problem persists.`));
       }
       else {
+        spinner.stop();
         standings(body);
       }
     });
@@ -132,14 +148,19 @@ const argv = yargs
       .example('sudo $0 lists -r')
       .argv;
 
+    const spinner = ora('Fetching data').start();
+
     if (argv.r) {
       request({ "url": getURL("competitions"), "headers": headers }, (err, res, body) => {
         if(err) {
+          spinner.stop();
           console.log(chalk.red.bold(`Sorry, an error occured. Please report issues to ${BUGS_URL} if problem persists.`));
         }
         else {
+          spinner.stop();
           let newLeagueIDs = refresh(body);
           fs.writeFileSync(__dirname+'/league_ids.json', JSON.stringify(newLeagueIDs, null, 2), 'utf8');
+          console.log(chalk.cyan.bold("New list fetched and saved"));
         }
       });
     }
@@ -158,7 +179,7 @@ const argv = yargs
           chalk.bold.green(league)
         ]);
       }
-
+      spinner.stop();
       console.log(table.toString());
     }
   })
