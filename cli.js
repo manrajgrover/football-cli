@@ -27,6 +27,8 @@ const getURL = helpers.getURL,
       fixturesHelper = helpers.fixturesHelper,
       scoresHelper = helpers.scoresHelper;
 
+const BUGS_URL = "https://github.com/ManrajGrover/football-cli/issues";
+
 const headers = {
   'X-Auth-Token': config.API_KEY
 };
@@ -38,7 +40,7 @@ const argv = yargs
       .usage('Usage: $0 scores [options]')
       .alias('l', 'live').describe('l', 'Live scores').boolean('l')
       .alias('t', 'team').describe('t', 'Select team')
-      .example('sudo $0 scores -l -t "Manchester United"')
+      .example('$0 scores -t "Manchester United" -l')
       .argv;
 
     let url = undefined,
@@ -52,7 +54,7 @@ const argv = yargs
 
     request({ "url": getURL(url), "headers": headers }, (err, res, body) => {
       if(err) {
-        console.log(chalk.red("Sorry, an error occured"));
+        console.log(chalk.red.bold(`Sorry, an error occured. Please report issues to ${BUGS_URL} if problem persists.`));
       }
       else {
         scoresHelper(argv.l, team, body);
@@ -64,20 +66,20 @@ const argv = yargs
       .usage('Usage: $0 fixtures [options]')
       .alias('d', 'days').describe('t', 'Number of days')
       .alias('l', 'league').describe('l', 'League')
-      .alias('t', 'team').describe('t', 'Team name or substring of it')
+      .alias('t', 'team').describe('t', 'Team name or substring of it').string('t')
       .alias('n', 'next').describe('n', 'Next or upcoming matches').boolean('n')
-      .example('sudo $0 fixtures -l PL -d 5 -t "Manchester United" -n')
+      .example('$0 fixtures -l PL -d 5 -t "Manchester United" -n')
       .argv;
       
     let days = argv.d || 10,
-        league = argv.l,
-        team = argv.t,
+        league = (argv.l === undefined) ? "" : argv.l,
+        team = (argv.t === undefined) ? "" : argv.t,
         time = (argv.n === true) ? "n" : "p";
 
     let timeFrame = `${time}${days}`;
     if(league !== undefined){
       if(league_ids[league] === undefined){
-        throw new Error("No league found. Please check the League Code entered with the list `football list`.");
+        throw new Error(chalk.red.bold("No league found. Please check the League Code entered with the list `football lists`."));
       }
 
       let id = league_ids[league].id,
@@ -85,7 +87,7 @@ const argv = yargs
 
       request({ "url": getURL(`competitions/${id}/fixtures?timeFrame=${timeFrame}`), "headers": headers }, (err, res, body) => {
         if(err) {
-          console.log(chalk.red("Sorry, an error occured"));
+          console.log(chalk.red.bold(`Sorry, an error occured. Please report issues to ${BUGS_URL} if problem persists.`));
         }
         else {
           fixturesHelper(league, name, team, body);
@@ -95,7 +97,7 @@ const argv = yargs
     else {
       request({ "url": getURL(`fixtures?timeFrame=${timeFrame}`), "headers": headers }, (err, res, body) => {
         if(err) {
-          console.log(chalk.red("Sorry, an error occured"));
+          console.log(chalk.red.bold(`Sorry, an error occured. Please report issues to ${BUGS_URL} if problem persists.`));
         }
         else {
           fixturesHelper(league, undefined, team, body);
@@ -107,14 +109,14 @@ const argv = yargs
     const argv = yargs
       .usage('Usage: $0 standings [options]')
       .alias('l', 'league').describe('l', 'League to be searched').demand('l')
-      .example('sudo $0 standings -l PL')
+      .example('$0 standings -l PL')
       .argv;
 
     let id = league_ids[argv.l].id;
 
     request({ "url": getURL(`competitions/${id}/leagueTable`), "headers": headers }, (err, res, body) => {
       if(err) {
-        console.log(chalk.red("Sorry, an error occured"));
+        console.log(chalk.red.bold(`Sorry, an error occured. Please report issues to ${BUGS_URL} if problem persists.`));
       }
       else {
         standings(body);
@@ -131,7 +133,7 @@ const argv = yargs
     if (argv.r) {
       request({ "url": getURL("competitions"), "headers": headers }, (err, res, body) => {
         if(err) {
-          console.log(chalk.red("Sorry, an error occured"));
+          console.log(chalk.red.bold(`Sorry, an error occured. Please report issues to ${BUGS_URL} if problem persists.`));
         }
         else {
           let newLeagueIDs = refresh(body);
