@@ -116,7 +116,7 @@ Examples:
 
 ## Get in touch
 
-Say hi on [twitter](https://twitter.com/manrajsgrover) and share this project by clicking [here](https://twitter.com/home?status=Checkout%20command%20line%20tool%20for%20checking%20live%20scores,%20fixtures%20and%20more%20on%20Github%20by%20%40manrajsgrover%20https%3A//github.com/ManrajGrover/football-cli)
+Say hi on [twitter](https://twitter.com/manrajsgrover) and share this project by clicking [here](https://twitter.com/home?status=Checkout%20command%20line%20tool%20for%20checking%20live%20%23scores,%20%23fixtures%20and%20more%20on%20%23Github%20by%20%40manrajsgrover%20%23cli%20https%3A//github.com/ManrajGrover/football-cli)
 
 ## License
 
