@@ -4,7 +4,7 @@
 * @Author: Manraj Singh
 * @Date:   2016-08-24 12:21:30
 * @Last Modified by:   Manraj Singh
-* @Last Modified time: 2016-08-27 21:11:45
+* @Last Modified time: 2016-09-01 16:29:40
 */
 
 'use strict';
@@ -21,21 +21,37 @@ const config = require('./config');
 const league_ids = require('./league_ids');
 const helpers = require('./helpers');
 
+/**
+ * Get all helpers from `helpers.js`
+ */
 const getURL = helpers.getURL,
       standings = helpers.standings,
       refresh = helpers.refresh,
       fixturesHelper = helpers.fixturesHelper,
       scoresHelper = helpers.scoresHelper;
 
+/**
+ * URL to report to for any issue related to project
+ */
 const BUGS_URL = "https://github.com/ManrajGrover/football-cli/issues";
 
+/**
+ * headers for every request that is made
+ */
 const headers = {
   'X-Auth-Token': config.API_KEY
 };
 
+/**
+ * Command line interface code for the app
+ */
 const argv = yargs
   .usage('$0 <command>')
   .command('scores', 'Get scores of past and live fixtures', (yargs) => {
+
+    /**
+     * Get all the options set for `scores` command
+     */
     const argv = yargs
       .usage('Usage: $0 scores [options]')
       .alias('l', 'live').describe('l', 'Live scores').boolean('l')
@@ -44,13 +60,28 @@ const argv = yargs
       .argv;
 
     const spinner = ora('Fetching data').start();
+
     let url = undefined,
         team = (argv.t === undefined) ? '' : (argv.t).toLowerCase();
 
+    /**
+     * [timeFrameStart Set start date from which fixtures is to be fetch]
+     * [timeFrameEnd Set end date till which fixtures is to be fetch]
+     */
     let timeFrameStart = moment().subtract(1, "days").format("YYYY-MM-DD"),
         timeFrameEnd = moment().add(1, "days").format("YYYY-MM-DD");
+
+    /**
+     * End Point for fetching all fixtures between `timeFrameStart` and `timeFrameEnd`
+     */
     url = `fixtures?timeFrameStart=${timeFrameStart}&timeFrameEnd=${timeFrameEnd}`;
 
+    /**
+     * Creates request to fetch fixtures and show them
+     * @param  {[String]} options."url":     getURL(url)   [End point from where data needs to be fetched]
+     * @param  {[Object]} options."headers": headers       [Headers for the request]
+     * @return {[None]}                                    [None]
+     */
     request({ "url": getURL(url), "headers": headers }, (err, res, body) => {
       if(err) {
         spinner.stop();
