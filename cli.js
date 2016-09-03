@@ -4,7 +4,7 @@
 * @Author: Manraj Singh
 * @Date:   2016-08-24 12:21:30
 * @Last Modified by:   Manraj Singh
-* @Last Modified time: 2016-09-01 16:29:40
+* @Last Modified time: 2016-09-03 21:42:58
 */
 
 'use strict';
@@ -61,12 +61,11 @@ const argv = yargs
 
     const spinner = ora('Fetching data').start();
 
-    let url = undefined,
-        team = (argv.t === undefined) ? '' : (argv.t).toLowerCase();
+    let team = (argv.t === undefined) ? '' : (argv.t).toLowerCase();
 
     /**
-     * [timeFrameStart Set start date from which fixtures is to be fetch]
-     * [timeFrameEnd Set end date till which fixtures is to be fetch]
+     * timeFrameStart [Set start date from which fixtures is to be fetch]
+     * timeFrameEnd   [Set end date till which fixtures is to be fetch]
      */
     let timeFrameStart = moment().subtract(1, "days").format("YYYY-MM-DD"),
         timeFrameEnd = moment().add(1, "days").format("YYYY-MM-DD");
@@ -74,7 +73,7 @@ const argv = yargs
     /**
      * End Point for fetching all fixtures between `timeFrameStart` and `timeFrameEnd`
      */
-    url = `fixtures?timeFrameStart=${timeFrameStart}&timeFrameEnd=${timeFrameEnd}`;
+    let url = `fixtures?timeFrameStart=${timeFrameStart}&timeFrameEnd=${timeFrameEnd}`;
 
     /**
      * Creates request to fetch fixtures and show them

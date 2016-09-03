@@ -2,12 +2,12 @@
 * @Author: Manraj Singh
 * @Date:   2016-08-27 20:49:04
 * @Last Modified by:   Manraj Singh
-* @Last Modified time: 2016-08-27 21:05:44
+* @Last Modified time: 2016-09-03 22:00:25
 */
 
-'use strict';
+"use strict";
 
-const league_ids = require('./league_ids')
+const league_ids = require('./league_ids');
 const Table = require('cli-table');
 const chalk = require('chalk');
 const moment = require('moment');
@@ -16,13 +16,13 @@ const API_URL = 'http://api.football-data.org/v1/';
 
 module.exports.getURL = (endPoint) => {
   return API_URL + endPoint;
-}
+};
 
 module.exports.standings = (body) => {
   let data = JSON.parse(body), table;
 
-  if(data["standing"] !== undefined) {
-    let standing = data["standing"];
+  if(data.standing !== undefined) {
+    let standing = data.standing;
 
     table = new Table({
       head: [
@@ -49,7 +49,7 @@ module.exports.standings = (body) => {
     console.log(table.toString());
   }
   else {
-    let standings = data["standings"];
+    let standings = data.standings;
 
     for(let groupCode in standings) {
       console.log(chalk.bgCyan.bold.white(groupCode));
@@ -81,7 +81,7 @@ module.exports.standings = (body) => {
       console.log(table.toString());
     }
   }
-}
+};
 
 module.exports.refresh = (body) => {
   let data = JSON.parse(body), newLeagueIDs = {};
@@ -96,7 +96,7 @@ module.exports.refresh = (body) => {
   }
 
   return newLeagueIDs;
-}
+};
 
 
 const getLeagueName = (fixture) => {
@@ -109,7 +109,7 @@ const getLeagueName = (fixture) => {
     }
   }
   return "";
-}
+};
 
 module.exports.fixturesHelper = (league, name, team, body) => {
   let data = JSON.parse(body),
@@ -152,7 +152,7 @@ module.exports.fixturesHelper = (league, name, team, body) => {
       console.log(`${chalk.green.bold(name)}  ${chalk.cyan.bold(homeTeam)} ${chalk.cyan.bold(goalsHomeTeam)} vs. ${chalk.red.bold(goalsAwayTeam)} ${chalk.red.bold(awayTeam)} ${chalk.yellow.bold(time)}`);
     }
   }
-}
+};
 
 const printScores = (arr, live) => {
   for(let i = 0; i < arr.length; i++){
@@ -165,7 +165,7 @@ const printScores = (arr, live) => {
         time = (live === true) ? "LIVE": moment(fixture.date).calendar();
     console.log(`${chalk.green.bold(name)}  ${chalk.cyan.bold(homeTeam)} ${chalk.cyan.bold(goalsHomeTeam)} vs. ${chalk.red.bold(goalsAwayTeam)} ${chalk.red.bold(awayTeam)} ${chalk.yellow.bold(time)}`);
   }
-}
+};
 
 module.exports.scoresHelper = (l, team, body) => {
   let data = JSON.parse(body),
@@ -204,4 +204,4 @@ module.exports.scoresHelper = (l, team, body) => {
       console.log(chalk.cyan.bold("Sorry, no scores to show right now"));
     }
   }
-}
+};
