@@ -4,7 +4,7 @@
 * @Author: Manraj Singh
 * @Date:   2016-08-24 12:21:30
 * @Last Modified by:   Manraj Singh
-* @Last Modified time: 2016-09-04 21:30:44
+* @Last Modified time: 2016-09-04 21:31:49
 */
 
 'use strict';
@@ -36,7 +36,7 @@ const getURL = helpers.getURL,
 const BUGS_URL = "https://github.com/ManrajGrover/football-cli/issues";
 
 /**
- * headers for every request that is made
+ * Headers for every request that is made
  */
 const headers = {
   'X-Auth-Token': config.API_KEY
@@ -106,7 +106,7 @@ const argv = yargs
       .argv;
     
     const spinner = ora('Fetching data').start();
-    
+
     let days = argv.d || 10,
         league = argv.l,
         team = argv.t || "",
