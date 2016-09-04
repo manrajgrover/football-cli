@@ -2,7 +2,7 @@
 * @Author: Manraj Singh
 * @Date:   2016-08-27 20:49:04
 * @Last Modified by:   Manraj Singh
-* @Last Modified time: 2016-09-04 22:22:11
+* @Last Modified time: 2016-09-04 22:26:14
 */
 
 "use strict";
@@ -19,7 +19,8 @@ const moment = require('moment');
  */ 
 const API_URL = 'http://api.football-data.org/v1/';
 /**
- * URL to report to for any issue related to project
+ * [URL to report to for any issue related to project]
+ * @type {String}
  */
 const BUGS_URL = "https://github.com/ManrajGrover/football-cli/issues";
 
@@ -35,7 +36,7 @@ const fixturesHelper = (league, name, team, body) => {
       fixtures = data.fixtures;
 
   if(fixtures.length === 0){
-    console.log(chalk.bold.cyan("Sorry, no fixtures to show right now"));
+    updateMessage("UPDATE", "Sorry, no fixtures to show right now");
     return;
   }
 
@@ -236,17 +237,18 @@ const updateMessage = (TYPE, message = "") => {
       );
       break;
     case "UPDATE":
+      console.log(chalk.bold.cyan(message));
       break;
     default:
-      
+
   }
 };
 
 module.exports = {
-  "errorHelper": errorHelper,
   "fixturesHelper": fixturesHelper,
   "getURL": getURL,
   "refresh": refresh,
   "scoresHelper": scoresHelper,
-  "standings": standings
+  "standings": standings,
+  "updateMessage": updateMessage 
 };

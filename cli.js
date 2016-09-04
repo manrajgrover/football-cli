@@ -4,7 +4,7 @@
 * @Author: Manraj Singh
 * @Date:   2016-08-24 12:21:30
 * @Last Modified by:   Manraj Singh
-* @Last Modified time: 2016-09-04 22:22:56
+* @Last Modified time: 2016-09-04 22:23:24
 */
 
 'use strict';
@@ -29,7 +29,7 @@ const fixturesHelper = helpers.fixturesHelper,
       refresh = helpers.refresh,
       scoresHelper = helpers.scoresHelper,
       standings = helpers.standings,
-      updateMessage = helper.updateMessage;
+      updateMessage = helpers.updateMessage;
 
 /**
  * Headers for every request that is made
