@@ -2,7 +2,7 @@
 * @Author: Manraj Singh
 * @Date:   2016-08-27 20:49:04
 * @Last Modified by:   Manraj Singh
-* @Last Modified time: 2016-09-04 22:40:48
+* @Last Modified time: 2016-09-04 22:50:36
 */
 
 "use strict";
@@ -246,17 +246,21 @@ const standings = (body) => {
 
 const updateMessage = (TYPE, message = "") => {
   switch(TYPE) {
+
     case "ERROR":
       console.log(
         chalk.red.bold(`Sorry, an error occured. Please report issues to ${BUGS_URL} if problem persists.`)
       );
       break;
+
     case "UPDATE":
       console.log(chalk.bold.cyan(message));
       break;
+
     case "LEAGUE_ERR":
       throw new Error(chalk.red.bold("No league found. " + 
                                      "Please check the League Code entered with the list `football lists`."));
+
     default:
       console.log("ERROR OCCURED.");
   }

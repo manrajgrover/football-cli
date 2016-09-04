@@ -4,7 +4,7 @@
 * @Author: Manraj Singh
 * @Date:   2016-08-24 12:21:30
 * @Last Modified by:   Manraj Singh
-* @Last Modified time: 2016-09-04 22:39:30
+* @Last Modified time: 2016-09-04 22:52:44
 */
 
 'use strict';
@@ -109,6 +109,7 @@ const argv = yargs
         time = (argv.n === true) ? "n" : "p";
 
     let timeFrame = `${time}${days}`;
+
     if(league !== undefined) {
       if(league_ids[league] === undefined){
         spinner.stop();
@@ -118,10 +119,8 @@ const argv = yargs
       let id = league_ids[league].id,
           name = league_ids[league].caption;
 
-      request({ 
-                "url": getURL(`competitions/${id}/fixtures?timeFrame=${timeFrame}`),
-                "headers": headers
-              }, (err, res, body) => {
+      request({ "url": getURL(`competitions/${id}/fixtures?timeFrame=${timeFrame}`),
+                "headers": headers }, (err, res, body) => {
         if(err) {
           spinner.stop();
           updateMessage("ERROR");
@@ -133,10 +132,9 @@ const argv = yargs
       });
     }
     else {
-      request({
-                "url": getURL(`fixtures?timeFrame=${timeFrame}`),
-                "headers": headers
-              }, (err, res, body) => {
+      request({ "url": getURL(`fixtures?timeFrame=${timeFrame}`),
+                "headers": headers }, (err, res, body) => {
+
         if(err) {
           spinner.stop();
           updateMessage("ERROR");
@@ -170,10 +168,9 @@ const argv = yargs
 
     let id = league_ids[league].id;
 
-    request({
-              "url": getURL(`competitions/${id}/leagueTable`),
-              "headers": headers
-            }, (err, res, body) => {
+    request({ "url": getURL(`competitions/${id}/leagueTable`),
+              "headers": headers }, (err, res, body) => {
+
       if(err) {
         spinner.stop();
         updateMessage("ERROR");
