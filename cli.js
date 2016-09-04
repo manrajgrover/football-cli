@@ -4,7 +4,7 @@
 * @Author: Manraj Singh
 * @Date:   2016-08-24 12:21:30
 * @Last Modified by:   Manraj Singh
-* @Last Modified time: 2016-09-04 21:31:49
+* @Last Modified time: 2016-09-04 22:22:56
 */
 
 'use strict';
@@ -24,16 +24,12 @@ const helpers = require('./helpers');
 /**
  * Get all helpers from `helpers.js`
  */
-const getURL = helpers.getURL,
-      standings = helpers.standings,
+const fixturesHelper = helpers.fixturesHelper,
+      getURL = helpers.getURL,
       refresh = helpers.refresh,
-      fixturesHelper = helpers.fixturesHelper,
-      scoresHelper = helpers.scoresHelper;
-
-/**
- * URL to report to for any issue related to project
- */
-const BUGS_URL = "https://github.com/ManrajGrover/football-cli/issues";
+      scoresHelper = helpers.scoresHelper,
+      standings = helpers.standings,
+      updateMessage = helper.updateMessage;
 
 /**
  * Headers for every request that is made
@@ -84,7 +80,7 @@ const argv = yargs
     request({ "url": getURL(url), "headers": headers }, (err, res, body) => {
       if(err) {
         spinner.stop();
-        console.log(chalk.red.bold(`Sorry, an error occured. Please report issues to ${BUGS_URL} if problem persists.`));
+        updateMessage("ERROR");
       }
       else {
         spinner.stop();
@@ -125,7 +121,7 @@ const argv = yargs
       request({ "url": getURL(`competitions/${id}/fixtures?timeFrame=${timeFrame}`), "headers": headers }, (err, res, body) => {
         if(err) {
           spinner.stop();
-          console.log(chalk.red.bold(`Sorry, an error occured. Please report issues to ${BUGS_URL} if problem persists.`));
+          updateMessage("ERROR");
         }
         else {
           spinner.stop();
@@ -137,7 +133,7 @@ const argv = yargs
       request({ "url": getURL(`fixtures?timeFrame=${timeFrame}`), "headers": headers }, (err, res, body) => {
         if(err) {
           spinner.stop();
-          console.log(chalk.red.bold(`Sorry, an error occured. Please report issues to ${BUGS_URL} if problem persists.`));
+          updateMessage("ERROR");
         }
         else {
           spinner.stop();
@@ -171,7 +167,7 @@ const argv = yargs
     request({ "url": getURL(`competitions/${id}/leagueTable`), "headers": headers }, (err, res, body) => {
       if(err) {
         spinner.stop();
-        console.log(chalk.red.bold(`Sorry, an error occured. Please report issues to ${BUGS_URL} if problem persists.`));
+        updateMessage("ERROR");
       }
       else {
         spinner.stop();
@@ -196,7 +192,7 @@ const argv = yargs
       request({ "url": getURL("competitions"), "headers": headers }, (err, res, body) => {
         if(err) {
           spinner.stop();
-          console.log(chalk.red.bold(`Sorry, an error occured. Please report issues to ${BUGS_URL} if problem persists.`));
+          updateMessage("ERROR");
         }
         else {
           spinner.stop();
@@ -222,7 +218,7 @@ const argv = yargs
         ]);
       }
       spinner.stop();
-      console.log(table.toString());
+      console.log( table.toString() );
     }
   })
   .command('config', 'Change configuration and defaults', (yargs) => {
@@ -252,7 +248,7 @@ const argv = yargs
         obj.API_KEY = answers.API_KEY;
       }
 
-      fs.writeFileSync(__dirname+'/config.json', JSON.stringify(obj, null, 2), 'utf8');
+      fs.writeFileSync( __dirname + '/config.json', JSON.stringify(obj, null, 2), 'utf8');
       console.log(chalk.cyan.bold("API KEY has been updated."));
     });
   })

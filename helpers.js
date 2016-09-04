@@ -2,7 +2,7 @@
 * @Author: Manraj Singh
 * @Date:   2016-08-27 20:49:04
 * @Last Modified by:   Manraj Singh
-* @Last Modified time: 2016-09-04 21:45:54
+* @Last Modified time: 2016-09-04 22:22:11
 */
 
 "use strict";
@@ -12,7 +12,16 @@ const Table = require('cli-table');
 const chalk = require('chalk');
 const moment = require('moment');
 
+
+/**
+ * [API URL for all requests]
+ * @type {String}
+ */ 
 const API_URL = 'http://api.football-data.org/v1/';
+/**
+ * URL to report to for any issue related to project
+ */
+const BUGS_URL = "https://github.com/ManrajGrover/football-cli/issues";
 
 const buildScore = (name, homeTeam, goalsHomeTeam, goalsAwayTeam, awayTeam, time) => {
   return (
@@ -44,8 +53,10 @@ const fixturesHelper = (league, name, team, body) => {
 
       if((homeTeam.toLowerCase()).indexOf((team).toLowerCase()) !== -1 || 
          (awayTeam.toLowerCase()).indexOf((team).toLowerCase()) !== -1) {
+
         let time = (fixture.status === "IN_PLAY") ? "LIVE" : moment(fixture.date).calendar();
         console.log( buildScore(name, homeTeam, goalsHomeTeam, goalsAwayTeam, awayTeam, time) );
+
       }
     }
   }
@@ -62,7 +73,7 @@ const fixturesHelper = (league, name, team, body) => {
       name = (league === undefined) ? getLeagueName(fixture) : name;
 
       let time = (fixture.status === "IN_PLAY") ? "LIVE" : moment(fixture.date).calendar();
-      console.log(`${chalk.green.bold(name)}  ${chalk.cyan.bold(homeTeam)} ${chalk.cyan.bold(goalsHomeTeam)} vs. ${chalk.red.bold(goalsAwayTeam)} ${chalk.red.bold(awayTeam)} ${chalk.yellow.bold(time)}`);
+      console.log( buildScore(name, homeTeam, goalsHomeTeam, goalsAwayTeam, awayTeam, time) );
     }
   }
 };
@@ -92,7 +103,7 @@ const printScores = (arr, live) => {
         goalsHomeTeam = (fixture.result.goalsHomeTeam === null) ? "-1" : fixture.result.goalsHomeTeam,
         goalsAwayTeam = (fixture.result.goalsAwayTeam === null) ? "-1" : fixture.result.goalsAwayTeam,
         time = (live === true) ? "LIVE": moment(fixture.date).calendar();
-    console.log(`${chalk.green.bold(name)}  ${chalk.cyan.bold(homeTeam)} ${chalk.cyan.bold(goalsHomeTeam)} vs. ${chalk.red.bold(goalsAwayTeam)} ${chalk.red.bold(awayTeam)} ${chalk.yellow.bold(time)}`);
+    console.log( buildScore(name, homeTeam, goalsHomeTeam, goalsAwayTeam, awayTeam, time) );
   }
 };
 
@@ -123,20 +134,22 @@ const scoresHelper = (l, team, body) => {
 
     team = team.toLowerCase();
 
-    if(fixture.status === "IN_PLAY" && (homeTeam.indexOf(team) !== -1 || awayTeam.indexOf(team) !== -1)) {
+    if(fixture.status === "IN_PLAY" && (homeTeam.indexOf(team) !== -1 || 
+                                        awayTeam.indexOf(team) !== -1) ) {
       live.push(fixture);
       scores.push(fixture);
     }
-    else if(fixture.status === "FINISHED" && (homeTeam.indexOf(team) !== -1 || awayTeam.indexOf(team) !== -1)){
+    else if(fixture.status === "FINISHED" && (homeTeam.indexOf(team) !== -1 ||
+                                              awayTeam.indexOf(team) !== -1) ) {
       scores.push(fixture);
     }
   }
 
   if(l){
-    if(live.length !== 0){
+    if(live.length !== 0) {
       printScores(live, true);
     }
-    else{
+    else {
       console.log(chalk.cyan.bold("Sorry, no live match right now"));
     }
   }
@@ -178,7 +191,7 @@ const standings = (body) => {
       ]);
     }
 
-    console.log(table.toString());
+    console.log( table.toString() );
   }
   else {
     let standings = data.standings;
@@ -210,12 +223,27 @@ const standings = (body) => {
         ]);
       }
 
-      console.log(table.toString());
+      console.log( table.toString() );
     }
   }
 };
 
+const updateMessage = (TYPE, message = "") => {
+  switch(TYPE) {
+    case "ERROR":
+      console.log(
+        chalk.red.bold(`Sorry, an error occured. Please report issues to ${BUGS_URL} if problem persists.`)
+      );
+      break;
+    case "UPDATE":
+      break;
+    default:
+      
+  }
+};
+
 module.exports = {
+  "errorHelper": errorHelper,
   "fixturesHelper": fixturesHelper,
   "getURL": getURL,
   "refresh": refresh,
