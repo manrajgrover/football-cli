@@ -4,7 +4,7 @@
 * @Author: Manraj Singh
 * @Date:   2016-08-24 12:21:30
 * @Last Modified by:   Manraj Singh
-* @Last Modified time: 2016-09-04 22:23:24
+* @Last Modified time: 2016-09-04 22:39:30
 */
 
 'use strict';
@@ -112,13 +112,16 @@ const argv = yargs
     if(league !== undefined) {
       if(league_ids[league] === undefined){
         spinner.stop();
-        throw new Error(chalk.red.bold("No league found. Please check the League Code entered with the list `football lists`."));
+        updateMessage("LEAGUE_ERR");
       }
 
       let id = league_ids[league].id,
           name = league_ids[league].caption;
 
-      request({ "url": getURL(`competitions/${id}/fixtures?timeFrame=${timeFrame}`), "headers": headers }, (err, res, body) => {
+      request({ 
+                "url": getURL(`competitions/${id}/fixtures?timeFrame=${timeFrame}`),
+                "headers": headers
+              }, (err, res, body) => {
         if(err) {
           spinner.stop();
           updateMessage("ERROR");
@@ -130,7 +133,10 @@ const argv = yargs
       });
     }
     else {
-      request({ "url": getURL(`fixtures?timeFrame=${timeFrame}`), "headers": headers }, (err, res, body) => {
+      request({
+                "url": getURL(`fixtures?timeFrame=${timeFrame}`),
+                "headers": headers
+              }, (err, res, body) => {
         if(err) {
           spinner.stop();
           updateMessage("ERROR");
@@ -159,12 +165,15 @@ const argv = yargs
 
     if(league_ids[league] === undefined){
       spinner.stop();
-      throw new Error(chalk.red.bold("No league found. Please check the League Code entered with the list `football lists`."));
+      updateMessage("LEAGUE_ERR");
     }
 
     let id = league_ids[league].id;
 
-    request({ "url": getURL(`competitions/${id}/leagueTable`), "headers": headers }, (err, res, body) => {
+    request({
+              "url": getURL(`competitions/${id}/leagueTable`),
+              "headers": headers
+            }, (err, res, body) => {
       if(err) {
         spinner.stop();
         updateMessage("ERROR");
@@ -197,8 +206,8 @@ const argv = yargs
         else {
           spinner.stop();
           let newLeagueIDs = refresh(body);
-          fs.writeFileSync(__dirname+'/league_ids.json', JSON.stringify(newLeagueIDs, null, 2), 'utf8');
-          console.log(chalk.cyan.bold("New list fetched and saved"));
+          fs.writeFileSync( __dirname + '/league_ids.json', JSON.stringify(newLeagueIDs, null, 2), 'utf8');
+          updateMessage("UPDATE", "New list fetched and saved");
         }
       });
     }
@@ -249,7 +258,7 @@ const argv = yargs
       }
 
       fs.writeFileSync( __dirname + '/config.json', JSON.stringify(obj, null, 2), 'utf8');
-      console.log(chalk.cyan.bold("API KEY has been updated."));
+      updateMessage("UPDATE", "API KEY has been updated.");
     });
   })
   .help('h')

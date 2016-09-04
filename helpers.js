@@ -2,7 +2,7 @@
 * @Author: Manraj Singh
 * @Date:   2016-08-27 20:49:04
 * @Last Modified by:   Manraj Singh
-* @Last Modified time: 2016-09-04 22:26:14
+* @Last Modified time: 2016-09-04 22:40:48
 */
 
 "use strict";
@@ -56,8 +56,8 @@ const fixturesHelper = (league, name, team, body) => {
          (awayTeam.toLowerCase()).indexOf((team).toLowerCase()) !== -1) {
 
         let time = (fixture.status === "IN_PLAY") ? "LIVE" : moment(fixture.date).calendar();
-        console.log( buildScore(name, homeTeam, goalsHomeTeam, goalsAwayTeam, awayTeam, time) );
 
+        console.log( buildScore(name, homeTeam, goalsHomeTeam, goalsAwayTeam, awayTeam, time) );
       }
     }
   }
@@ -74,6 +74,7 @@ const fixturesHelper = (league, name, team, body) => {
       name = (league === undefined) ? getLeagueName(fixture) : name;
 
       let time = (fixture.status === "IN_PLAY") ? "LIVE" : moment(fixture.date).calendar();
+
       console.log( buildScore(name, homeTeam, goalsHomeTeam, goalsAwayTeam, awayTeam, time) );
     }
   }
@@ -83,11 +84,13 @@ const getLeagueName = (fixture) => {
   let compUrl = fixture._links.competition.href;
   let parts = compUrl.split('/');
   let id = parts[parts.length-1];
+
   for(let league in league_ids){
     if(league_ids[league].id == id) {
       return league_ids[league].caption;
     }
   }
+
   return "";
 };
 
@@ -96,20 +99,25 @@ const getURL = (endPoint) => {
 };
 
 const printScores = (arr, live) => {
+
   for(let i = 0; i < arr.length; i++){
     let fixture = arr[i];
+
     let name = getLeagueName(fixture),
         homeTeam = fixture.homeTeamName,
         awayTeam = fixture.awayTeamName,
         goalsHomeTeam = (fixture.result.goalsHomeTeam === null) ? "-1" : fixture.result.goalsHomeTeam,
         goalsAwayTeam = (fixture.result.goalsAwayTeam === null) ? "-1" : fixture.result.goalsAwayTeam,
         time = (live === true) ? "LIVE": moment(fixture.date).calendar();
+
     console.log( buildScore(name, homeTeam, goalsHomeTeam, goalsAwayTeam, awayTeam, time) );
   }
+
 };
 
 const refresh = (body) => {
-  let data = JSON.parse(body), newLeagueIDs = {};
+  let data = JSON.parse(body),
+      newLeagueIDs = {};
 
   for(let i = 0; i < data.length; i++) {
     let comp = data[i];
@@ -128,7 +136,8 @@ const scoresHelper = (l, team, body) => {
       fixtures = data.fixtures,
       live = [], scores = [];
 
-  for(let i = 0; i < fixtures.length; i++){
+  for(let i = 0; i < fixtures.length; i++) {
+
     let fixture = fixtures[i],
         homeTeam = (fixture.homeTeamName).toLowerCase(),
         awayTeam = (fixture.awayTeamName).toLowerCase();
@@ -147,20 +156,24 @@ const scoresHelper = (l, team, body) => {
   }
 
   if(l){
+
     if(live.length !== 0) {
       printScores(live, true);
     }
     else {
-      console.log(chalk.cyan.bold("Sorry, no live match right now"));
+      updateMessage("UPDATE", "Sorry, no live match right now");
     }
+
   }
   else{
+
     if(scores.length !== 0){
       printScores(scores, false);
     }
     else{
-      console.log(chalk.cyan.bold("Sorry, no scores to show right now"));
+      updateMessage("UPDATE", "Sorry, no scores to show right now");
     }
+
   }
 };
 
@@ -198,7 +211,7 @@ const standings = (body) => {
     let standings = data.standings;
 
     for(let groupCode in standings) {
-      console.log(chalk.bgCyan.bold.white(groupCode));
+      console.log( chalk.bgCyan.bold.white(groupCode) );
 
       let group = standings[groupCode];
 
@@ -215,6 +228,7 @@ const standings = (body) => {
 
       for(let i = 0; i < group.length; i++) {
         let team = group[i];
+
         table.push([
           chalk.bold.magenta(team.rank),
           chalk.bold.cyan(team.team),
@@ -222,6 +236,7 @@ const standings = (body) => {
           chalk.bold.blue(team.goalDifference),
           chalk.bold.green(team.points)
         ]);
+
       }
 
       console.log( table.toString() );
@@ -239,8 +254,11 @@ const updateMessage = (TYPE, message = "") => {
     case "UPDATE":
       console.log(chalk.bold.cyan(message));
       break;
+    case "LEAGUE_ERR":
+      throw new Error(chalk.red.bold("No league found. " + 
+                                     "Please check the League Code entered with the list `football lists`."));
     default:
-
+      console.log("ERROR OCCURED.");
   }
 };
 
