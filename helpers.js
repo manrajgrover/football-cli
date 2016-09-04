@@ -2,7 +2,7 @@
 * @Author: Manraj Singh
 * @Date:   2016-08-27 20:49:04
 * @Last Modified by:   Manraj Singh
-* @Last Modified time: 2016-09-04 21:38:14
+* @Last Modified time: 2016-09-04 21:45:54
 */
 
 "use strict";
@@ -14,6 +14,13 @@ const moment = require('moment');
 
 const API_URL = 'http://api.football-data.org/v1/';
 
+const buildScore = (name, homeTeam, goalsHomeTeam, goalsAwayTeam, awayTeam, time) => {
+  return (
+    `${chalk.green.bold(name)}  ${chalk.cyan.bold(homeTeam)} ${chalk.cyan.bold(goalsHomeTeam)} vs. ` + 
+    `${chalk.red.bold(goalsAwayTeam)} ${chalk.red.bold(awayTeam)} ${chalk.yellow.bold(time)}`
+  );
+};
+
 const fixturesHelper = (league, name, team, body) => {
   let data = JSON.parse(body),
       fixtures = data.fixtures;
@@ -22,8 +29,10 @@ const fixturesHelper = (league, name, team, body) => {
     console.log(chalk.bold.cyan("Sorry, no fixtures to show right now"));
     return;
   }
+
   if(team !== undefined) {
-    for(let i = 0; i< fixtures.length; i++) {
+
+    for(let i = 0; i < fixtures.length; i++) {
       let fixture = fixtures[i];
 
       let homeTeam = fixture.homeTeamName,
@@ -33,15 +42,16 @@ const fixturesHelper = (league, name, team, body) => {
 
       name = (league === undefined) ? getLeagueName(fixture) : name;
 
-      if((homeTeam.toLowerCase()).indexOf((team).toLowerCase()) !== -1 || (awayTeam.toLowerCase()).indexOf((team).toLowerCase()) !== -1){
+      if((homeTeam.toLowerCase()).indexOf((team).toLowerCase()) !== -1 || 
+         (awayTeam.toLowerCase()).indexOf((team).toLowerCase()) !== -1) {
         let time = (fixture.status === "IN_PLAY") ? "LIVE" : moment(fixture.date).calendar();
-        console.log(`${chalk.green.bold(name)}  ${chalk.cyan.bold(homeTeam)} ${chalk.cyan.bold(goalsHomeTeam)} vs. ${chalk.red.bold(goalsAwayTeam)} ${chalk.red.bold(awayTeam)} ${chalk.yellow.bold(time)}`);
+        console.log( buildScore(name, homeTeam, goalsHomeTeam, goalsAwayTeam, awayTeam, time) );
       }
     }
   }
   else {
 
-    for(let i = 0; i< fixtures.length; i++) {
+    for(let i = 0; i < fixtures.length; i++) {
       let fixture = fixtures[i];
 
       let homeTeam = fixture.homeTeamName,
