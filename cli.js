@@ -4,7 +4,7 @@
 * @Author: Manraj Singh
 * @Date:   2016-08-24 12:21:30
 * @Last Modified by:   Manraj Singh
-* @Last Modified time: 2016-09-03 21:42:58
+* @Last Modified time: 2016-09-04 21:30:44
 */
 
 'use strict';
@@ -93,6 +93,9 @@ const argv = yargs
     });
   })
   .command('fixtures', 'Get upcoming and past fixtures of a league and team', (yargs) => {
+    /**
+     * Get all the options set for `fixtures` command
+     */
     const argv = yargs
       .usage('Usage: $0 fixtures [options]')
       .alias('d', 'days').describe('t', 'Number of days')
@@ -103,6 +106,7 @@ const argv = yargs
       .argv;
     
     const spinner = ora('Fetching data').start();
+    
     let days = argv.d || 10,
         league = argv.l,
         team = argv.t || "",
@@ -143,6 +147,10 @@ const argv = yargs
     }
   })
   .command('standings', 'Get standings of particular league', (yargs) => {
+
+    /**
+     * Get all the options set for `standings` command
+     */
     const argv = yargs
       .usage('Usage: $0 standings [options]')
       .alias('l', 'league').describe('l', 'League to be searched').demand('l')
@@ -172,6 +180,10 @@ const argv = yargs
     });
   })
   .command('lists', 'List of codes of various competitions', (yargs) => {
+
+    /**
+     * Get all the options set for `lists` command
+     */
     const argv = yargs
       .usage('Usage: sudo $0 lists [options]')
       .alias('r', 'refresh').describe('r', 'Refresh league ids').boolean('r')
@@ -214,6 +226,10 @@ const argv = yargs
     }
   })
   .command('config', 'Change configuration and defaults', (yargs) => {
+
+    /**
+     * Get all the options set for `config` command
+     */
     const argv = yargs
       .usage('Usage: sudo $0 config')
       .example('sudo $0 config')
