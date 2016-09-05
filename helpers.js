@@ -2,7 +2,7 @@
 * @Author: Manraj Singh
 * @Date:   2016-08-27 20:49:04
 * @Last Modified by:   Manraj Singh
-* @Last Modified time: 2016-09-04 22:50:36
+* @Last Modified time: 2016-09-05 19:02:26
 */
 
 "use strict";
@@ -247,7 +247,7 @@ const standings = (body) => {
 const updateMessage = (TYPE, message = "") => {
   switch(TYPE) {
 
-    case "ERROR":
+    case "REQ_ERROR":
       console.log(
         chalk.red.bold(`Sorry, an error occured. Please report issues to ${BUGS_URL} if problem persists.`)
       );

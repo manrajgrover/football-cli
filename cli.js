@@ -4,7 +4,7 @@
 * @Author: Manraj Singh
 * @Date:   2016-08-24 12:21:30
 * @Last Modified by:   Manraj Singh
-* @Last Modified time: 2016-09-04 22:52:44
+* @Last Modified time: 2016-09-05 19:02:18
 */
 
 'use strict';
@@ -80,7 +80,7 @@ const argv = yargs
     request({ "url": getURL(url), "headers": headers }, (err, res, body) => {
       if(err) {
         spinner.stop();
-        updateMessage("ERROR");
+        updateMessage("REQ_ERROR");
       }
       else {
         spinner.stop();
@@ -123,7 +123,7 @@ const argv = yargs
                 "headers": headers }, (err, res, body) => {
         if(err) {
           spinner.stop();
-          updateMessage("ERROR");
+          updateMessage("REQ_ERROR");
         }
         else {
           spinner.stop();
@@ -137,7 +137,7 @@ const argv = yargs
 
         if(err) {
           spinner.stop();
-          updateMessage("ERROR");
+          updateMessage("REQ_ERROR");
         }
         else {
           spinner.stop();
@@ -173,7 +173,7 @@ const argv = yargs
 
       if(err) {
         spinner.stop();
-        updateMessage("ERROR");
+        updateMessage("REQ_ERROR");
       }
       else {
         spinner.stop();
@@ -198,7 +198,7 @@ const argv = yargs
       request({ "url": getURL("competitions"), "headers": headers }, (err, res, body) => {
         if(err) {
           spinner.stop();
-          updateMessage("ERROR");
+          updateMessage("REQ_ERROR");
         }
         else {
           spinner.stop();
