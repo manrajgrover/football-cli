@@ -4,7 +4,7 @@
 * @Author: Manraj Singh
 * @Date:   2016-08-24 12:21:30
 * @Last Modified by:   Manraj Singh
-* @Last Modified time: 2016-09-06 21:38:48
+* @Last Modified time: 2016-09-06 22:46:11
 */
 
 'use strict';
@@ -103,11 +103,21 @@ const argv = yargs
 
     const spinner = ora('Fetching data').start();
 
+    /**
+     * days   [Number of days for which data needs to be fetched]
+     * league [League code for which data needs to be fetched]
+     * team   [Team for which fixtures is requested]
+     * time   [Past or present depending on flag `n` set]
+     */
     let days = argv.d || 10,
         league = argv.l,
         team = argv.t || "",
         time = (argv.n === true) ? "n" : "p";
 
+    /**
+     * timeFrame [Combination of `time` and `days` as per API requirements]
+     * @type {[String]}
+     */
     let timeFrame = `${time}${days}`;
 
     if(league !== undefined) {
