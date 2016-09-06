@@ -4,7 +4,7 @@
 * @Author: Manraj Singh
 * @Date:   2016-08-24 12:21:30
 * @Last Modified by:   Manraj Singh
-* @Last Modified time: 2016-09-05 19:02:18
+* @Last Modified time: 2016-09-06 21:38:48
 */
 
 'use strict';
@@ -100,7 +100,7 @@ const argv = yargs
       .alias('n', 'next').describe('n', 'Next or upcoming matches').boolean('n')
       .example('$0 fixtures -l PL -d 5 -t "Manchester United" -n')
       .argv;
-    
+
     const spinner = ora('Fetching data').start();
 
     let days = argv.d || 10,

@@ -2,7 +2,7 @@
 * @Author: Manraj Singh
 * @Date:   2016-08-27 20:49:04
 * @Last Modified by:   Manraj Singh
-* @Last Modified time: 2016-09-05 19:02:26
+* @Last Modified time: 2016-09-06 21:38:27
 */
 
 "use strict";
@@ -26,7 +26,7 @@ const BUGS_URL = "https://github.com/ManrajGrover/football-cli/issues";
 
 const buildScore = (name, homeTeam, goalsHomeTeam, goalsAwayTeam, awayTeam, time) => {
   return (
-    `${chalk.green.bold(name)}  ${chalk.cyan.bold(homeTeam)} ${chalk.cyan.bold(goalsHomeTeam)} vs. ` + 
+    `${chalk.green.bold(name)}  ${chalk.cyan.bold(homeTeam)} ${chalk.cyan.bold(goalsHomeTeam)} vs. ` +
     `${chalk.red.bold(goalsAwayTeam)} ${chalk.red.bold(awayTeam)} ${chalk.yellow.bold(time)}`
   );
 };
@@ -52,7 +52,7 @@ const fixturesHelper = (league, name, team, body) => {
 
       name = (league === undefined) ? getLeagueName(fixture) : name;
 
-      if((homeTeam.toLowerCase()).indexOf((team).toLowerCase()) !== -1 || 
+      if((homeTeam.toLowerCase()).indexOf((team).toLowerCase()) !== -1 ||
          (awayTeam.toLowerCase()).indexOf((team).toLowerCase()) !== -1) {
 
         let time = (fixture.status === "IN_PLAY") ? "LIVE" : moment(fixture.date).calendar();
@@ -144,7 +144,7 @@ const scoresHelper = (l, team, body) => {
 
     team = team.toLowerCase();
 
-    if(fixture.status === "IN_PLAY" && (homeTeam.indexOf(team) !== -1 || 
+    if(fixture.status === "IN_PLAY" && (homeTeam.indexOf(team) !== -1 ||
                                         awayTeam.indexOf(team) !== -1) ) {
       live.push(fixture);
       scores.push(fixture);
@@ -258,7 +258,7 @@ const updateMessage = (TYPE, message = "") => {
       break;
 
     case "LEAGUE_ERR":
-      throw new Error(chalk.red.bold("No league found. " + 
+      throw new Error(chalk.red.bold("No league found. " +
                                      "Please check the League Code entered with the list `football lists`."));
 
     default:
@@ -272,5 +272,5 @@ module.exports = {
   "refresh": refresh,
   "scoresHelper": scoresHelper,
   "standings": standings,
-  "updateMessage": updateMessage 
+  "updateMessage": updateMessage
 };
