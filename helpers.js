@@ -2,7 +2,7 @@
 * @Author: Manraj Singh
 * @Date:   2016-08-27 20:49:04
 * @Last Modified by:   Manraj Singh
-* @Last Modified time: 2016-09-06 21:38:27
+* @Last Modified time: 2016-09-08 21:56:12
 */
 
 "use strict";
@@ -16,7 +16,7 @@ const moment = require('moment');
 /**
  * [API URL for all requests]
  * @type {String}
- */ 
+ */
 const API_URL = 'http://api.football-data.org/v1/';
 /**
  * [URL to report to for any issue related to project]
@@ -32,8 +32,8 @@ const buildScore = (name, homeTeam, goalsHomeTeam, goalsAwayTeam, awayTeam, time
 };
 
 const fixturesHelper = (league, name, team, body) => {
-  let data = JSON.parse(body),
-      fixtures = data.fixtures;
+  let data = JSON.parse(body);
+  let fixtures = data.fixtures;
 
   if(fixtures.length === 0){
     updateMessage("UPDATE", "Sorry, no fixtures to show right now");
@@ -45,10 +45,10 @@ const fixturesHelper = (league, name, team, body) => {
     for(let i = 0; i < fixtures.length; i++) {
       let fixture = fixtures[i];
 
-      let homeTeam = fixture.homeTeamName,
-          awayTeam = fixture.awayTeamName,
-          goalsHomeTeam = (fixture.result.goalsHomeTeam === null) ? "-1" : fixture.result.goalsHomeTeam,
-          goalsAwayTeam = (fixture.result.goalsAwayTeam === null) ? "-1" : fixture.result.goalsAwayTeam;
+      let homeTeam = fixture.homeTeamName;
+      let awayTeam = fixture.awayTeamName;
+      let goalsHomeTeam = (fixture.result.goalsHomeTeam === null) ? "-1" : fixture.result.goalsHomeTeam;
+      let goalsAwayTeam = (fixture.result.goalsAwayTeam === null) ? "-1" : fixture.result.goalsAwayTeam;
 
       name = (league === undefined) ? getLeagueName(fixture) : name;
 
@@ -66,10 +66,10 @@ const fixturesHelper = (league, name, team, body) => {
     for(let i = 0; i < fixtures.length; i++) {
       let fixture = fixtures[i];
 
-      let homeTeam = fixture.homeTeamName,
-          awayTeam = fixture.awayTeamName,
-          goalsHomeTeam = (fixture.result.goalsHomeTeam === null) ? "-1" : fixture.result.goalsHomeTeam,
-          goalsAwayTeam = (fixture.result.goalsAwayTeam === null) ? "-1" : fixture.result.goalsAwayTeam;
+      let homeTeam = fixture.homeTeamName;
+      let awayTeam = fixture.awayTeamName;
+      let goalsHomeTeam = (fixture.result.goalsHomeTeam === null) ? "-1" : fixture.result.goalsHomeTeam;
+      let goalsAwayTeam = (fixture.result.goalsAwayTeam === null) ? "-1" : fixture.result.goalsAwayTeam;
 
       name = (league === undefined) ? getLeagueName(fixture) : name;
 
@@ -103,12 +103,12 @@ const printScores = (arr, live) => {
   for(let i = 0; i < arr.length; i++){
     let fixture = arr[i];
 
-    let name = getLeagueName(fixture),
-        homeTeam = fixture.homeTeamName,
-        awayTeam = fixture.awayTeamName,
-        goalsHomeTeam = (fixture.result.goalsHomeTeam === null) ? "-1" : fixture.result.goalsHomeTeam,
-        goalsAwayTeam = (fixture.result.goalsAwayTeam === null) ? "-1" : fixture.result.goalsAwayTeam,
-        time = (live === true) ? "LIVE": moment(fixture.date).calendar();
+    let name = getLeagueName(fixture);
+    let homeTeam = fixture.homeTeamName;
+    let awayTeam = fixture.awayTeamName;
+    let goalsHomeTeam = (fixture.result.goalsHomeTeam === null) ? "-1" : fixture.result.goalsHomeTeam;
+    let goalsAwayTeam = (fixture.result.goalsAwayTeam === null) ? "-1" : fixture.result.goalsAwayTeam;
+    let time = (live === true) ? "LIVE": moment(fixture.date).calendar();
 
     console.log( buildScore(name, homeTeam, goalsHomeTeam, goalsAwayTeam, awayTeam, time) );
   }
@@ -132,9 +132,10 @@ const refresh = (body) => {
 };
 
 const scoresHelper = (l, team, body) => {
-  let data = JSON.parse(body),
-      fixtures = data.fixtures,
-      live = [], scores = [];
+  let data = JSON.parse(body);
+  let fixtures = data.fixtures;
+  let live = [];
+  let scores = [];
 
   for(let i = 0; i < fixtures.length; i++) {
 
@@ -178,7 +179,8 @@ const scoresHelper = (l, team, body) => {
 };
 
 const standings = (body) => {
-  let data = JSON.parse(body), table;
+  let data = JSON.parse(body);
+  let table;
 
   if(data.standing !== undefined) {
     let standing = data.standing;

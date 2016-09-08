@@ -4,7 +4,7 @@
 * @Author: Manraj Singh
 * @Date:   2016-08-24 12:21:30
 * @Last Modified by:   Manraj Singh
-* @Last Modified time: 2016-09-06 22:46:11
+* @Last Modified time: 2016-09-08 21:53:01
 */
 
 'use strict';
@@ -24,12 +24,12 @@ const helpers = require('./helpers');
 /**
  * Get all helpers from `helpers.js`
  */
-const fixturesHelper = helpers.fixturesHelper,
-      getURL = helpers.getURL,
-      refresh = helpers.refresh,
-      scoresHelper = helpers.scoresHelper,
-      standings = helpers.standings,
-      updateMessage = helpers.updateMessage;
+const fixturesHelper = helpers.fixturesHelper;
+const getURL = helpers.getURL;
+const refresh = helpers.refresh;
+const scoresHelper = helpers.scoresHelper;
+const standings = helpers.standings;
+const updateMessage = helpers.updateMessage;
 
 /**
  * Headers for every request that is made
@@ -62,13 +62,10 @@ const argv = yargs
     /**
      * timeFrameStart [Set start date from which fixtures is to be fetch]
      * timeFrameEnd   [Set end date till which fixtures is to be fetch]
-     */
-    let timeFrameStart = moment().subtract(1, "days").format("YYYY-MM-DD"),
-        timeFrameEnd = moment().add(1, "days").format("YYYY-MM-DD");
-
-    /**
      * End Point for fetching all fixtures between `timeFrameStart` and `timeFrameEnd`
      */
+    let timeFrameStart = moment().subtract(1, "days").format("YYYY-MM-DD");
+    let timeFrameEnd = moment().add(1, "days").format("YYYY-MM-DD");
     let url = `fixtures?timeFrameStart=${timeFrameStart}&timeFrameEnd=${timeFrameEnd}`;
 
     /**
@@ -109,10 +106,10 @@ const argv = yargs
      * team   [Team for which fixtures is requested]
      * time   [Past or present depending on flag `n` set]
      */
-    let days = argv.d || 10,
-        league = argv.l,
-        team = argv.t || "",
-        time = (argv.n === true) ? "n" : "p";
+    let days = argv.d || 10;
+    let league = argv.l;
+    let team = argv.t || "";
+    let time = (argv.n === true) ? "n" : "p";
 
     /**
      * timeFrame [Combination of `time` and `days` as per API requirements]
