@@ -2,7 +2,7 @@
 * @Author: Manraj Singh
 * @Date:   2016-08-27 20:49:04
 * @Last Modified by:   Manraj Singh
-* @Last Modified time: 2016-09-08 21:56:12
+* @Last Modified time: 2016-09-09 19:38:46
 */
 
 "use strict";
@@ -92,6 +92,19 @@ const getLeagueName = (fixture) => {
   }
 
   return "";
+};
+
+const getStandingsTableInstance = () => {
+  return new Table({
+    head: [
+      chalk.bold.white.bgCyan('Rank'),
+      chalk.bold.white.bgCyan('Team'),
+      chalk.bold.white.bgCyan('Played'),
+      chalk.bold.white.bgCyan('Goal Diff'),
+      chalk.bold.white.bgCyan('Points')
+    ],
+    colWidths: [ 7, 25, 10, 15, 10]
+  });
 };
 
 const getURL = (endPoint) => {
@@ -185,16 +198,7 @@ const standings = (body) => {
   if(data.standing !== undefined) {
     let standing = data.standing;
 
-    table = new Table({
-      head: [
-        chalk.bold.white.bgCyan('Rank'),
-        chalk.bold.white.bgCyan('Team'),
-        chalk.bold.white.bgCyan('Played'),
-        chalk.bold.white.bgCyan('Goal Diff'),
-        chalk.bold.white.bgCyan('Points')
-      ],
-      colWidths: [ 7, 25, 10, 15, 10]
-    });
+    table = getStandingsTableInstance();
 
     for(let i = 0; i < standing.length; i++) {
       let team = standing[i];
@@ -217,16 +221,7 @@ const standings = (body) => {
 
       let group = standings[groupCode];
 
-      table = new Table({
-        head: [
-          chalk.bold.white.bgCyan('Rank'),
-          chalk.bold.white.bgCyan('Team'),
-          chalk.bold.white.bgCyan('Played'),
-          chalk.bold.white.bgCyan('Goal Diff'),
-          chalk.bold.white.bgCyan('Points')
-        ],
-        colWidths: [ 7, 25, 10, 15, 10]
-      });
+      table = getStandingsTableInstance();
 
       for(let i = 0; i < group.length; i++) {
         let team = group[i];
