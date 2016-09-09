@@ -2,7 +2,7 @@
 * @Author: Manraj Singh
 * @Date:   2016-08-27 20:49:04
 * @Last Modified by:   Manraj Singh
-* @Last Modified time: 2016-09-09 19:38:46
+* @Last Modified time: 2016-09-09 19:55:58
 */
 
 "use strict";
@@ -35,49 +35,34 @@ const fixturesHelper = (league, name, team, body) => {
   let data = JSON.parse(body);
   let fixtures = data.fixtures;
 
-  if(fixtures.length === 0){
+  if(fixtures.length === 0) {
     updateMessage("UPDATE", "Sorry, no fixtures to show right now");
     return;
   }
 
-  if(team !== undefined) {
+  for(let i = 0; i < fixtures.length; i++) {
+    let fixture = fixtures[i];
 
-    for(let i = 0; i < fixtures.length; i++) {
-      let fixture = fixtures[i];
+    let homeTeam = fixture.homeTeamName;
+    let awayTeam = fixture.awayTeamName;
+    let goalsHomeTeam = (fixture.result.goalsHomeTeam === null) ? "-1" : fixture.result.goalsHomeTeam;
+    let goalsAwayTeam = (fixture.result.goalsAwayTeam === null) ? "-1" : fixture.result.goalsAwayTeam;
 
-      let homeTeam = fixture.homeTeamName;
-      let awayTeam = fixture.awayTeamName;
-      let goalsHomeTeam = (fixture.result.goalsHomeTeam === null) ? "-1" : fixture.result.goalsHomeTeam;
-      let goalsAwayTeam = (fixture.result.goalsAwayTeam === null) ? "-1" : fixture.result.goalsAwayTeam;
+    name = (league === undefined) ? getLeagueName(fixture) : name;
 
-      name = (league === undefined) ? getLeagueName(fixture) : name;
+    let time = (fixture.status === "IN_PLAY") ? "LIVE" : moment(fixture.date).calendar();
 
-      if((homeTeam.toLowerCase()).indexOf((team).toLowerCase()) !== -1 ||
-         (awayTeam.toLowerCase()).indexOf((team).toLowerCase()) !== -1) {
-
-        let time = (fixture.status === "IN_PLAY") ? "LIVE" : moment(fixture.date).calendar();
-
+    if(team !== undefined ) {
+      if ( (homeTeam.toLowerCase()).indexOf((team).toLowerCase()) !== -1 ||
+          (awayTeam.toLowerCase()).indexOf((team).toLowerCase()) !== -1 ) {
         console.log( buildScore(name, homeTeam, goalsHomeTeam, goalsAwayTeam, awayTeam, time) );
       }
     }
-  }
-  else {
-
-    for(let i = 0; i < fixtures.length; i++) {
-      let fixture = fixtures[i];
-
-      let homeTeam = fixture.homeTeamName;
-      let awayTeam = fixture.awayTeamName;
-      let goalsHomeTeam = (fixture.result.goalsHomeTeam === null) ? "-1" : fixture.result.goalsHomeTeam;
-      let goalsAwayTeam = (fixture.result.goalsAwayTeam === null) ? "-1" : fixture.result.goalsAwayTeam;
-
-      name = (league === undefined) ? getLeagueName(fixture) : name;
-
-      let time = (fixture.status === "IN_PLAY") ? "LIVE" : moment(fixture.date).calendar();
-
+    else {
       console.log( buildScore(name, homeTeam, goalsHomeTeam, goalsAwayTeam, awayTeam, time) );
     }
   }
+
 };
 
 const getLeagueName = (fixture) => {
