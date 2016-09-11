@@ -38,6 +38,8 @@ Options:
 #### Command `scores`
 Get scores of past and live fixtures
 
+![Standings](https://raw.githubusercontent.com/ManrajGrover/football-cli/master/assets/football-livescores.gif)
+
 ```
 Usage: football scores [options]
 
