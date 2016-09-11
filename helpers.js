@@ -2,7 +2,7 @@
 * @Author: Manraj Singh
 * @Date:   2016-08-27 20:49:04
 * @Last Modified by:   Manraj Singh
-* @Last Modified time: 2016-09-09 19:55:58
+* @Last Modified time: 2016-09-09 19:57:46
 */
 
 "use strict";
@@ -70,7 +70,7 @@ const getLeagueName = (fixture) => {
   let parts = compUrl.split('/');
   let id = parts[parts.length-1];
 
-  for(let league in league_ids){
+  for(let league in league_ids) {
     if(league_ids[league].id == id) {
       return league_ids[league].caption;
     }
