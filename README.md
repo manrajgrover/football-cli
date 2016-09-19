@@ -14,7 +14,7 @@ $ npm install -g footballcli
 
 ## How to get API Key?
 
-Please register on [football-data.org](http://api.football-data.org/register) to get your API Key. Then run `$ sudo football config` to add your API Key.
+Please register on [football-data.org](http://api.football-data.org/register) to get your API Key. Then run `$ sudo football config` to add your API Key. Requests made using API key increases your rate limit from 50 requests per day to 50 requests per minute.
 
 ## Usage
 
