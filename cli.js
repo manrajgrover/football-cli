@@ -4,7 +4,7 @@
 * @Author: Manraj Singh
 * @Date:   2016-08-24 12:21:30
 * @Last Modified by:   Manraj Singh
-* @Last Modified time: 2016-09-08 21:53:01
+* @Last Modified time: 2016-09-19 10:57:27
 */
 
 'use strict';
@@ -110,6 +110,10 @@ const argv = yargs
     let league = argv.l;
     let team = argv.t || "";
     let time = (argv.n === true) ? "n" : "p";
+
+    if (days < 0) {
+      updateMessage("FIX_INPUT_ERR");
+    }
 
     /**
      * timeFrame [Combination of `time` and `days` as per API requirements]
