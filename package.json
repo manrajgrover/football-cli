@@ -10,7 +10,7 @@
     "football": "./cli.js"
   },
   "engines": {
-    "node": ">=4.4.7"
+    "node": ">=4.5.0"
   },
   "repository": {
     "type": "git",
