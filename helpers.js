@@ -226,7 +226,9 @@ const standings = (body) => {
   }
 };
 
-const updateMessage = (TYPE, message = "") => {
+const updateMessage = (TYPE, message) => {
+  message = (typeof message !== 'undefined') ?  message : "";
+
   switch(TYPE) {
 
     case "REQ_ERROR":
