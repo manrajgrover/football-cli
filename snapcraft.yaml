@@ -1,0 +1,18 @@
+name: football
+version: 'master'
+summary: football-cli
+description: |
+  Command line interface for Hackers who love football
+
+grade: stable
+confinement: strict
+
+apps:
+  football:
+    command: bin/football
+    plugs: [network]
+
+parts:
+  football:
+    plugin: nodejs
+    source: .
