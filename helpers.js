@@ -2,7 +2,7 @@
 * @Author: Manraj Singh
 * @Date:   2016-08-27 20:49:04
 * @Last Modified by:   Manraj Singh
-* @Last Modified time: 2016-09-19 10:57:02
+* @Last Modified time: 2016-12-09 22:29:33
 */
 
 "use strict";
@@ -11,18 +11,10 @@ const league_ids = require('./league_ids');
 const Table = require('cli-table');
 const chalk = require('chalk');
 const moment = require('moment');
+const URLS = require('./constants');
 
-
-/**
- * [API URL for all requests]
- * @type {String}
- */
-const API_URL = 'http://api.football-data.org/v1/';
-/**
- * [URL to report to for any issue related to project]
- * @type {String}
- */
-const BUGS_URL = "https://github.com/ManrajGrover/football-cli/issues";
+const API_URL = URLS.API_URL,
+      BUGS_URL = URLS.BUGS_URL;
 
 const buildScore = (name, homeTeam, goalsHomeTeam, goalsAwayTeam, awayTeam, time) => {
   return (
