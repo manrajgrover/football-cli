@@ -2,7 +2,7 @@
 * @Author: Manraj Singh
 * @Date:   2016-08-27 20:49:04
 * @Last Modified by:   Manraj Singh
-* @Last Modified time: 2016-12-09 22:29:33
+* @Last Modified time: 2016-12-10 23:01:43
 */
 
 "use strict";
@@ -88,17 +88,17 @@ const getURL = (endPoint) => {
   return API_URL + endPoint;
 };
 
-const printScores = (arr, live) => {
+const printScores = (fixtures, isLive) => {
 
-  for(let i = 0; i < arr.length; i++){
-    let fixture = arr[i];
+  for(let i = 0; i < fixtures.length; i++){
+    let fixture = fixtures[i];
 
     let name = getLeagueName(fixture);
     let homeTeam = fixture.homeTeamName;
     let awayTeam = fixture.awayTeamName;
     let goalsHomeTeam = (fixture.result.goalsHomeTeam === null) ? "-1" : fixture.result.goalsHomeTeam;
     let goalsAwayTeam = (fixture.result.goalsAwayTeam === null) ? "-1" : fixture.result.goalsAwayTeam;
-    let time = (live === true) ? "LIVE": moment(fixture.date).calendar();
+    let time = (isLive === true) ? "LIVE": moment(fixture.date).calendar();
 
     console.log( buildScore(name, homeTeam, goalsHomeTeam, goalsAwayTeam, awayTeam, time) );
   }
@@ -121,7 +121,7 @@ const refresh = (body) => {
   return newLeagueIDs;
 };
 
-const scoresHelper = (l, team, body) => {
+const scoresHelper = (isLive, team, body) => {
   let data = JSON.parse(body);
   let fixtures = data.fixtures;
   let live = [];
@@ -146,7 +146,7 @@ const scoresHelper = (l, team, body) => {
     }
   }
 
-  if(l){
+  if(isLive){
 
     if(live.length !== 0) {
       printScores(live, true);
