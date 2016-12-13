@@ -125,4 +125,4 @@ You may find similar packages [here](http://api.football-data.org/libraries)
 
 ## License
 
-MIT © [ManrajGrover](https://github.com/ManrajGrover)
+[MIT](https://github.com/ManrajGrover/football-cli/blob/master/LICENSE) © ManrajGrover
