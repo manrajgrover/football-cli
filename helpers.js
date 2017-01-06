@@ -246,10 +246,10 @@ const updateMessage = (TYPE, message) => {
 };
 
 module.exports = {
-  "fixturesHelper": fixturesHelper,
-  "getURL": getURL,
-  "refresh": refresh,
-  "scoresHelper": scoresHelper,
-  "standings": standings,
-  "updateMessage": updateMessage
+  fixturesHelper,
+  getURL,
+  refresh,
+  scoresHelper,
+  standings,
+  updateMessage
 };
