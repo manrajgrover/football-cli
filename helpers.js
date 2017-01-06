@@ -1,10 +1,3 @@
-/*
-* @Author: Manraj Singh
-* @Date:   2016-08-27 20:49:04
-* @Last Modified by:   Manraj Singh
-* @Last Modified time: 2016-12-10 23:01:43
-*/
-
 "use strict";
 
 const league_ids = require('./league_ids');
