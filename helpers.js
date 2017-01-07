@@ -1,6 +1,6 @@
 "use strict";
 
-const league_ids = require('./league_ids');
+const leagueIds = require('./leagueIds');
 const Table = require('cli-table');
 const chalk = require('chalk');
 const moment = require('moment');
@@ -55,9 +55,9 @@ const getLeagueName = (fixture) => {
   let parts = compUrl.split('/');
   let id = parts[parts.length-1];
 
-  for(let league in league_ids) {
-    if(league_ids[league].id == id) {
-      return league_ids[league].caption;
+  for(let league in leagueIds) {
+    if(leagueIds[league].id == id) {
+      return leagueIds[league].caption;
     }
   }
 
