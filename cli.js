@@ -1,7 +1,5 @@
 #!/usr/bin/env node
 
-'use strict';
-
 const yargs = require('yargs');
 const fs = require('fs');
 const ora = require('ora');
@@ -11,7 +9,7 @@ const moment = require('moment');
 const inquirer = require('inquirer');
 const Table = require('cli-table');
 const config = require('./config');
-const league_ids = require('./league_ids');
+const leagueIds = require('./leagueIds');
 const helpers = require('./helpers');
 
 /**
@@ -28,7 +26,7 @@ const updateMessage = helpers.updateMessage;
  * Headers for every request that is made
  */
 const headers = {
-  'X-Auth-Token': config.API_KEY
+  'X-Auth-Token': config.API_KEY,
 };
 
 /**
@@ -37,42 +35,45 @@ const headers = {
 const argv = yargs
   .usage('$0 <command>')
   .command('scores', 'Get scores of past and live fixtures', (yargs) => {
-
     /**
      * Get all the options set for `scores` command
      */
     const argv = yargs
       .usage('Usage: $0 scores [options]')
-      .alias('l', 'live').describe('l', 'Live scores').boolean('l')
-      .alias('t', 'team').describe('t', 'Select team').string('t')
+      .alias('l', 'live')
+        .describe('l', 'Live scores')
+        .boolean('l')
+      .alias('t', 'team')
+        .describe('t', 'Select team')
+        .string('t')
       .example('$0 scores -t "Manchester United" -l')
       .argv;
 
     const spinner = ora('Fetching data').start();
 
-    let team = (argv.t === undefined) ? '' : (argv.t).toLowerCase();
+    const team = (argv.t === undefined) ? '' : (argv.t).toLowerCase();
 
     /**
      * timeFrameStart [Set start date from which fixtures is to be fetch]
      * timeFrameEnd   [Set end date till which fixtures is to be fetch]
      * End Point for fetching all fixtures between `timeFrameStart` and `timeFrameEnd`
      */
-    let timeFrameStart = moment().subtract(1, "days").format("YYYY-MM-DD");
-    let timeFrameEnd = moment().add(1, "days").format("YYYY-MM-DD");
-    let url = `fixtures?timeFrameStart=${timeFrameStart}&timeFrameEnd=${timeFrameEnd}`;
+    const timeFrameStart = moment().subtract(1, 'days').format('YYYY-MM-DD');
+    const timeFrameEnd = moment().add(1, 'days').format('YYYY-MM-DD');
+    const url = `fixtures?timeFrameStart=${timeFrameStart}&timeFrameEnd=${timeFrameEnd}`;
 
     /**
      * Creates request to fetch fixtures and show them
-     * @param  {[String]} options."url":     getURL(url)   [End point from where data needs to be fetched]
-     * @param  {[Object]} options."headers": headers       [Headers for the request]
-     * @return {[None]}                                    [None]
+     * @param  {[String]} options."url":     getURL(url) [End point from where data
+     *                                                    needs to be fetched]
+     * @param  {[Object]} options."headers": headers     [Headers for the request]
+     * @return {[None]}                                  [None]
      */
-    request({ "url": getURL(url), "headers": headers }, (err, res, body) => {
-      if(err) {
+    request({ url: getURL(url), headers }, (err, res, body) => {
+      if (err) {
         spinner.stop();
-        updateMessage("REQ_ERROR");
-      }
-      else {
+        updateMessage('REQ_ERROR');
+      } else {
         spinner.stop();
         scoresHelper(argv.l, team, body);
       }
@@ -115,13 +116,13 @@ const argv = yargs
     let timeFrame = `${time}${days}`;
 
     if(league !== undefined) {
-      if(league_ids[league] === undefined){
+      if(leagueIds[league] === undefined){
         spinner.stop();
         updateMessage("LEAGUE_ERR");
       }
 
-      let id = league_ids[league].id,
-          name = league_ids[league].caption;
+      let id = leagueIds[league].id,
+          name = leagueIds[league].caption;
 
       request({ "url": getURL(`competitions/${id}/fixtures?timeFrame=${timeFrame}`),
                 "headers": headers }, (err, res, body) => {
@@ -165,12 +166,12 @@ const argv = yargs
 
     let league = argv.l;
 
-    if(league_ids[league] === undefined){
+    if(leagueIds[league] === undefined){
       spinner.stop();
       updateMessage("LEAGUE_ERR");
     }
 
-    let id = league_ids[league].id;
+    let id = leagueIds[league].id;
 
     request({ "url": getURL(`competitions/${id}/leagueTable`),
               "headers": headers }, (err, res, body) => {
@@ -207,7 +208,7 @@ const argv = yargs
         else {
           spinner.stop();
           let newLeagueIDs = refresh(body);
-          fs.writeFileSync( __dirname + '/league_ids.json', JSON.stringify(newLeagueIDs, null, 2), 'utf8');
+          fs.writeFileSync( __dirname + '/leagueIds.json', JSON.stringify(newLeagueIDs, null, 2), 'utf8');
           updateMessage("UPDATE", "New list fetched and saved");
         }
       });
@@ -221,9 +222,9 @@ const argv = yargs
         colWidths: [ 40, 20]
       });
 
-      for(let league in league_ids){
+      for(let league in leagueIds){
         table.push([
-          chalk.bold.cyan(league_ids[league].caption),
+          chalk.bold.cyan(leagueIds[league].caption),
           chalk.bold.green(league)
         ]);
       }
