@@ -85,10 +85,16 @@ const argv = yargs
      */
     const argv = yargs
       .usage('Usage: $0 fixtures [options]')
-      .alias('d', 'days').describe('t', 'Number of days')
-      .alias('l', 'league').describe('l', 'League')
-      .alias('t', 'team').describe('t', 'Team name or substring of it').string('t')
-      .alias('n', 'next').describe('n', 'Next or upcoming matches').boolean('n')
+      .alias('d', 'days')
+        .describe('t', 'Number of days')
+      .alias('l', 'league')
+        .describe('l', 'League')
+      .alias('t', 'team')
+        .describe('t', 'Team name or substring of it')
+        .string('t')
+      .alias('n', 'next')
+        .describe('n', 'Next or upcoming matches')
+        .boolean('n')
       .example('$0 fixtures -l PL -d 5 -t "Manchester United" -n')
       .argv;
 
@@ -100,51 +106,51 @@ const argv = yargs
      * team   [Team for which fixtures is requested]
      * time   [Past or present depending on flag `n` set]
      */
-    let days = argv.d || 10;
-    let league = argv.l;
-    let team = argv.t || "";
-    let time = (argv.n === true) ? "n" : "p";
+    const days = argv.d || 10;
+    const league = argv.l;
+    const team = argv.t || '';
+    const time = (argv.n === true) ? 'n' : 'p';
 
     if (days < 0) {
-      updateMessage("FIX_INPUT_ERR");
+      updateMessage('FIX_INPUT_ERR');
     }
 
     /**
      * timeFrame [Combination of `time` and `days` as per API requirements]
      * @type {[String]}
      */
-    let timeFrame = `${time}${days}`;
+    const timeFrame = `${time}${days}`;
 
-    if(league !== undefined) {
-      if(leagueIds[league] === undefined){
+    if (league !== undefined) {
+      if (leagueIds[league] === undefined) {
         spinner.stop();
-        updateMessage("LEAGUE_ERR");
+        updateMessage('LEAGUE_ERR');
       }
 
-      let id = leagueIds[league].id,
-          name = leagueIds[league].caption;
+      const id = leagueIds[league].id;
+      const name = leagueIds[league].caption;
 
-      request({ "url": getURL(`competitions/${id}/fixtures?timeFrame=${timeFrame}`),
-                "headers": headers }, (err, res, body) => {
-        if(err) {
+      request({
+        url: getURL(`competitions/${id}/fixtures?timeFrame=${timeFrame}`),
+        headers,
+      }, (err, res, body) => {
+        if (err) {
           spinner.stop();
-          updateMessage("REQ_ERROR");
-        }
-        else {
+          updateMessage('REQ_ERROR');
+        } else {
           spinner.stop();
           fixturesHelper(league, name, team, body);
         }
       });
-    }
-    else {
-      request({ "url": getURL(`fixtures?timeFrame=${timeFrame}`),
-                "headers": headers }, (err, res, body) => {
-
-        if(err) {
+    } else {
+      request({
+        url: getURL(`fixtures?timeFrame=${timeFrame}`),
+        headers,
+      }, (err, res, body) => {
+        if (err) {
           spinner.stop();
-          updateMessage("REQ_ERROR");
-        }
-        else {
+          updateMessage('REQ_ERROR');
+        } else {
           spinner.stop();
           fixturesHelper(league, undefined, team, body);
         }
