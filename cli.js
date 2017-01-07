@@ -158,7 +158,6 @@ const argv = yargs
     }
   })
   .command('standings', 'Get standings of particular league', (yargs) => {
-
     /**
      * Get all the options set for `standings` command
      */
@@ -170,23 +169,23 @@ const argv = yargs
 
     const spinner = ora('Fetching data').start();
 
-    let league = argv.l;
+    const league = argv.l;
 
-    if(leagueIds[league] === undefined){
+    if (leagueIds[league] === undefined) {
       spinner.stop();
-      updateMessage("LEAGUE_ERR");
+      updateMessage('LEAGUE_ERR');
     }
 
-    let id = leagueIds[league].id;
+    const id = leagueIds[league].id;
 
-    request({ "url": getURL(`competitions/${id}/leagueTable`),
-              "headers": headers }, (err, res, body) => {
-
-      if(err) {
+    request({
+      url: getURL(`competitions/${id}/leagueTable`),
+      headers,
+    }, (err, res, body) => {
+      if (err) {
         spinner.stop();
-        updateMessage("REQ_ERROR");
-      }
-      else {
+        updateMessage('REQ_ERROR');
+      } else {
         spinner.stop();
         standings(body);
       }
