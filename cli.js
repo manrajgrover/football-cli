@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+'use strict';
+
 const yargs = require('yargs');
 const fs = require('fs');
 const ora = require('ora');
@@ -11,6 +13,7 @@ const Table = require('cli-table');
 const config = require('./config');
 const leagueIds = require('./leagueIds');
 const helpers = require('./helpers');
+const path = require('path');
 
 /**
  * Get all helpers from `helpers.js`
@@ -19,7 +22,7 @@ const fixturesHelper = helpers.fixturesHelper;
 const getURL = helpers.getURL;
 const refresh = helpers.refresh;
 const scoresHelper = helpers.scoresHelper;
-const standings = helpers.standings;
+const standingsHelper = helpers.standings;
 const updateMessage = helpers.updateMessage;
 
 /**
@@ -34,11 +37,11 @@ const headers = {
  */
 const argv = yargs
   .usage('$0 <command>')
-  .command('scores', 'Get scores of past and live fixtures', (yargs) => {
+  .command('scores', 'Get scores of past and live fixtures', (yargsScores) => {
     /**
      * Get all the options set for `scores` command
      */
-    const argv = yargs
+    const scores = yargsScores
       .usage('Usage: $0 scores [options]')
       .alias('l', 'live')
         .describe('l', 'Live scores')
@@ -51,7 +54,7 @@ const argv = yargs
 
     const spinner = ora('Fetching data').start();
 
-    const team = (argv.t === undefined) ? '' : (argv.t).toLowerCase();
+    const team = (scores.t === undefined) ? '' : (scores.t).toLowerCase();
 
     /**
      * timeFrameStart [Set start date from which fixtures is to be fetch]
@@ -75,15 +78,15 @@ const argv = yargs
         updateMessage('REQ_ERROR');
       } else {
         spinner.stop();
-        scoresHelper(argv.l, team, body);
+        scoresHelper(scores.l, team, body);
       }
     });
   })
-  .command('fixtures', 'Get upcoming and past fixtures of a league and team', (yargs) => {
+  .command('fixtures', 'Get upcoming and past fixtures of a league and team', (yargsFixtures) => {
     /**
      * Get all the options set for `fixtures` command
      */
-    const argv = yargs
+    const fixtures = yargsFixtures
       .usage('Usage: $0 fixtures [options]')
       .alias('d', 'days')
         .describe('t', 'Number of days')
@@ -106,10 +109,10 @@ const argv = yargs
      * team   [Team for which fixtures is requested]
      * time   [Past or present depending on flag `n` set]
      */
-    const days = argv.d || 10;
-    const league = argv.l;
-    const team = argv.t || '';
-    const time = (argv.n === true) ? 'n' : 'p';
+    const days = fixtures.d || 10;
+    const league = fixtures.l;
+    const team = fixtures.t || '';
+    const time = (fixtures.n === true) ? 'n' : 'p';
 
     if (days < 0) {
       updateMessage('FIX_INPUT_ERR');
@@ -157,11 +160,11 @@ const argv = yargs
       });
     }
   })
-  .command('standings', 'Get standings of particular league', (yargs) => {
+  .command('standings', 'Get standings of particular league', (yargsStandings) => {
     /**
      * Get all the options set for `standings` command
      */
-    const argv = yargs
+    const standings = yargsStandings
       .usage('Usage: $0 standings [options]')
       .alias('l', 'league').describe('l', 'League to be searched').demand('l')
       .example('$0 standings -l PL')
@@ -169,7 +172,7 @@ const argv = yargs
 
     const spinner = ora('Fetching data').start();
 
-    const league = argv.l;
+    const league = standings.l;
 
     if (leagueIds[league] === undefined) {
       spinner.stop();
@@ -187,85 +190,90 @@ const argv = yargs
         updateMessage('REQ_ERROR');
       } else {
         spinner.stop();
-        standings(body);
+        standingsHelper(body);
       }
     });
   })
-  .command('lists', 'List of codes of various competitions', (yargs) => {
-
+  .command('lists', 'List of codes of various competitions', (yargsLists) => {
     /**
      * Get all the options set for `lists` command
      */
-    const argv = yargs
+    const lists = yargsLists
       .usage('Usage: sudo $0 lists [options]')
-      .alias('r', 'refresh').describe('r', 'Refresh league ids').boolean('r')
+      .alias('r', 'refresh')
+        .describe('r', 'Refresh league ids')
+        .boolean('r')
       .example('sudo $0 lists -r')
       .argv;
 
     const spinner = ora('Fetching data').start();
 
-    if (argv.r) {
-      request({ "url": getURL("competitions"), "headers": headers }, (err, res, body) => {
-        if(err) {
+    if (lists.r) {
+      request({
+        url: getURL('competitions'),
+        headers,
+      }, (err, res, body) => {
+        if (err) {
           spinner.stop();
-          updateMessage("REQ_ERROR");
-        }
-        else {
+          updateMessage('REQ_ERROR');
+        } else {
           spinner.stop();
-          let newLeagueIDs = refresh(body);
-          fs.writeFileSync( __dirname + '/leagueIds.json', JSON.stringify(newLeagueIDs, null, 2), 'utf8');
-          updateMessage("UPDATE", "New list fetched and saved");
+          const newLeagueIDs = refresh(body);
+          fs.writeFileSync(
+            path.resolve(__dirname, 'leagueIds.json'),
+            JSON.stringify(newLeagueIDs, null, 2),
+            'utf8'
+          );
+          updateMessage('UPDATE', 'New list fetched and saved');
         }
       });
-    }
-    else {
-      let table = new Table({
+    } else {
+      const table = new Table({
         head: [
           chalk.bold.white.bgCyan('League'),
-          chalk.bold.white.bgCyan('League Code')
+          chalk.bold.white.bgCyan('League Code'),
         ],
-        colWidths: [ 40, 20]
+        colWidths: [40, 20],
       });
 
-      for(let league in leagueIds){
+      for (let league of Object.keys(leagueIds)) {
         table.push([
           chalk.bold.cyan(leagueIds[league].caption),
-          chalk.bold.green(league)
+          chalk.bold.green(league),
         ]);
       }
       spinner.stop();
-      console.log( table.toString() );
+      console.log(table.toString());
     }
   })
-  .command('config', 'Change configuration and defaults', (yargs) => {
-
+  .command('config', 'Change configuration and defaults', (yargsConfig) => {
     /**
      * Get all the options set for `config` command
      */
-    const argv = yargs
+    const configs = yargsConfig
       .usage('Usage: sudo $0 config')
       .example('sudo $0 config')
       .argv;
 
-    if(argv.h){
+    if (configs.h) {
       return;
     }
 
     const questions = [{
       type: 'input',
       name: 'API_KEY',
-      message: 'Enter API KEY <leave blank incase unchanged>'
+      message: 'Enter API KEY <leave blank incase unchanged>',
     }];
 
     inquirer.prompt(questions).then((answers) => {
-      let obj = config;
+      const obj = config;
 
-      if (answers.API_KEY !== ''){
+      if (answers.API_KEY !== '') {
         obj.API_KEY = answers.API_KEY;
       }
 
-      fs.writeFileSync( __dirname + '/config.json', JSON.stringify(obj, null, 2), 'utf8');
-      updateMessage("UPDATE", "API KEY has been updated.");
+      fs.writeFileSync(path.resolve(__dirname, 'config.json'), JSON.stringify(obj, null, 2), 'utf8');
+      updateMessage('UPDATE', 'API KEY has been updated.');
     });
   })
   .help('h')
