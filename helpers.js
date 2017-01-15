@@ -15,7 +15,7 @@ const buildScore = (name, homeTeam, goalsHomeTeam, goalsAwayTeam, awayTeam, time
 );
 
 const updateMessage = (TYPE, message) => {
-  message = (typeof message !== 'undefined') ?  message : '';
+  message = message || '';
 
   switch (TYPE) {
 
@@ -30,8 +30,9 @@ const updateMessage = (TYPE, message) => {
       break;
 
     case 'LEAGUE_ERR':
-      throw new Error(chalk.red.bold('No league found. ' +
-                                     'Please check the League Code entered with the list `football lists`.'));
+      throw new Error(chalk.red.bold(
+        'No league found. Please check the League Code entered with the list `football lists`.'
+      ));
 
     case 'FIX_INPUT_ERR':
       throw new Error(chalk.red.bold('Days cannot be a negative value.'));
@@ -47,7 +48,7 @@ const getLeagueName = (fixture) => {
   let id = parts[parts.length - 1];
 
   for (let league in leagueIds) {
-    if (leagueIds[league].id == id) {
+    if (leagueIds[league].id === id) {
       return leagueIds[league].caption;
     }
   }
@@ -64,9 +65,7 @@ const fixturesHelper = (league, name, team, body) => {
     return;
   }
 
-  for (let i = 0; i < fixtures.length; i++) {
-    let fixture = fixtures[i];
-
+  for (let fixture of fixtures) {
     let homeTeam = fixture.homeTeamName;
     let awayTeam = fixture.awayTeamName;
     let goalsHomeTeam = (fixture.result.goalsHomeTeam === null) ? '-1' : fixture.result.goalsHomeTeam;
@@ -85,7 +84,6 @@ const fixturesHelper = (league, name, team, body) => {
       console.log(buildScore(name, homeTeam, goalsHomeTeam, goalsAwayTeam, awayTeam, time));
     }
   }
-
 };
 
 const getStandingsTableInstance = () => (
@@ -101,35 +99,29 @@ const getStandingsTableInstance = () => (
   })
 );
 
-const getURL = (endPoint) => API_URL + endPoint;
+const getURL = endPoint => API_URL + endPoint;
 
 const printScores = (fixtures, isLive) => {
-
-  for(let i = 0; i < fixtures.length; i++){
-    let fixture = fixtures[i];
-
+  for (let fixture of fixtures) {
     let name = getLeagueName(fixture);
     let homeTeam = fixture.homeTeamName;
     let awayTeam = fixture.awayTeamName;
-    let goalsHomeTeam = (fixture.result.goalsHomeTeam === null) ? "-1" : fixture.result.goalsHomeTeam;
-    let goalsAwayTeam = (fixture.result.goalsAwayTeam === null) ? "-1" : fixture.result.goalsAwayTeam;
-    let time = (isLive === true) ? "LIVE": moment(fixture.date).calendar();
+    let goalsHomeTeam = (fixture.result.goalsHomeTeam === null) ? '-1' : fixture.result.goalsHomeTeam;
+    let goalsAwayTeam = (fixture.result.goalsAwayTeam === null) ? '-1' : fixture.result.goalsAwayTeam;
+    let time = (isLive === true) ? 'LIVE' : moment(fixture.date).calendar();
 
-    console.log( buildScore(name, homeTeam, goalsHomeTeam, goalsAwayTeam, awayTeam, time) );
+    console.log(buildScore(name, homeTeam, goalsHomeTeam, goalsAwayTeam, awayTeam, time));
   }
-
 };
 
 const refresh = (body) => {
-  let data = JSON.parse(body),
-      newLeagueIDs = {};
+  let data = JSON.parse(body);
+  let newLeagueIDs = {};
 
-  for(let i = 0; i < data.length; i++) {
-    let comp = data[i];
-
+  for (let comp of data) {
     newLeagueIDs[comp.league] = {
-      "id": comp.id,
-      "caption": comp.caption
+      id: comp.id,
+      caption: comp.caption
     };
   }
 
@@ -142,21 +134,18 @@ const scoresHelper = (isLive, team, body) => {
   let live = [];
   let scores = [];
 
-  for(let i = 0; i < fixtures.length; i++) {
+  team = team.toLowerCase();
 
-    let fixture = fixtures[i],
-        homeTeam = (fixture.homeTeamName).toLowerCase(),
-        awayTeam = (fixture.awayTeamName).toLowerCase();
+  for (let fixture of fixtures) {
+    let homeTeam = (fixture.homeTeamName).toLowerCase();
+    let awayTeam = (fixture.awayTeamName).toLowerCase();
 
-    team = team.toLowerCase();
-
-    if(fixture.status === "IN_PLAY" && (homeTeam.indexOf(team) !== -1 ||
-                                        awayTeam.indexOf(team) !== -1) ) {
+    if (fixture.status === 'IN_PLAY' && (homeTeam.indexOf(team) !== -1 ||
+                                         awayTeam.indexOf(team) !== -1)) {
       live.push(fixture);
       scores.push(fixture);
-    }
-    else if(fixture.status === "FINISHED" && (homeTeam.indexOf(team) !== -1 ||
-                                              awayTeam.indexOf(team) !== -1) ) {
+    } else if (fixture.status === 'FINISHED' && (homeTeam.indexOf(team) !== -1 ||
+                                                 awayTeam.indexOf(team) !== -1)) {
       scores.push(fixture);
     }
   }
@@ -167,15 +156,12 @@ const scoresHelper = (isLive, team, body) => {
     } else {
       updateMessage('UPDATE', 'Sorry, no live match right now');
     }
-
-  }
-  else {
+  } else {
     if (scores.length !== 0) {
       printScores(scores, false);
-    } else{
-      updateMessage("UPDATE", "Sorry, no scores to show right now");
+    } else {
+      updateMessage('UPDATE', 'Sorry, no scores to show right now');
     }
-
   }
 };
 
@@ -188,8 +174,7 @@ const standings = (body) => {
 
     table = getStandingsTableInstance();
 
-    for (let i = 0; i < standing.length; i++) {
-      let team = standing[i];
+    for (let team of standing) {
       table.push([
         chalk.bold.magenta(team.position),
         chalk.bold.cyan(team.teamName),
@@ -201,18 +186,16 @@ const standings = (body) => {
 
     console.log(table.toString());
   } else {
-    let standings = data.standings;
+    let groupStandings = data.standings;
 
-    for (let groupCode in standings) {
-      console.log( chalk.bgCyan.bold.white(groupCode) );
+    for (let groupCode in groupStandings) {
+      console.log(chalk.bgCyan.bold.white(groupCode));
 
       let group = standings[groupCode];
 
       table = getStandingsTableInstance();
 
-      for (let i = 0; i < group.length; i++) {
-        let team = group[i];
-
+      for (let team of group) {
         table.push([
           chalk.bold.magenta(team.rank),
           chalk.bold.cyan(team.team),
@@ -220,9 +203,7 @@ const standings = (body) => {
           chalk.bold.blue(team.goalDifference),
           chalk.bold.green(team.points),
         ]);
-
       }
-
       console.log(table.toString());
     }
   }
