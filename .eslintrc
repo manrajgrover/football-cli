@@ -6,6 +6,8 @@
     "strict": "off",
     "comma-dangle": "off",
     "no-restricted-syntax": "off",
-    "prefer-const": "off"
+    "prefer-const": "off",
+    "no-underscore-dangle": "off",
+    "no-param-reassign": "off"
   }
 }
