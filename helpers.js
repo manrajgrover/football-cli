@@ -64,7 +64,12 @@ const fixturesHelper = (league, name, team, body) => {
   let data = JSON.parse(body);
   let fixtures = data.fixtures;
 
-  if (fixtures === undefined || fixtures.length === 0) {
+  if ('error' in data) {
+    updateMessage('CUSTOM_ERR', data.error);
+    return;
+  }
+
+  if (fixtures.length === 0) {
     updateMessage('UPDATE', 'Sorry, no fixtures to show right now');
     return;
   }
@@ -122,6 +127,11 @@ const refresh = (body) => {
   let data = JSON.parse(body);
   let newLeagueIDs = {};
 
+  if ('error' in data) {
+    updateMessage('CUSTOM_ERR', data.error);
+    return;
+  }
+
   for (let comp of data) {
     newLeagueIDs[comp.league] = {
       id: comp.id,
@@ -137,6 +147,11 @@ const scoresHelper = (isLive, team, body) => {
   let fixtures = data.fixtures;
   let live = [];
   let scores = [];
+
+  if ('error' in data) {
+    updateMessage('CUSTOM_ERR', data.error);
+    return;
+  }
 
   team = team.toLowerCase();
 
@@ -172,6 +187,11 @@ const scoresHelper = (isLive, team, body) => {
 const standings = (body) => {
   let data = JSON.parse(body);
   let table;
+
+  if ('error' in data) {
+    updateMessage('CUSTOM_ERR', data.error);
+    return;
+  }
 
   if (data.standing !== undefined) {
     let standing = data.standing;
