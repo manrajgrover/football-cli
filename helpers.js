@@ -25,6 +25,10 @@ const updateMessage = (TYPE, message) => {
       );
       break;
 
+    case 'CUSTOM_ERR':
+      console.log(chalk.bold.red(message));
+      break;
+
     case 'UPDATE':
       console.log(chalk.bold.cyan(message));
       break;
