@@ -64,7 +64,7 @@ const fixturesHelper = (league, name, team, body) => {
   let data = JSON.parse(body);
   let fixtures = data.fixtures;
 
-  if (fixtures.length === 0) {
+  if (fixtures === undefined || fixtures.length === 0) {
     updateMessage('UPDATE', 'Sorry, no fixtures to show right now');
     return;
   }
