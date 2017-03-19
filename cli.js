@@ -57,8 +57,8 @@ const argv = yargs
     const team = (scores.t === undefined) ? '' : (scores.t).toLowerCase();
 
     /**
-     * timeFrameStart [Set start date from which fixtures is to be fetch]
-     * timeFrameEnd   [Set end date till which fixtures is to be fetch]
+     * timeFrameStart Set start date from which fixtures is to be fetch
+     * timeFrameEnd   Set end date till which fixtures is to be fetch
      * End Point for fetching all fixtures between `timeFrameStart` and `timeFrameEnd`
      */
     const timeFrameStart = moment().subtract(1, 'days').format('YYYY-MM-DD');
@@ -67,10 +67,10 @@ const argv = yargs
 
     /**
      * Creates request to fetch fixtures and show them
-     * @param  {[String]} options."url":     getURL(url) [End point from where data
-     *                                                    needs to be fetched]
-     * @param  {[Object]} options."headers": headers     [Headers for the request]
-     * @return {[None]}                                  [None]
+     * @param  {String} options."url":     getURL(url) End point from where data
+     *                                                    needs to be fetched
+     * @param  {Object} options."headers": headers     Headers for the request
+     * @return {None}                                  None
      */
     request({ url: getURL(url), headers }, (err, res, body) => {
       if (err) {
@@ -104,10 +104,10 @@ const argv = yargs
     const spinner = ora('Fetching data').start();
 
     /**
-     * days   [Number of days for which data needs to be fetched]
-     * league [League code for which data needs to be fetched]
-     * team   [Team for which fixtures is requested]
-     * time   [Past or present depending on flag `n` set]
+     * days   Number of days for which data needs to be fetched
+     * league League code for which data needs to be fetched
+     * team   Team for which fixtures is requested
+     * time   Past or present depending on flag `n` set
      */
     const days = fixtures.d || 10;
     const league = fixtures.l;
@@ -119,8 +119,8 @@ const argv = yargs
     }
 
     /**
-     * timeFrame [Combination of `time` and `days` as per API requirements]
-     * @type {[String]}
+     * timeFrame Combination of `time` and `days` as per API requirements
+     * @type {String}
      */
     const timeFrame = `${time}${days}`;
 
