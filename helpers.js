@@ -129,7 +129,7 @@ const refresh = (body) => {
 
   if ('error' in data) {
     updateMessage('CUSTOM_ERR', data.error);
-    return;
+    return null;
   }
 
   for (let comp of data) {
