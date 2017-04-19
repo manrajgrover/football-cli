@@ -8,6 +8,8 @@
     "no-restricted-syntax": "off",
     "prefer-const": "off",
     "no-underscore-dangle": "off",
-    "no-param-reassign": "off"
+    "no-param-reassign": "off",
+    "guard-for-in": "off",
+    "no-lonely-if": "off"
   }
 }
