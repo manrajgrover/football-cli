@@ -8,7 +8,7 @@
 
 **Run**
 
-```
+```shell
 $ npm install -g footballcli
 ```
 
@@ -20,7 +20,7 @@ Please register on [football-data.org](http://api.football-data.org/register) to
 
 ### Commands available
 
-```
+```shell
 football <command>
 
 Commands:
@@ -40,7 +40,7 @@ Get scores of past and live fixtures
 
 ![Standings](https://raw.githubusercontent.com/ManrajGrover/football-cli/master/assets/football-livescores.gif)
 
-```
+```shell
 Usage: football scores [options]
 
 Options:
@@ -56,7 +56,7 @@ Examples:
 #### Command `fixtures`
 Get upcoming and past fixtures of a league and team
 
-```
+```shell
 Usage: football fixtures [options]
 
 Options:
@@ -75,7 +75,7 @@ Examples:
 #### Command `standings`
 Get standings of particular league
 
-```
+```shell
 Usage: football standings [options]
 
 Options:
@@ -90,7 +90,7 @@ Examples:
 #### Command `lists`
 List of codes of various competitions
 
-```
+```shell
 Usage: sudo football lists [options]
 
 Options:
@@ -105,7 +105,7 @@ Examples:
 #### Command `config`
 Change configuration and defaults
 
-```
+```shell
 Usage: sudo football config
 
 Options:
