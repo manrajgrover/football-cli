@@ -1,62 +1,62 @@
 {
-  "EC": {
-    "id": 424,
-    "caption": "European Championships France 2016"
+  "BSA": {
+    "id": 444,
+    "caption": "Campeonato Brasileiro da Série A"
   },
   "PL": {
-    "id": 426,
-    "caption": "Premier League 2016/17"
+    "id": 445,
+    "caption": "Premier League 2017/18"
   },
   "ELC": {
-    "id": 427,
-    "caption": "Championship 2016/17"
+    "id": 446,
+    "caption": "Championship 2017/18"
   },
   "EL1": {
-    "id": 428,
-    "caption": "League One 2016/17"
+    "id": 447,
+    "caption": "League One 2017/18"
   },
-  "BL1": {
-    "id": 430,
-    "caption": "1. Bundesliga 2016/17"
-  },
-  "BL2": {
-    "id": 431,
-    "caption": "2. Bundesliga 2016/17"
-  },
-  "DFB": {
-    "id": 432,
-    "caption": "DFB-Pokal 2016/17"
+  "EL2": {
+    "id": 448,
+    "caption": "League Two 2017/18"
   },
   "DED": {
-    "id": 433,
-    "caption": "Eredivisie 2016/17"
+    "id": 449,
+    "caption": "Eredivisie 2017/18"
   },
   "FL1": {
-    "id": 434,
-    "caption": "Ligue 1 2016/17"
+    "id": 450,
+    "caption": "Ligue 1 2017/18"
   },
   "FL2": {
-    "id": 435,
-    "caption": "Ligue 2 2016/17"
+    "id": 451,
+    "caption": "Ligue 2 2017/18"
+  },
+  "BL1": {
+    "id": 452,
+    "caption": "1. Bundesliga 2017/18"
+  },
+  "BL2": {
+    "id": 453,
+    "caption": "2. Bundesliga 2017/18"
   },
   "PD": {
-    "id": 436,
-    "caption": "Primera Division 2016/17"
-  },
-  "SD": {
-    "id": 437,
-    "caption": "Liga Adelante 2016/17"
+    "id": 455,
+    "caption": "Primera Division 2017"
   },
   "SA": {
-    "id": 438,
-    "caption": "Serie A 2016/17"
+    "id": 456,
+    "caption": "Serie A 2017/18"
   },
   "PPL": {
-    "id": 439,
-    "caption": "Primeira Liga 2016/17"
+    "id": 457,
+    "caption": "Primeira Liga 2017/18"
   },
-  "CL": {
-    "id": 440,
-    "caption": "Champions League 2016/17"
+  "DFB": {
+    "id": 458,
+    "caption": "DFB-Pokal 2017/18"
+  },
+  "SB": {
+    "id": 459,
+    "caption": "Serie B 2017/18"
   }
 }
