@@ -1,5 +1,5 @@
 # football-cli
-[![npm version](https://badge.fury.io/js/footballcli.svg)](https://www.npmjs.com/package/footballcli) [![npm](https://img.shields.io/npm/dt/footballcli.svg?maxAge=2592000?style=flat-square)](https://www.npmjs.com/package/footballcli) ![awesome](https://img.shields.io/badge/awesome-yes-green.svg)
+[![Build Status](https://travis-ci.org/ManrajGrover/football-cli.svg?branch=master)](https://travis-ci.org/ManrajGrover/football-cli) [![npm version](https://badge.fury.io/js/footballcli.svg)](https://www.npmjs.com/package/footballcli) [![npm](https://img.shields.io/npm/dt/footballcli.svg?maxAge=2592000?style=flat-square)](https://www.npmjs.com/package/footballcli) ![awesome](https://img.shields.io/badge/awesome-yes-green.svg)
 > Command line interface for Hackers who love football ⚽
 
 ![Standings](https://raw.githubusercontent.com/ManrajGrover/football-cli/master/assets/football-standings.gif)
