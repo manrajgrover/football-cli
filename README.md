@@ -116,6 +116,24 @@ Examples:
   
 ```
 
+## Development
+
+Run:
+
+```sh
+$ git clone https://github.com/ManrajGrover/football-cli.git
+$ cd football-cli
+$ npm link
+```
+
+This will setup a symbolic link to the CLI. Any changes in source files will now be reflected when running the `football` command.
+
+To lint your code, run
+
+```sh
+$ npm run lint
+```
+
 ## Get in touch
 
 Say hi on [twitter](https://twitter.com/manrajsgrover) and share this project by clicking [here](https://twitter.com/home?status=Checkout%20command%20line%20tool%20for%20checking%20live%20%23scores,%20%23fixtures%20and%20more%20on%20%23Github%20by%20%40manrajsgrover%20%23cli%20https%3A//github.com/ManrajGrover/football-cli)
