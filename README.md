@@ -61,8 +61,9 @@ Usage: football fixtures [options]
 
 Options:
   -h, --help    Show help                                         [boolean]
+  -d, --days    Number of days from today                         [number]
+  -l, --league  League                                            [string]
   -t, --team    Team name or substring of it                      [string]
-  -l, --league  League
   -n, --next    Next or upcoming matches                          [boolean]
 
 Examples:
