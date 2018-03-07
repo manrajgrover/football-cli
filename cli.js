@@ -89,9 +89,11 @@ const argv = yargs
     const fixtures = yargsFixtures
       .usage('Usage: $0 fixtures [options]')
       .alias('d', 'days')
-        .describe('t', 'Number of days')
+        .describe('d', 'Number of days from today')
+        .number('d')
       .alias('l', 'league')
         .describe('l', 'League')
+        .string('l')
       .alias('t', 'team')
         .describe('t', 'Team name or substring of it')
         .string('t')
@@ -166,7 +168,9 @@ const argv = yargs
      */
     const standings = yargsStandings
       .usage('Usage: $0 standings [options]')
-      .alias('l', 'league').describe('l', 'League to be searched').demand('l')
+      .alias('l', 'league')
+        .describe('l', 'League to be searched')
+        .demand('l')
       .example('$0 standings -l PL')
       .argv;
 
