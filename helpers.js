@@ -215,7 +215,7 @@ const standings = (body) => {
     for (let groupCode in groupStandings) {
       console.log(chalk.bgCyan.bold.white(groupCode));
 
-      let group = standings[groupCode];
+      let group = groupStandings[groupCode];
 
       table = getStandingsTableInstance();
 

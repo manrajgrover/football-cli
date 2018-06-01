@@ -58,5 +58,13 @@
   "SB": {
     "id": 459,
     "caption": "Serie B 2017/18"
+  },
+  "CL": {
+    "id": 464,
+    "caption": "Champions League 2017/18"
+  },
+  "AAL": {
+    "id": 466,
+    "caption": "Australian A-League"
   }
 }
