@@ -14,7 +14,7 @@
 
 ### Versions
 
-- NodeJS version (if applicable):
+- NodeJS version:
 - Football CLI version:
 
 ### Error
