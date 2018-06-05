@@ -1,2 +1,6 @@
-/assets
-/.github
+assets/
+.github/
+.editorconfig
+.eslintrc
+.jshintrc
+.travis.yml
