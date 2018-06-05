@@ -1,6 +1,6 @@
 {
   "name": "footballcli",
-  "version": "0.14.2",
+  "version": "0.14.3",
   "description": "Command Line Interface for next fixtures, live scores and more",
   "main": "cli.js",
   "scripts": {
