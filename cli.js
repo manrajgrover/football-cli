@@ -266,7 +266,7 @@ const argv = yargs
     const questions = [{
       type: 'input',
       name: 'API_KEY',
-      message: 'Enter API KEY <leave blank incase unchanged>',
+      message: 'Enter API KEY <leave blank in case unchanged>',
     }];
 
     inquirer.prompt(questions).then((answers) => {
