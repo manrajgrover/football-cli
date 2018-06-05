@@ -66,5 +66,9 @@
   "AAL": {
     "id": 466,
     "caption": "Australian A-League"
+  },
+  "WC": {
+    "id": 467,
+    "caption": "World Cup"
   }
 }
