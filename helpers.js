@@ -213,7 +213,7 @@ const standings = (body) => {
     let groupStandings = data.standings;
 
     for (let groupCode in groupStandings) {
-      console.log(chalk.bgCyan.bold.white(groupCode));
+      console.log(chalk.bgCyan.bold.white(`Group: ${groupCode}`));
 
       let group = groupStandings[groupCode];
 
