@@ -95,19 +95,6 @@ const fixturesHelper = (league, name, team, body) => {
   }
 };
 
-const getStandingsTableInstance = () => (
-  new Table({
-    head: [
-      chalk.bold.white.bgCyan('Rank'),
-      chalk.bold.white.bgCyan('Team'),
-      chalk.bold.white.bgCyan('Played'),
-      chalk.bold.white.bgCyan('Goal Diff'),
-      chalk.bold.white.bgCyan('Points'),
-    ],
-    colWidths: [7, 25, 10, 15, 10],
-  })
-);
-
 const getURL = endPoint => API_URL + endPoint;
 
 const printScores = (fixtures, isLive) => {
@@ -196,14 +183,33 @@ const standings = (body) => {
   if (data.standing !== undefined) {
     let standing = data.standing;
 
-    table = getStandingsTableInstance();
+    table = new Table({
+      head: [
+        chalk.bold.white.bgBlue(' # '),
+        chalk.bold.white.bgBlue(' Team '),
+        chalk.bold.white.bgBlue(' MP '),
+        chalk.bold.white.bgBlue(' W '),
+        chalk.bold.white.bgBlue(' D '),
+        chalk.bold.white.bgBlue(' L '),
+        chalk.bold.white.bgBlue(' GF '),
+        chalk.bold.white.bgBlue(' GA '),
+        chalk.bold.white.bgBlue(' GD '),
+        chalk.bold.white.bgBlue(' Pts '),
+      ],
+      colWidths: [7, 30],
+    });
 
     for (let team of standing) {
       table.push([
         chalk.bold.magenta(team.position),
         chalk.bold.cyan(team.teamName),
-        chalk.bold.yellow(team.playedGames),
-        chalk.bold.blue(team.goalDifference),
+        chalk.bold.magenta(team.playedGames),
+        chalk.bold.green(team.wins),
+        chalk.bold.yellow(team.draws),
+        chalk.bold.magenta(team.losses),
+        chalk.bold.green(team.goals),
+        chalk.bold.magenta(team.goalsAgainst),
+        chalk.bold.cyan(team.goalDifference),
         chalk.bold.green(team.points),
       ]);
     }
@@ -213,18 +219,31 @@ const standings = (body) => {
     let groupStandings = data.standings;
 
     for (let groupCode in groupStandings) {
-      console.log(chalk.bgCyan.bold.white(`Group: ${groupCode}`));
+      console.log(chalk.bgBlue.bold.white(` Group: ${groupCode} `));
 
       let group = groupStandings[groupCode];
 
-      table = getStandingsTableInstance();
+      table = new Table({
+        head: [
+          chalk.bold.white.bgBlue(' # '),
+          chalk.bold.white.bgBlue(' Team '),
+          chalk.bold.white.bgBlue(' MP '),
+          chalk.bold.white.bgBlue(' GF '),
+          chalk.bold.white.bgBlue(' GA '),
+          chalk.bold.white.bgBlue(' GD '),
+          chalk.bold.white.bgBlue(' Pts '),
+        ],
+        colWidths: [7, 30],
+      });
 
       for (let team of group) {
         table.push([
           chalk.bold.magenta(team.rank),
           chalk.bold.cyan(team.team),
-          chalk.bold.yellow(team.playedGames),
-          chalk.bold.blue(team.goalDifference),
+          chalk.bold.magenta(team.playedGames),
+          chalk.bold.green(team.goals),
+          chalk.bold.magenta(team.goalsAgainst),
+          chalk.bold.cyan(team.goalDifference),
           chalk.bold.green(team.points),
         ]);
       }

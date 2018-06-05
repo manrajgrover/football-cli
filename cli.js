@@ -234,8 +234,8 @@ const argv = yargs
     } else {
       const table = new Table({
         head: [
-          chalk.bold.white.bgCyan('League'),
-          chalk.bold.white.bgCyan('League Code'),
+          chalk.bold.white.bgBlue(' League '),
+          chalk.bold.white.bgBlue(' League Code '),
         ],
         colWidths: [40, 20],
       });
