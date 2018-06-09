@@ -117,6 +117,10 @@ Examples:
   
 ```
 
+## Note
+
+For World Cup fixtures, you need to specify `league` flag with value as `WC`. API response does not provide world cup information in consolidated response and is a known bug.
+
 ## Development
 
 Run:
