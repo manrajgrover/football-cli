@@ -14,13 +14,18 @@ const config = require('./config');
 const leagueIds = require('./leagueIds');
 const helpers = require('./helpers');
 const path = require('path');
+const URLS = require('./constants');
+
+/**
+ * Get league ids url
+ */
+const LEAGUE_IDS_URL = URLS.LEAGUE_IDS_URL;
 
 /**
  * Get all helpers from `helpers.js`
  */
 const fixturesHelper = helpers.fixturesHelper;
 const getURL = helpers.getURL;
-const refresh = helpers.refresh;
 const scoresHelper = helpers.scoresHelper;
 const standingsHelper = helpers.standings;
 const updateMessage = helpers.updateMessage;
@@ -211,21 +216,23 @@ const argv = yargs
       .argv;
 
     const spinner = ora('Fetching data').start();
+    const refreshHeaders = { 'User-Agent': 'node.js' };
 
     if (lists.r) {
       request({
-        url: getURL('competitions'),
-        headers,
+        url: LEAGUE_IDS_URL,
+        headers: refreshHeaders,
+        json: true,
       }, (err, res, body) => {
         if (err) {
           spinner.stop();
           updateMessage('REQ_ERROR');
         } else {
           spinner.stop();
-          const newLeagueIDs = refresh(body);
+          const newLeagueIDs = Buffer.from(body.content, 'base64').toString('utf8');
           fs.writeFileSync(
             path.resolve(__dirname, 'leagueIds.json'),
-            JSON.stringify(newLeagueIDs, null, 2),
+            newLeagueIDs,
             'utf8'
           );
           updateMessage('UPDATE', 'New list fetched and saved');
