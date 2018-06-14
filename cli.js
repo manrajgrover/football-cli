@@ -16,6 +16,13 @@ const helpers = require('./helpers');
 const path = require('path');
 const URLS = require('./constants');
 
+const footballRequest = request.defaults({
+  baseUrl: URLS.API_URL,
+  headers: {
+    'X-Auth-Token': config.API_KEY,
+  },
+});
+
 /**
  * Get league ids url
  */
@@ -25,17 +32,9 @@ const LEAGUE_IDS_URL = URLS.LEAGUE_IDS_URL;
  * Get all helpers from `helpers.js`
  */
 const fixturesHelper = helpers.fixturesHelper;
-const getURL = helpers.getURL;
 const scoresHelper = helpers.scoresHelper;
 const standingsHelper = helpers.standings;
 const updateMessage = helpers.updateMessage;
-
-/**
- * Headers for every request that is made
- */
-const headers = {
-  'X-Auth-Token': config.API_KEY,
-};
 
 /**
  * Command line interface code for the app
@@ -72,17 +71,15 @@ const argv = yargs
 
     /**
      * Creates request to fetch fixtures and show them
-     * @param  {String} options."url":     getURL(url) End point from where data
-     *                                                    needs to be fetched
-     * @param  {Object} options."headers": headers     Headers for the request
-     * @return {None}                                  None
+     * @param  {String} url:     End point from where data to be fetched
+     * @return {None}            None
      */
-    request({ url: getURL(url), headers }, (err, res, body) => {
+    footballRequest(url, (err, res, body) => {
+      spinner.stop();
+
       if (err) {
-        spinner.stop();
         updateMessage('REQ_ERROR');
       } else {
-        spinner.stop();
         scoresHelper(scores.l, team, body);
       }
     });
@@ -140,28 +137,22 @@ const argv = yargs
       const id = leagueIds[league].id;
       const name = leagueIds[league].caption;
 
-      request({
-        url: getURL(`competitions/${id}/fixtures?timeFrame=${timeFrame}`),
-        headers,
-      }, (err, res, body) => {
+      footballRequest(`competitions/${id}/fixtures?timeFrame=${timeFrame}`, (err, res, body) => {
+        spinner.stop();
+
         if (err) {
-          spinner.stop();
           updateMessage('REQ_ERROR');
         } else {
-          spinner.stop();
           fixturesHelper(league, name, team, body);
         }
       });
     } else {
-      request({
-        url: getURL(`fixtures?timeFrame=${timeFrame}`),
-        headers,
-      }, (err, res, body) => {
+      footballRequest(`fixtures?timeFrame=${timeFrame}`, (err, res, body) => {
+        spinner.stop();
+
         if (err) {
-          spinner.stop();
           updateMessage('REQ_ERROR');
         } else {
-          spinner.stop();
           fixturesHelper(league, undefined, team, body);
         }
       });
@@ -190,15 +181,12 @@ const argv = yargs
 
     const id = leagueIds[league].id;
 
-    request({
-      url: getURL(`competitions/${id}/leagueTable`),
-      headers,
-    }, (err, res, body) => {
+    footballRequest(`competitions/${id}/leagueTable`, (err, res, body) => {
+      spinner.stop();
+
       if (err) {
-        spinner.stop();
         updateMessage('REQ_ERROR');
       } else {
-        spinner.stop();
         standingsHelper(body);
       }
     });
@@ -224,11 +212,11 @@ const argv = yargs
         headers: refreshHeaders,
         json: true,
       }, (err, res, body) => {
+        spinner.stop();
+
         if (err) {
-          spinner.stop();
           updateMessage('REQ_ERROR');
         } else {
-          spinner.stop();
           const newLeagueIDs = Buffer.from(body.content, 'base64').toString('utf8');
           fs.writeFileSync(
             path.resolve(__dirname, 'leagueIds.json'),

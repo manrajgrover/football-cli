@@ -95,8 +95,6 @@ const fixturesHelper = (league, name, team, body) => {
   }
 };
 
-const getURL = endPoint => API_URL + endPoint;
-
 const printScores = (fixtures, isLive) => {
   for (let fixture of fixtures) {
     let name = getLeagueName(fixture);
@@ -235,7 +233,6 @@ const standings = (body) => {
 
 module.exports = {
   fixturesHelper,
-  getURL,
   scoresHelper,
   standings,
   updateMessage,
