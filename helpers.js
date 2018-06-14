@@ -110,25 +110,6 @@ const printScores = (fixtures, isLive) => {
   }
 };
 
-const refresh = (body) => {
-  let data = JSON.parse(body);
-  let newLeagueIDs = {};
-
-  if ('error' in data) {
-    updateMessage('CUSTOM_ERR', data.error);
-    return null;
-  }
-
-  for (let comp of data) {
-    newLeagueIDs[comp.league] = {
-      id: comp.id,
-      caption: comp.caption
-    };
-  }
-
-  return newLeagueIDs;
-};
-
 const scoresHelper = (isLive, team, body) => {
   let data = JSON.parse(body);
   let fixtures = data.fixtures;
@@ -255,7 +236,6 @@ const standings = (body) => {
 module.exports = {
   fixturesHelper,
   getURL,
-  refresh,
   scoresHelper,
   standings,
   updateMessage,
