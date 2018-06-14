@@ -141,7 +141,7 @@ const scoresHelper = (isLive, team, body) => {
     if (live.length !== 0) {
       printScores(live, true);
     } else {
-      updateMessage('UPDATE', 'Sorry, no live match right now');
+      updateMessage('UPDATE', 'Sorry, no live matches right now');
     }
   } else {
     if (scores.length !== 0) {
