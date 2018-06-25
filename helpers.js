@@ -77,8 +77,8 @@ const fixturesHelper = (league, name, team, body) => {
   for (let fixture of fixtures) {
     let homeTeam = fixture.homeTeamName;
     let awayTeam = fixture.awayTeamName;
-    let goalsHomeTeam = (fixture.result.goalsHomeTeam === null) ? '-1' : fixture.result.goalsHomeTeam;
-    let goalsAwayTeam = (fixture.result.goalsAwayTeam === null) ? '-1' : fixture.result.goalsAwayTeam;
+    let goalsHomeTeam = (fixture.result.goalsHomeTeam === null) ? '' : fixture.result.goalsHomeTeam;
+    let goalsAwayTeam = (fixture.result.goalsAwayTeam === null) ? '' : fixture.result.goalsAwayTeam;
 
     name = (league === undefined) ? getLeagueName(fixture) : name;
 
