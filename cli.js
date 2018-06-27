@@ -70,8 +70,8 @@ const argv = yargs
 
     const team = (scores.t === undefined) ? '' : (scores.t).toLowerCase();
     const outData = {
-      json: (scores.json === undefined) ? null : scores.json,
-      csv: (scores.csv === undefined) ? null : scores.csv
+      json: (scores.json === undefined) ? undefined : scores.json,
+      csv: (scores.csv === undefined) ? undefined : scores.csv
     };
 
     /**
@@ -131,8 +131,8 @@ const argv = yargs
 
     const spinner = ora('Fetching data').start();
     const outData = {
-      json: (fixtures.json === undefined) ? null : fixtures.json,
-      csv: (fixtures.csv === undefined) ? null : fixtures.csv
+      json: (fixtures.json === undefined) ? undefined : fixtures.json,
+      csv: (fixtures.csv === undefined) ? undefined : fixtures.csv
     };
 
     /**
@@ -212,8 +212,8 @@ const argv = yargs
 
     const league = standings.l;
     const outData = {
-      json: (standings.json === undefined) ? null : standings.json,
-      csv: (standings.csv === undefined) ? null : standings.csv
+      json: (standings.json === undefined) ? undefined : standings.json,
+      csv: (standings.csv === undefined) ? undefined : standings.csv
     };
 
     if (leagueIds[league] === undefined) {

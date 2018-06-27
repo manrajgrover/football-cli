@@ -7,6 +7,7 @@ const moment = require('moment');
 const URLS = require('./constants');
 const fs = require('fs');
 const path = require('path');
+const jsonexport = require('jsonexport');
 
 const API_URL = URLS.API_URL;
 const BUGS_URL = URLS.BUGS_URL;
@@ -49,8 +50,8 @@ const updateMessage = (TYPE, message) => {
 };
 
 const exportData = (output, data) => {
-  const jsonFileName = (output.json.length > 0) ? output.json : 'footballOut';
   if (output.json !== undefined) {
+    const jsonFileName = (output.json.length > 0) ? output.json : 'footballOut';
     fs.writeFile(path.resolve(process.cwd(), `${jsonFileName}.json`),
                     JSON.stringify(data, null, 4), 'utf8', (err) => {
                       if (err) {
@@ -59,6 +60,27 @@ const exportData = (output, data) => {
                         console.log(`\nData has been successfully saved as ${jsonFileName}.json`);
                       }
                     });
+  }
+  if (output.csv !== undefined) {
+    const csvFileName = (output.csv.length > 0) ? output.csv : 'footballOut';
+    try {
+      const exp = jsonexport(data, (err, csv) => {
+        if (err) {
+          throw (err);
+        } else {
+          fs.writeFile(path.resolve(process.cwd(), `${csvFileName}.csv`),
+                        csv, 'utf8', (error) => {
+                          if (error) {
+                            throw (error);
+                          } else {
+                            console.log(`\nData has been successfully saved as ${csvFileName}.csv`);
+                          }
+                        });
+        }
+      });
+    } catch (err) {
+      console.log('Error while generating CSV.', err);
+    }
   }
 };
 
