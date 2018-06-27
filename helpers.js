@@ -75,10 +75,10 @@ const fixturesHelper = (league, name, team, body) => {
   }
 
   for (let fixture of fixtures) {
-    let homeTeam = fixture.homeTeamName;
-    let awayTeam = fixture.awayTeamName;
-    let goalsHomeTeam = (fixture.result.goalsHomeTeam === null) ? '-1' : fixture.result.goalsHomeTeam;
-    let goalsAwayTeam = (fixture.result.goalsAwayTeam === null) ? '-1' : fixture.result.goalsAwayTeam;
+    let homeTeam = (fixture.homeTeamName === '' ? 'TBD' : fixture.homeTeamName);
+    let awayTeam = (fixture.awayTeamName === '' ? 'TBD' : fixture.awayTeamName);
+    let goalsHomeTeam = (fixture.result.goalsHomeTeam === null) ? '' : fixture.result.goalsHomeTeam;
+    let goalsAwayTeam = (fixture.result.goalsAwayTeam === null) ? '' : fixture.result.goalsAwayTeam;
 
     name = (league === undefined) ? getLeagueName(fixture) : name;
 
@@ -100,8 +100,8 @@ const printScores = (fixtures, isLive) => {
     let name = getLeagueName(fixture);
     let homeTeam = fixture.homeTeamName;
     let awayTeam = fixture.awayTeamName;
-    let goalsHomeTeam = (fixture.result.goalsHomeTeam === null) ? '-1' : fixture.result.goalsHomeTeam;
-    let goalsAwayTeam = (fixture.result.goalsAwayTeam === null) ? '-1' : fixture.result.goalsAwayTeam;
+    let goalsHomeTeam = (fixture.result.goalsHomeTeam === null) ? '' : fixture.result.goalsHomeTeam;
+    let goalsAwayTeam = (fixture.result.goalsAwayTeam === null) ? '' : fixture.result.goalsAwayTeam;
     let time = (isLive === true) ? 'LIVE' : moment(fixture.date).calendar();
 
     console.log(buildScore(name, homeTeam, goalsHomeTeam, goalsAwayTeam, awayTeam, time));
