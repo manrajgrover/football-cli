@@ -71,6 +71,10 @@ const argv = yargs
     const spinner = ora('Fetching data').start();
 
     const team = (scores.t === undefined) ? '' : (scores.t).toLowerCase();
+    const outData = {
+      json: (scores.json === undefined) ? null : scores.json,
+      csv: (scores.csv === undefined) ? null : scores.csv
+    };
 
     /**
      * timeFrameStart Set start date from which fixtures is to be fetch
@@ -92,7 +96,7 @@ const argv = yargs
       if (err) {
         updateMessage('REQ_ERROR');
       } else {
-        scoresHelper(scores.l, team, body);
+        scoresHelper(scores.l, team, body, outData);
       }
     });
   })
@@ -130,6 +134,10 @@ const argv = yargs
       .argv;
 
     const spinner = ora('Fetching data').start();
+    const outData = {
+      json: (fixtures.json === undefined) ? null : fixtures.json,
+      csv: (fixtures.csv === undefined) ? null : fixtures.csv
+    };
 
     /**
      * days   Number of days for which data needs to be fetched
@@ -167,7 +175,7 @@ const argv = yargs
         if (err) {
           updateMessage('REQ_ERROR');
         } else {
-          fixturesHelper(league, name, team, body);
+          fixturesHelper(league, name, team, body, outData);
         }
       });
     } else {
@@ -177,7 +185,7 @@ const argv = yargs
         if (err) {
           updateMessage('REQ_ERROR');
         } else {
-          fixturesHelper(league, undefined, team, body);
+          fixturesHelper(league, undefined, team, body, outData);
         }
       });
     }
@@ -209,6 +217,10 @@ const argv = yargs
     const spinner = ora('Fetching data').start();
 
     const league = standings.l;
+    const outData = {
+      json: (standings.json === undefined) ? null : standings.json,
+      csv: (standings.csv === undefined) ? null : standings.csv
+    };
 
     if (leagueIds[league] === undefined) {
       spinner.stop();
@@ -223,7 +235,7 @@ const argv = yargs
       if (err) {
         updateMessage('REQ_ERROR');
       } else {
-        standingsHelper(body);
+        standingsHelper(body, outData);
       }
     });
   })

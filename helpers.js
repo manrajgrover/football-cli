@@ -5,6 +5,8 @@ const Table = require('cli-table3');
 const chalk = require('chalk');
 const moment = require('moment');
 const URLS = require('./constants');
+const fs = require('fs');
+const path = require('path');
 
 const API_URL = URLS.API_URL;
 const BUGS_URL = URLS.BUGS_URL;
@@ -46,6 +48,12 @@ const updateMessage = (TYPE, message) => {
   }
 };
 
+const exportData = (output, data) => {
+  if (output.json) {
+    fs.writeFileSync(path.resolve(process.cwd(), `${output.json}.json`), JSON.stringify(data, null, 4), 'utf8');
+  }
+};
+
 const getLeagueName = (fixture) => {
   let compUrl = fixture._links.competition.href;
   let parts = compUrl.split('/');
@@ -60,7 +68,7 @@ const getLeagueName = (fixture) => {
   return '';
 };
 
-const fixturesHelper = (league, name, team, body) => {
+const fixturesHelper = (league, name, team, body, outData) => {
   let data = JSON.parse(body);
   let fixtures = data.fixtures;
 
@@ -72,6 +80,10 @@ const fixturesHelper = (league, name, team, body) => {
   if (fixtures.length === 0) {
     updateMessage('UPDATE', 'Sorry, no fixtures to show right now');
     return;
+  }
+
+  if (outData.json || outData.csv) {
+    exportData(outData, fixtures);
   }
 
   for (let fixture of fixtures) {
@@ -108,7 +120,7 @@ const printScores = (fixtures, isLive) => {
   }
 };
 
-const scoresHelper = (isLive, team, body) => {
+const scoresHelper = (isLive, team, body, outData) => {
   let data = JSON.parse(body);
   let fixtures = data.fixtures;
   let live = [];
@@ -138,19 +150,25 @@ const scoresHelper = (isLive, team, body) => {
   if (isLive) {
     if (live.length !== 0) {
       printScores(live, true);
+      if (outData.json || outData.csv) {
+        exportData(outData, live);
+      }
     } else {
       updateMessage('UPDATE', 'Sorry, no live matches right now');
     }
   } else {
     if (scores.length !== 0) {
       printScores(scores, false);
+      if (outData.json || outData.csv) {
+        exportData(outData, scores);
+      }
     } else {
       updateMessage('UPDATE', 'Sorry, no scores to show right now');
     }
   }
 };
 
-const standings = (body) => {
+const standings = (body, outData) => {
   let data = JSON.parse(body);
   let table;
 
@@ -194,6 +212,10 @@ const standings = (body) => {
     }
 
     console.log(table.toString());
+
+    if (outData.json || outData.csv) {
+      exportData(outData, standing);
+    }
   } else {
     let groupStandings = data.standings;
 
@@ -227,6 +249,9 @@ const standings = (body) => {
         ]);
       }
       console.log(table.toString());
+      if (outData.json || outData.csv) {
+        exportData(outData, groupStandings);
+      }
     }
   }
 };
@@ -236,4 +261,5 @@ module.exports = {
   scoresHelper,
   standings,
   updateMessage,
+  exportData
 };
