@@ -279,9 +279,9 @@ const standings = (body, outData) => {
         ]);
       }
       console.log(table.toString());
-      if (outData.json !== undefined || outData.csv !== undefined) {
-        exportData(outData, groupStandings);
-      }
+    }
+    if (outData.json !== undefined || outData.csv !== undefined) {
+      exportData(outData, groupStandings);
     }
   }
 };
