@@ -57,12 +57,10 @@ const argv = yargs
           json: {
             desc: 'Output results as JSON file.',
             type: 'string',
-            global: true
           },
           csv: {
             desc: 'Output results as CSV file.',
             type: 'string',
-            global: true
           }
         })
       .example('$0 scores -t "Manchester United" -l')
@@ -122,12 +120,10 @@ const argv = yargs
         json: {
           desc: 'Output results as JSON file.',
           type: 'string',
-          global: true
         },
         csv: {
           desc: 'Output results as CSV file.',
           type: 'string',
-          global: true
         }
       })
       .example('$0 fixtures -l PL -d 5 -t "Manchester United" -n')
@@ -203,12 +199,10 @@ const argv = yargs
         json: {
           desc: 'Output results as JSON file.',
           type: 'string',
-          global: true
         },
         csv: {
           desc: 'Output results as CSV file.',
           type: 'string',
-          global: true
         }
       })
       .example('$0 standings -l PL')

@@ -49,8 +49,16 @@ const updateMessage = (TYPE, message) => {
 };
 
 const exportData = (output, data) => {
-  if (output.json) {
-    fs.writeFileSync(path.resolve(process.cwd(), `${output.json}.json`), JSON.stringify(data, null, 4), 'utf8');
+  const jsonFileName = (output.json.length > 0) ? output.json : 'footballOut';
+  if (output.json !== undefined) {
+    fs.writeFile(path.resolve(process.cwd(), `${jsonFileName}.json`),
+                    JSON.stringify(data, null, 4), 'utf8', (err) => {
+                      if (err) {
+                        throw (err);
+                      } else {
+                        console.log(`\nData has been successfully saved as ${jsonFileName}.json`);
+                      }
+                    });
   }
 };
 
@@ -82,7 +90,7 @@ const fixturesHelper = (league, name, team, body, outData) => {
     return;
   }
 
-  if (outData.json || outData.csv) {
+  if (outData.json !== undefined || outData.csv !== undefined) {
     exportData(outData, fixtures);
   }
 
@@ -150,7 +158,7 @@ const scoresHelper = (isLive, team, body, outData) => {
   if (isLive) {
     if (live.length !== 0) {
       printScores(live, true);
-      if (outData.json || outData.csv) {
+      if (outData.json !== undefined || outData.csv !== undefined) {
         exportData(outData, live);
       }
     } else {
@@ -159,7 +167,7 @@ const scoresHelper = (isLive, team, body, outData) => {
   } else {
     if (scores.length !== 0) {
       printScores(scores, false);
-      if (outData.json || outData.csv) {
+      if (outData.json !== undefined || outData.csv !== undefined) {
         exportData(outData, scores);
       }
     } else {
@@ -213,7 +221,7 @@ const standings = (body, outData) => {
 
     console.log(table.toString());
 
-    if (outData.json || outData.csv) {
+    if (outData.json !== undefined || outData.csv !== undefined) {
       exportData(outData, standing);
     }
   } else {
@@ -249,7 +257,7 @@ const standings = (body, outData) => {
         ]);
       }
       console.log(table.toString());
-      if (outData.json || outData.csv) {
+      if (outData.json !== undefined || outData.csv !== undefined) {
         exportData(outData, groupStandings);
       }
     }
