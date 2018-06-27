@@ -53,6 +53,18 @@ const argv = yargs
       .alias('t', 'team')
         .describe('t', 'Select team')
         .string('t')
+        .options({
+          json: {
+            desc: 'Output results as JSON file.',
+            type: 'string',
+            global: true
+          },
+          csv: {
+            desc: 'Output results as CSV file.',
+            type: 'string',
+            global: true
+          }
+        })
       .example('$0 scores -t "Manchester United" -l')
       .argv;
 
@@ -102,6 +114,18 @@ const argv = yargs
       .alias('n', 'next')
         .describe('n', 'Next or upcoming matches')
         .boolean('n')
+      .options({
+        json: {
+          desc: 'Output results as JSON file.',
+          type: 'string',
+          global: true
+        },
+        csv: {
+          desc: 'Output results as CSV file.',
+          type: 'string',
+          global: true
+        }
+      })
       .example('$0 fixtures -l PL -d 5 -t "Manchester United" -n')
       .argv;
 
@@ -167,6 +191,18 @@ const argv = yargs
       .alias('l', 'league')
         .describe('l', 'League to be searched')
         .demand('l')
+      .options({
+        json: {
+          desc: 'Output results as JSON file.',
+          type: 'string',
+          global: true
+        },
+        csv: {
+          desc: 'Output results as CSV file.',
+          type: 'string',
+          global: true
+        }
+      })
       .example('$0 standings -l PL')
       .argv;
 
