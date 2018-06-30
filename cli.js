@@ -321,4 +321,5 @@ const argv = yargs
   })
   .help('h')
   .alias('h', 'help')
+  .version()
   .argv;
