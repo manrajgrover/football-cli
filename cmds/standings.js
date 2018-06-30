@@ -24,6 +24,16 @@ exports.builder = function builder(yargs) {
     .alias('l', 'league')
       .describe('l', 'League to be searched')
       .demand('l')
+    .options({
+      json: {
+        desc: 'Output results as JSON file.',
+        type: 'string',
+      },
+      csv: {
+        desc: 'Output results as CSV file.',
+        type: 'string',
+      }
+    })
     .example('$0 standings -l PL')
     .argv;
 };
@@ -32,8 +42,15 @@ exports.handler = function handler(yargs) {
    * Get all the options set for `standings` command
    */
   const standings = yargs;
+
   const spinner = ora('Fetching data').start();
+
   const league = standings.l;
+  const outData = {
+    json: (standings.json === undefined) ? undefined : standings.json,
+    csv: (standings.csv === undefined) ? undefined : standings.csv
+  };
+
   if (leagueIds[league] === undefined) {
     spinner.stop();
     updateMessage('LEAGUE_ERR');

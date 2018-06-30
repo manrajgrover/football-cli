@@ -26,6 +26,16 @@ exports.builder = function builder(yargs) {
     .alias('t', 'team')
         .describe('t', 'Select team')
         .string('t')
+    .options({
+      json: {
+        desc: 'Output results as JSON file.',
+        type: 'string',
+      },
+      csv: {
+        desc: 'Output results as CSV file.',
+        type: 'string',
+      }
+    })
     .example('$0 scores -t "Manchester United" -l')
     .argv;
 };
@@ -34,6 +44,11 @@ exports.handler = function handler(yargs) {
      * Get all the options set for `scores` command
      */
   const scores = yargs;
+
+  const outData = {
+    json: (scores.json === undefined) ? undefined : scores.json,
+    csv: (scores.csv === undefined) ? undefined : scores.csv
+  };
 
   const spinner = ora('Fetching data').start();
   const team = (scores.t === undefined) ? '' : (scores.t).toLowerCase();
@@ -58,7 +73,7 @@ exports.handler = function handler(yargs) {
     if (err) {
       updateMessage('REQ_ERROR');
     } else {
-      scoresHelper(scores.l, team, body);
+      scoresHelper(scores.l, team, body, outData);
     }
   });
 };

@@ -32,6 +32,16 @@ exports.builder = function builder(yargs) {
     .alias('n', 'next')
         .describe('n', 'Next or upcoming matches')
         .boolean('n')
+    .options({
+      json: {
+        desc: 'Output results as JSON file.',
+        type: 'string',
+      },
+      csv: {
+        desc: 'Output results as CSV file.',
+        type: 'string',
+      }
+    })
     .example('$0 fixtures -l PL -d 5 -t "Manchester United" -n')
     .argv;
 };
@@ -40,6 +50,10 @@ exports.handler = (yargs) => {
      * Get all the options set for `fixtures` command
      */
   const fixtures = yargs;
+  const outData = {
+    json: (fixtures.json === undefined) ? undefined : fixtures.json,
+    csv: (fixtures.csv === undefined) ? undefined : fixtures.csv
+  };
 
   const spinner = ora('Fetching data').start();
 
@@ -82,7 +96,7 @@ exports.handler = (yargs) => {
       if (err) {
         updateMessage('REQ_ERROR');
       } else {
-        fixturesHelper(league, undefined, team, body);
+        fixturesHelper(league, undefined, team, body, outData);
       }
     });
   }
