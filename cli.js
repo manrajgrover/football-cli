@@ -196,11 +196,11 @@ const argv = yargs
      * Get all the options set for `lists` command
      */
     const lists = yargsLists
-      .usage('Usage: sudo $0 lists [options]')
+      .usage('Usage: $0 lists [options]')
       .alias('r', 'refresh')
         .describe('r', 'Refresh league ids')
         .boolean('r')
-      .example('sudo $0 lists -r')
+        .example('$0 lists -r')
       .argv;
 
     const spinner = ora('Fetching data').start();
@@ -250,8 +250,8 @@ const argv = yargs
      * Get all the options set for `config` command
      */
     const configs = yargsConfig
-      .usage('Usage: sudo $0 config')
-      .example('sudo $0 config')
+      .usage('Usage: $0 config')
+      .example('$0 config')
       .argv;
 
     if (configs.h) {
