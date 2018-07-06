@@ -14,7 +14,7 @@ $ npm install -g footballcli
 
 ## How to get API Key?
 
-Please register on [football-data.org](http://api.football-data.org/register) to get your API Key. Then run `$ sudo football config` to add your API Key. Requests made using API key increases your rate limit from 50 requests per day to 50 requests per minute.
+Please register on [football-data.org](http://api.football-data.org/register) to get your API Key. Then run `$ football config` to add your API Key (use `sudo` if required). Requests made using API key increases your rate limit from 50 requests per day to 50 requests per minute.
 
 ## Usage
 
@@ -92,14 +92,14 @@ Examples:
 List of codes of various competitions
 
 ```shell
-Usage: sudo football lists [options]
+Usage: football lists [options]
 
 Options:
   -h, --help     Show help                                        [boolean]
   -r, --refresh  Refresh league ids                               [boolean]
 
 Examples:
-  sudo football lists -r
+  football lists -r
 
 ```
 
@@ -107,13 +107,13 @@ Examples:
 Change configuration and defaults
 
 ```shell
-Usage: sudo football config
+Usage: football config
 
 Options:
   -h, --help  Show help                                           [boolean]
 
 Examples:
-  sudo football config
+  football config
   
 ```
 
