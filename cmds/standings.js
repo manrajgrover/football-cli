@@ -7,7 +7,7 @@ const helpers = require('../helpers');
 const leagueIds = require('../leagueIds');
 
 const updateMessage = helpers.updateMessage;
-const standingsHelper = helpers.standingsHelper;
+const standingsHelper = helpers.standings;
 
 const footballRequest = request.defaults({
   baseUrl: URLS.API_URL,

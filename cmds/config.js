@@ -37,7 +37,7 @@ exports.handler = function handler(yargs) {
       obj.API_KEY = answers.API_KEY;
     }
 
-    fs.writeFileSync(path.resolve(__dirname, 'config.json'), JSON.stringify(obj, null, 2), 'utf8');
+    fs.writeFileSync(path.resolve(__dirname, '../config.json'), JSON.stringify(obj, null, 2), 'utf8');
     updateMessage('UPDATE', 'API KEY has been updated.');
   }).catch((err) => {
     updateMessage('CUSTOM_ERR', 'Please run the following command with root access');
