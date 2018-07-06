@@ -34,6 +34,10 @@ exports.builder = function builder(yargs) {
       csv: {
         desc: 'Output results as CSV file.',
         type: 'string',
+      },
+      dir: {
+        desc: 'Output directory for files',
+        type: 'string'
       }
     })
     .example('$0 scores -t "Manchester United" -l')
@@ -47,7 +51,8 @@ exports.handler = function handler(yargs) {
 
   const outData = {
     json: (scores.json === undefined) ? undefined : scores.json,
-    csv: (scores.csv === undefined) ? undefined : scores.csv
+    csv: (scores.csv === undefined) ? undefined : scores.csv,
+    dir: (scores.dir === undefined) ? undefined : scores.dir
   };
 
   const spinner = ora('Fetching data').start();

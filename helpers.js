@@ -7,7 +7,10 @@ const moment = require('moment');
 const URLS = require('./constants');
 const fs = require('fs');
 const path = require('path');
+const mkdir = require('mkdirp');
 const jsonexport = require('jsonexport');
+
+const getDirName = path.dirname;
 
 const API_URL = URLS.API_URL;
 const BUGS_URL = URLS.BUGS_URL;
@@ -16,6 +19,16 @@ const buildScore = (name, homeTeam, goalsHomeTeam, goalsAwayTeam, awayTeam, time
   `${chalk.green.bold(name)}  ${chalk.cyan.bold(homeTeam)} ${chalk.cyan.bold(goalsHomeTeam)} vs. ` +
   `${chalk.red.bold(goalsAwayTeam)} ${chalk.red.bold(awayTeam)} ${chalk.yellow.bold(time)}`
 );
+
+const writeFile = (writePath, content, cb) => {
+  mkdir(getDirName(writePath), (err) => {
+    if (err) {
+      return cb(err);
+    }
+    fs.writeFile(writePath, content, 'utf8', cb);
+    return 0;
+  });
+};
 
 const updateMessage = (TYPE, message) => {
   message = message || '';
@@ -50,10 +63,11 @@ const updateMessage = (TYPE, message) => {
 };
 
 const exportData = (output, data) => {
+  const outputDir = (output.dir.length > 0) ? output.dir : undefined;
   if (output.json !== undefined) {
     const jsonFileName = (output.json.length > 0) ? output.json : 'footballOut';
-    fs.writeFile(path.resolve(process.cwd(), `${jsonFileName}.json`),
-                    JSON.stringify(data, null, 4), 'utf8', (err) => {
+    writeFile(path.resolve(outputDir || process.cwd(), `${jsonFileName}.json`),
+                    JSON.stringify(data, null, 4), (err) => {
                       if (err) {
                         throw (err);
                       } else {
@@ -68,8 +82,8 @@ const exportData = (output, data) => {
         if (err) {
           throw (err);
         } else {
-          fs.writeFile(path.resolve(process.cwd(), `${csvFileName}.csv`),
-                        csv, 'utf8', (error) => {
+          writeFile(path.resolve(outputDir || process.cwd(), `${csvFileName}.csv`),
+                        csv, (error) => {
                           if (error) {
                             throw (error);
                           } else {
@@ -168,11 +182,11 @@ const scoresHelper = (isLive, team, body, outData) => {
     let awayTeam = (fixture.awayTeamName).toLowerCase();
 
     if (fixture.status === 'IN_PLAY' && (homeTeam.indexOf(team) !== -1 ||
-                                         awayTeam.indexOf(team) !== -1)) {
+                                          awayTeam.indexOf(team) !== -1)) {
       live.push(fixture);
       scores.push(fixture);
     } else if (fixture.status === 'FINISHED' && (homeTeam.indexOf(team) !== -1 ||
-                                                 awayTeam.indexOf(team) !== -1)) {
+                                                  awayTeam.indexOf(team) !== -1)) {
       scores.push(fixture);
     }
   }

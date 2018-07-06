@@ -32,6 +32,10 @@ exports.builder = function builder(yargs) {
       csv: {
         desc: 'Output results as CSV file.',
         type: 'string',
+      },
+      dir: {
+        desc: 'Output directory for files',
+        type: 'string'
       }
     })
     .example('$0 standings -l PL')
@@ -48,7 +52,8 @@ exports.handler = function handler(yargs) {
   const league = standings.l;
   const outData = {
     json: (standings.json === undefined) ? undefined : standings.json,
-    csv: (standings.csv === undefined) ? undefined : standings.csv
+    csv: (standings.csv === undefined) ? undefined : standings.csv,
+    dir: (standings.dir === undefined) ? undefined : standings.dir
   };
 
   if (leagueIds[league] === undefined) {
@@ -61,7 +66,7 @@ exports.handler = function handler(yargs) {
     if (err) {
       updateMessage('REQ_ERROR');
     } else {
-      standingsHelper(body);
+      standingsHelper(body, outData);
     }
   });
 };
