@@ -12,9 +12,9 @@ exports.desc = 'Change configuration and defaults';
 
 exports.builder = function builder(yargs) {
   return yargs
-      .usage('Usage: sudo $0 config')
-      .example('sudo $0 config')
-      .argv;
+    .usage('Usage: sudo $0 config')
+    .example('sudo $0 config')
+    .argv;
 };
 
 exports.handler = function handler(yargs) {
