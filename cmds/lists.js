@@ -16,12 +16,12 @@ exports.desc = 'List of codes of various competitions';
 
 exports.builder = function builder(yargs) {
   return yargs
-        .usage('Usage: sudo $0 lists [options]')
-        .alias('r', 'refresh')
-          .describe('r', 'Refresh league ids')
-          .boolean('r')
-        .example('sudo $0 lists -r')
-        .argv;
+    .usage('Usage: sudo $0 lists [options]')
+    .alias('r', 'refresh')
+    .describe('r', 'Refresh league ids')
+    .boolean('r')
+    .example('sudo $0 lists -r')
+    .argv;
 };
 
 exports.handler = function handler(yargs) {
