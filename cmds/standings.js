@@ -7,7 +7,7 @@ const helpers = require('../helpers');
 const leagueIds = require('../leagueIds');
 
 const updateMessage = helpers.updateMessage;
-const standingsHelper = helpers.standings;
+const buildAndPrintStandings = helpers.buildAndPrintStandings;
 
 const footballRequest = request.defaults({
   baseUrl: URLS.API_URL,
@@ -18,6 +18,7 @@ const footballRequest = request.defaults({
 
 exports.command = 'standings';
 exports.desc = 'Get standings of particular league';
+
 exports.builder = function builder(yargs) {
   return yargs
     .usage('Usage: $0 standings [options]')
@@ -27,6 +28,7 @@ exports.builder = function builder(yargs) {
     .example('$0 standings -l PL')
     .argv;
 };
+
 exports.handler = function handler(yargs) {
   /**
    * Get all the options set for `standings` command
@@ -34,17 +36,20 @@ exports.handler = function handler(yargs) {
   const standings = yargs;
   const spinner = ora('Fetching data').start();
   const league = standings.l;
+
   if (leagueIds[league] === undefined) {
     spinner.stop();
     updateMessage('LEAGUE_ERR');
   }
+
   const id = leagueIds[league].id;
-  footballRequest(`competitions/${id}/leagueTable`, (err, res, body) => {
+
+  footballRequest(`competitions/${id}/leagueTable`, (err, _, body) => {
     spinner.stop();
     if (err) {
       updateMessage('REQ_ERROR');
     } else {
-      standingsHelper(body);
+      buildAndPrintStandings(body);
     }
   });
 };
