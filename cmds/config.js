@@ -18,12 +18,10 @@ exports.builder = function builder(yargs) {
 };
 
 exports.handler = function handler(yargs) {
-  /**
-   * Get all the options set for `config` command
-   */
+  /**  Get all the options set for `config` command */
   const configs = yargs;
 
-  if (configs.h) {
+  if (configs.help) {
     return;
   }
 

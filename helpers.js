@@ -66,7 +66,7 @@ const updateMessage = (TYPE, message) => {
 };
 
 const exportData = (output, data) => {
-  const outputDir = (output.dir.length > 0) ? output.dir : undefined;
+  const outputDir = (output.dir && output.dir.length > 0) ? output.dir : undefined;
   if (output.json !== undefined) {
     const jsonFileName = (output.json.length > 0) ? output.json : 'footballOut';
     writeFile(path.resolve(outputDir || process.cwd(), `${jsonFileName}.json`),
@@ -74,14 +74,16 @@ const exportData = (output, data) => {
                       if (err) {
                         throw (err);
                       } else {
-                        console.log(`\nData has been successfully saved as ${jsonFileName}.json`);
+                        console.log(
+                          chalk.bold.cyan(`Data has been successfully saved as ${jsonFileName}.json`)
+                        );
                       }
                     });
   }
   if (output.csv !== undefined) {
     const csvFileName = (output.csv.length > 0) ? output.csv : 'footballOut';
     try {
-      const exp = jsonexport(data, (err, csv) => {
+      jsonexport(data, (err, csv) => {
         if (err) {
           throw (err);
         } else {
@@ -90,7 +92,9 @@ const exportData = (output, data) => {
                           if (error) {
                             throw (error);
                           } else {
-                            console.log(`\nData has been successfully saved as ${csvFileName}.csv`);
+                            console.log(
+                              chalk.bold.cyan(`Data has been successfully saved as ${csvFileName}.csv`)
+                            );
                           }
                         });
         }
@@ -115,7 +119,7 @@ const getLeagueName = (fixture) => {
   return '';
 };
 
-const buildAndPrintFixtures = (league, name, team, body, outData) => {
+const buildAndPrintFixtures = (league, name, team, body, outData = {}) => {
   let data = JSON.parse(body);
   let fixtures = data.fixtures;
 
@@ -167,7 +171,7 @@ const printScores = (fixtures, isLive) => {
   }
 };
 
-const buildAndPrintScores = (isLive, team, body, outData) => {
+const buildAndPrintScores = (isLive, team, body, outData = {}) => {
   let data = JSON.parse(body);
   let fixtures = data.fixtures;
   let live = [];
@@ -215,7 +219,7 @@ const buildAndPrintScores = (isLive, team, body, outData) => {
   }
 };
 
-const buildAndPrintStandings = (body, outData) => {
+const buildAndPrintStandings = (body, outData = {}) => {
   let data = JSON.parse(body);
   let table;
 

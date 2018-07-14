@@ -22,64 +22,56 @@ exports.builder = function builder(yargs) {
   return yargs
     .usage('Usage: $0 fixtures [options]')
     .alias('d', 'days')
-        .describe('d', 'Number of days from today')
-        .number('d')
+      .describe('d', 'Number of days from today')
+      .number('d')
     .alias('l', 'league')
-        .describe('l', 'League')
-        .string('l')
+      .describe('l', 'League')
+      .string('l')
     .alias('t', 'team')
-        .describe('t', 'Team name or substring of it')
-        .string('t')
+      .describe('t', 'Team name or substring of it')
+      .string('t')
     .alias('n', 'next')
-        .describe('n', 'Next or upcoming matches')
-        .boolean('n')
-    .options({
-      json: {
-        desc: 'Output results as JSON file.',
-        type: 'string',
-      },
-      csv: {
-        desc: 'Output results as CSV file.',
-        type: 'string',
-      },
-      dir: {
-        desc: 'Output directory for files',
-        type: 'string'
-      }
-    })
+      .describe('n', 'Next or upcoming matches')
+      .boolean('n')
+    .alias('j', 'json')
+      .describe('j', 'JSON output file name')
+      .string('j')
+    .alias('c', 'csv')
+      .describe('c', 'CSV output file name')
+      .string('c')
+    .alias('o', 'dir')
+      .describe('o', 'Output directory for files')
+      .string('o')
     .example('$0 fixtures -l PL -d 5 -t "Manchester United" -n')
     .argv;
 };
 
 exports.handler = (yargs) => {
-  /**
-   * Get all the options set for `fixtures` command
-   */
+  /** Get all the options set for `fixtures` command */
   const fixtures = yargs;
+  
   const outData = {
-    json: (fixtures.json === undefined) ? undefined : fixtures.json,
-    csv: (fixtures.csv === undefined) ? undefined : fixtures.csv,
-    dir: (fixtures.dir === undefined) ? undefined : fixtures.dir
+    json: fixtures.json,
+    csv: fixtures.csv,
+    dir: fixtures.dir
   };
 
   const spinner = ora('Fetching data').start();
 
-  /**
-   * @const {!number} days Number of days for which data needs to be fetched
-   * @const {?string} league League code for which data needs to be fetched
-   * @const {!string} team   Team for which fixtures is requested
-   * @const {!string} time   Past or present depending on flag `n` set
-   */
-  const days = fixtures.d || 10;
-  const league = fixtures.l;
-  const team = fixtures.t || '';
-  const time = (fixtures.n === true) ? 'n' : 'p';
+  /** @const {!number} days Number of days for which data needs to be fetched */
+  const days = fixtures.days || 10;
+  /** @const {?string} league League code for which data needs to be fetched */
+  const league = fixtures.league;
+  /** @const {!string} team Team for which fixtures is requested */
+  const team = fixtures.team || '';
+  /** @const {!string} time Past or present depending on flag `n` set */
+  const time = (fixtures.next === true) ? 'n' : 'p';
+
   if (days < 0) {
     updateMessage('FIX_INPUT_ERR');
   }
-  /**
-   * @const {!string} timeFrame Combination of `time` and `days` as per API requirements
-   */
+
+  /** @const {!string} timeFrame Combination of `time` and `days` as per API requirements */
   const timeFrame = `${time}${days}`;
 
   if (league !== undefined) {
@@ -96,7 +88,7 @@ exports.handler = (yargs) => {
       if (err) {
         updateMessage('REQ_ERROR');
       } else {
-        buildAndPrintFixtures(league, name, team, body);
+        buildAndPrintFixtures(league, name, team, body, outData);
       }
     });
   } else {
