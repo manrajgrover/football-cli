@@ -13,6 +13,7 @@ const LEAGUE_IDS_URL = URLS.LEAGUE_IDS_URL;
 
 exports.command = 'lists';
 exports.desc = 'List of codes of various competitions';
+
 exports.builder = function builder(yargs) {
   return yargs
         .usage('Usage: sudo $0 lists [options]')
@@ -22,11 +23,11 @@ exports.builder = function builder(yargs) {
         .example('sudo $0 lists -r')
         .argv;
 };
+
 exports.handler = function handler(yargs) {
   /**
    * Get all the options set for `lists` command
    */
-
   const lists = yargs;
   const spinner = ora('Fetching data').start();
   const refreshHeaders = { 'User-Agent': 'node.js' };
@@ -42,11 +43,13 @@ exports.handler = function handler(yargs) {
         updateMessage('REQ_ERROR');
       } else {
         const newLeagueIDs = Buffer.from(body.content, 'base64').toString('utf8');
+
         fs.writeFileSync(
           path.resolve(__dirname, 'leagueIds.json'),
           newLeagueIDs,
           'utf8'
         );
+
         updateMessage('UPDATE', 'New list fetched and saved');
       }
     });
@@ -58,12 +61,14 @@ exports.handler = function handler(yargs) {
       ],
       colWidths: [40, 20],
     });
+
     for (let league of Object.keys(leagueIds)) {
       table.push([
         chalk.bold.cyan(leagueIds[league].caption),
         chalk.bold.green(league),
       ]);
     }
+
     spinner.stop();
     console.log(table.toString());
   }

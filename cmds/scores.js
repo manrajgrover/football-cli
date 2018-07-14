@@ -5,7 +5,7 @@ const URLS = require('../constants');
 const config = require('../config');
 const helpers = require('../helpers');
 
-const scoresHelper = helpers.scoresHelper;
+const buildAndPrintScores = helpers.buildAndPrintScores;
 const updateMessage = helpers.updateMessage;
 
 const footballRequest = request.defaults({
@@ -16,7 +16,9 @@ const footballRequest = request.defaults({
 });
 
 exports.command = 'scores';
+
 exports.desc = 'Get scores of past and live fixtures';
+
 exports.builder = function builder(yargs) {
   return yargs
     .usage('Usage: $0 scores [options]')
@@ -43,10 +45,11 @@ exports.builder = function builder(yargs) {
     .example('$0 scores -t "Manchester United" -l')
     .argv;
 };
+
 exports.handler = function handler(yargs) {
-    /**
-     * Get all the options set for `scores` command
-     */
+  /**
+   * Get all the options set for `scores` command
+   */
   const scores = yargs;
 
   const outData = {
@@ -59,26 +62,24 @@ exports.handler = function handler(yargs) {
   const team = (scores.t === undefined) ? '' : (scores.t).toLowerCase();
 
   /**
-   * timeFrameStart Set start date from which fixtures is to be fetch
-   * timeFrameEnd   Set end date till which fixtures is to be fetch
-   * End Point for fetching all fixtures between `timeFrameStart` and `timeFrameEnd`
+   * @const {!string} timeFrameStart Set start date from which fixtures is to be fetch
+   * @const {!string} timeFrameEnd   Set end date till which fixtures is to be fetch
+   * @const {!string} url End Point for fetching all fixtures between `timeFrameStart`
+   *                      and `timeFrameEnd`
    */
-
   const timeFrameStart = moment().subtract(1, 'days').format('YYYY-MM-DD');
   const timeFrameEnd = moment().add(1, 'days').format('YYYY-MM-DD');
   const url = `fixtures?timeFrameStart=${timeFrameStart}&timeFrameEnd=${timeFrameEnd}`;
+
   /**
    * Creates request to fetch fixtures and show them
-   * @param  {String} url:     End point from where data to be fetched
-   * @return {None}            None
    */
-
   footballRequest(url, (err, res, body) => {
     spinner.stop();
     if (err) {
       updateMessage('REQ_ERROR');
     } else {
-      scoresHelper(scores.l, team, body, outData);
+      buildAndPrintScores(scores.l, team, body, outData);
     }
   });
 };
