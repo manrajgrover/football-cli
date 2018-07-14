@@ -33,7 +33,6 @@ const updateMessage = (TYPE, message) => {
   message = message || '';
 
   switch (TYPE) {
-
     case 'REQ_ERROR':
       console.log(
         chalk.red.bold(
