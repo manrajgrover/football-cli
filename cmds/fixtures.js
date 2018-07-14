@@ -49,7 +49,7 @@ exports.builder = function builder(yargs) {
 exports.handler = (yargs) => {
   /** Get all the options set for `fixtures` command */
   const fixtures = yargs;
-  
+
   const outData = {
     json: fixtures.json,
     csv: fixtures.csv,
