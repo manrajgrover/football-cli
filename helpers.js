@@ -6,7 +6,6 @@ const chalk = require('chalk');
 const moment = require('moment');
 const URLS = require('./constants');
 
-const API_URL = URLS.API_URL;
 const BUGS_URL = URLS.BUGS_URL;
 
 const buildScore = (name, homeTeam, goalsHomeTeam, goalsAwayTeam, awayTeam, time) => (
@@ -21,7 +20,9 @@ const updateMessage = (TYPE, message) => {
 
     case 'REQ_ERROR':
       console.log(
-        chalk.red.bold(`Sorry, an error occured. Please report issues to ${BUGS_URL} if problem persists.`)
+        chalk.red.bold(
+          `Sorry, an error occured. Please report issues to ${BUGS_URL} if problem persists.`
+        )
       );
       break;
 
@@ -39,7 +40,9 @@ const updateMessage = (TYPE, message) => {
       ));
 
     case 'FIX_INPUT_ERR':
-      throw new Error(chalk.red.bold('Days cannot be a negative value.'));
+      throw new Error(
+        chalk.red.bold('Days cannot be a negative value.')
+      );
 
     default:
       console.log('ERROR OCCURED.');
@@ -60,7 +63,7 @@ const getLeagueName = (fixture) => {
   return '';
 };
 
-const fixturesHelper = (league, name, team, body) => {
+const buildAndPrintFixtures = (league, name, team, body) => {
   let data = JSON.parse(body);
   let fixtures = data.fixtures;
 
@@ -108,7 +111,7 @@ const printScores = (fixtures, isLive) => {
   }
 };
 
-const scoresHelper = (isLive, team, body) => {
+const buildAndPrintScores = (isLive, team, body) => {
   let data = JSON.parse(body);
   let fixtures = data.fixtures;
   let live = [];
@@ -150,7 +153,7 @@ const scoresHelper = (isLive, team, body) => {
   }
 };
 
-const standings = (body) => {
+const buildAndPrintStandings = (body) => {
   let data = JSON.parse(body);
   let table;
 
@@ -232,8 +235,8 @@ const standings = (body) => {
 };
 
 module.exports = {
-  fixturesHelper,
-  scoresHelper,
-  standings,
+  buildAndPrintFixtures,
+  buildAndPrintScores,
+  buildAndPrintStandings,
   updateMessage,
 };
