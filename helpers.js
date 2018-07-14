@@ -5,13 +5,29 @@ const Table = require('cli-table3');
 const chalk = require('chalk');
 const moment = require('moment');
 const URLS = require('./constants');
+const fs = require('fs');
+const path = require('path');
+const mkdir = require('mkdirp');
+const jsonexport = require('jsonexport');
+
+const getDirName = path.dirname;
 
 const BUGS_URL = URLS.BUGS_URL;
 
-const buildScore = (name, homeTeam, goalsHomeTeam, goalsAwayTeam, awayTeam, time) => (
-  `${chalk.green.bold(name)}  ${chalk.cyan.bold(homeTeam)} ${chalk.cyan.bold(goalsHomeTeam)} vs. ` +
+const buildScore = ({ leagueName, homeTeam, goalsHomeTeam, goalsAwayTeam, awayTeam, time }) => (
+  `${chalk.green.bold(leagueName)}  ${chalk.cyan.bold(homeTeam)} ${chalk.cyan.bold(goalsHomeTeam)} vs. ` +
   `${chalk.red.bold(goalsAwayTeam)} ${chalk.red.bold(awayTeam)} ${chalk.yellow.bold(time)}`
 );
+
+const writeFile = (writePath, content, cb) => {
+  mkdir(getDirName(writePath), (err) => {
+    if (err) {
+      return cb(err);
+    }
+    fs.writeFile(writePath, content, 'utf8', cb);
+    return 0;
+  });
+};
 
 const updateMessage = (TYPE, message) => {
   message = message || '';
@@ -49,6 +65,51 @@ const updateMessage = (TYPE, message) => {
   }
 };
 
+const exportData = (output, data) => {
+  const outputDir = (output.dir && output.dir.length > 0) ? output.dir : undefined;
+  if (output.json !== undefined) {
+    const jsonFileName = (output.json.length > 0) ? output.json : 'footballOut';
+    writeFile(
+      path.resolve(outputDir || process.cwd(), `${jsonFileName}.json`),
+      JSON.stringify(data, null, 4),
+      (err) => {
+        if (err) {
+          updateMessage('CUSTOM_ERR', 'Error creating JSON file');
+        } else {
+          console.log(
+            chalk.bold.cyan(`Data has been successfully saved as ${jsonFileName}.json`)
+          );
+        }
+      });
+  }
+  if (output.csv !== undefined) {
+    const csvFileName = (output.csv.length > 0) ? output.csv : 'footballOut';
+    try {
+      jsonexport(data, (err, csv) => {
+        if (err) {
+          throw new Error(err);
+        } else {
+          writeFile(
+            path.resolve(outputDir || process.cwd(), `${csvFileName}.csv`),
+            csv,
+            (error) => {
+              if (error) {
+                throw new Error(error);
+              } else {
+                console.log(
+                  chalk.bold.cyan(`Data has been successfully saved as ${csvFileName}.csv`)
+                );
+              }
+            }
+          );
+        }
+      });
+    } catch (err) {
+      updateMessage('CUSTOM_ERR', 'Error creating CSV file');
+    }
+  }
+};
+
 const getLeagueName = (fixture) => {
   let compUrl = fixture._links.competition.href;
   let parts = compUrl.split('/');
@@ -63,7 +124,7 @@ const getLeagueName = (fixture) => {
   return '';
 };
 
-const buildAndPrintFixtures = (league, name, team, body) => {
+const buildAndPrintFixtures = (league, name, team, body, outData = {}) => {
   let data = JSON.parse(body);
   let fixtures = data.fixtures;
 
@@ -77,41 +138,67 @@ const buildAndPrintFixtures = (league, name, team, body) => {
     return;
   }
 
+  const results = [];
+
   for (let fixture of fixtures) {
     let homeTeam = (fixture.homeTeamName === '' ? 'TBD' : fixture.homeTeamName);
     let awayTeam = (fixture.awayTeamName === '' ? 'TBD' : fixture.awayTeamName);
     let goalsHomeTeam = (fixture.result.goalsHomeTeam === null) ? '' : fixture.result.goalsHomeTeam;
     let goalsAwayTeam = (fixture.result.goalsAwayTeam === null) ? '' : fixture.result.goalsAwayTeam;
 
-    name = (league === undefined) ? getLeagueName(fixture) : name;
+    const leagueName = (league === undefined) ? getLeagueName(fixture) : name;
 
     let time = (fixture.status === 'IN_PLAY') ? 'LIVE' : moment(fixture.date).calendar();
+
+    const result = {
+      leagueName,
+      homeTeam,
+      goalsHomeTeam,
+      goalsAwayTeam,
+      awayTeam,
+      time,
+    };
 
     if (team !== undefined) {
       if ((homeTeam.toLowerCase()).indexOf((team).toLowerCase()) !== -1 ||
           (awayTeam.toLowerCase()).indexOf((team).toLowerCase()) !== -1) {
-        console.log(buildScore(name, homeTeam, goalsHomeTeam, goalsAwayTeam, awayTeam, time));
+        results.push(result);
+        console.log(buildScore(result));
       }
     } else {
-      console.log(buildScore(name, homeTeam, goalsHomeTeam, goalsAwayTeam, awayTeam, time));
+      results.push(result);
+      console.log(buildScore(result));
     }
+  }
+
+  if (outData.json !== undefined || outData.csv !== undefined) {
+    exportData(outData, fixtures);
   }
 };
 
 const printScores = (fixtures, isLive) => {
   for (let fixture of fixtures) {
-    let name = getLeagueName(fixture);
+    let leagueName = getLeagueName(fixture);
     let homeTeam = fixture.homeTeamName;
     let awayTeam = fixture.awayTeamName;
     let goalsHomeTeam = (fixture.result.goalsHomeTeam === null) ? '' : fixture.result.goalsHomeTeam;
     let goalsAwayTeam = (fixture.result.goalsAwayTeam === null) ? '' : fixture.result.goalsAwayTeam;
     let time = (isLive === true) ? 'LIVE' : moment(fixture.date).calendar();
 
-    console.log(buildScore(name, homeTeam, goalsHomeTeam, goalsAwayTeam, awayTeam, time));
+    const result = {
+      leagueName,
+      homeTeam,
+      goalsHomeTeam,
+      goalsAwayTeam,
+      awayTeam,
+      time,
+    };
+
+    console.log(buildScore(result));
   }
 };
 
-const buildAndPrintScores = (isLive, team, body) => {
+const buildAndPrintScores = (isLive, team, body, outData = {}) => {
   let data = JSON.parse(body);
   let fixtures = data.fixtures;
   let live = [];
@@ -129,11 +216,11 @@ const buildAndPrintScores = (isLive, team, body) => {
     let awayTeam = (fixture.awayTeamName).toLowerCase();
 
     if (fixture.status === 'IN_PLAY' && (homeTeam.indexOf(team) !== -1 ||
-                                         awayTeam.indexOf(team) !== -1)) {
+                                          awayTeam.indexOf(team) !== -1)) {
       live.push(fixture);
       scores.push(fixture);
     } else if (fixture.status === 'FINISHED' && (homeTeam.indexOf(team) !== -1 ||
-                                                 awayTeam.indexOf(team) !== -1)) {
+                                                  awayTeam.indexOf(team) !== -1)) {
       scores.push(fixture);
     }
   }
@@ -141,19 +228,25 @@ const buildAndPrintScores = (isLive, team, body) => {
   if (isLive) {
     if (live.length !== 0) {
       printScores(live, true);
+      if (outData.json !== undefined || outData.csv !== undefined) {
+        exportData(outData, live);
+      }
     } else {
       updateMessage('UPDATE', 'Sorry, no live matches right now');
     }
   } else {
     if (scores.length !== 0) {
       printScores(scores, false);
+      if (outData.json !== undefined || outData.csv !== undefined) {
+        exportData(outData, scores);
+      }
     } else {
       updateMessage('UPDATE', 'Sorry, no scores to show right now');
     }
   }
 };
 
-const buildAndPrintStandings = (body) => {
+const buildAndPrintStandings = (body, outData = {}) => {
   let data = JSON.parse(body);
   let table;
 
@@ -197,6 +290,10 @@ const buildAndPrintStandings = (body) => {
     }
 
     console.log(table.toString());
+
+    if (outData.json !== undefined || outData.csv !== undefined) {
+      exportData(outData, standing);
+    }
   } else {
     let groupStandings = data.standings;
 
@@ -231,6 +328,9 @@ const buildAndPrintStandings = (body) => {
       }
       console.log(table.toString());
     }
+    if (outData.json !== undefined || outData.csv !== undefined) {
+      exportData(outData, groupStandings);
+    }
   }
 };
 
@@ -239,4 +339,5 @@ module.exports = {
   buildAndPrintScores,
   buildAndPrintStandings,
   updateMessage,
+  exportData
 };

@@ -18,21 +18,20 @@ exports.builder = function builder(yargs) {
   return yargs
         .usage('Usage: sudo $0 lists [options]')
         .alias('r', 'refresh')
-            .describe('r', 'Refresh league ids')
-            .boolean('r')
+          .describe('r', 'Refresh league ids')
+          .boolean('r')
         .example('sudo $0 lists -r')
         .argv;
 };
 
 exports.handler = function handler(yargs) {
-  /**
-   * Get all the options set for `lists` command
-   */
+  /** Get all the options set for `lists` command */
   const lists = yargs;
+
   const spinner = ora('Fetching data').start();
   const refreshHeaders = { 'User-Agent': 'node.js' };
 
-  if (lists.r) {
+  if (lists.refresh) {
     request({
       url: LEAGUE_IDS_URL,
       headers: refreshHeaders,
