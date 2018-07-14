@@ -69,38 +69,43 @@ const exportData = (output, data) => {
   const outputDir = (output.dir && output.dir.length > 0) ? output.dir : undefined;
   if (output.json !== undefined) {
     const jsonFileName = (output.json.length > 0) ? output.json : 'footballOut';
-    writeFile(path.resolve(outputDir || process.cwd(), `${jsonFileName}.json`),
-                    JSON.stringify(data, null, 4), (err) => {
-                      if (err) {
-                        throw (err);
-                      } else {
-                        console.log(
-                          chalk.bold.cyan(`Data has been successfully saved as ${jsonFileName}.json`)
-                        );
-                      }
-                    });
+    writeFile(
+      path.resolve(outputDir || process.cwd(), `${jsonFileName}.json`),
+      JSON.stringify(data, null, 4),
+      (err) => {
+        if (err) {
+          updateMessage('CUSTOM_ERR', 'Error creating JSON file');
+        } else {
+          console.log(
+            chalk.bold.cyan(`Data has been successfully saved as ${jsonFileName}.json`)
+          );
+        }
+      });
   }
   if (output.csv !== undefined) {
     const csvFileName = (output.csv.length > 0) ? output.csv : 'footballOut';
     try {
       jsonexport(data, (err, csv) => {
         if (err) {
-          throw (err);
+          throw new Error(err);
         } else {
-          writeFile(path.resolve(outputDir || process.cwd(), `${csvFileName}.csv`),
-                        csv, (error) => {
-                          if (error) {
-                            throw (error);
-                          } else {
-                            console.log(
-                              chalk.bold.cyan(`Data has been successfully saved as ${csvFileName}.csv`)
-                            );
-                          }
-                        });
+          writeFile(
+            path.resolve(outputDir || process.cwd(), `${csvFileName}.csv`),
+            csv,
+            (error) => {
+              if (error) {
+                throw new Error(error);
+              } else {
+                console.log(
+                  chalk.bold.cyan(`Data has been successfully saved as ${csvFileName}.csv`)
+                );
+              }
+            }
+          );
         }
       });
     } catch (err) {
-      console.log('Error while generating CSV.', err);
+      updateMessage('CUSTOM_ERR', 'Error creating CSV file');
     }
   }
 };
