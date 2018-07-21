@@ -3,5 +3,7 @@ node_js:
   - 7.10.1
 install:
   - npm install
+cache:
+  - npm
 script:
 - npm run lint
