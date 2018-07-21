@@ -2,14 +2,14 @@ const fs = require('fs');
 const path = require('path');
 const ora = require('ora');
 const request = require('request');
-const leagueIds = require('../leagueIds');
 const Table = require('cli-table3');
 const chalk = require('chalk');
+const leagueIds = require('../leagueIds');
 const helpers = require('./utils/helpers');
 const URLS = require('../constants');
 
-const updateMessage = helpers.updateMessage;
-const LEAGUE_IDS_URL = URLS.LEAGUE_IDS_URL;
+const { updateMessage } = helpers;
+const { LEAGUE_IDS_URL } = URLS;
 
 exports.command = 'lists';
 exports.desc = 'List of codes of various competitions';

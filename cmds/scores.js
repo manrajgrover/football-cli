@@ -5,8 +5,7 @@ const URLS = require('../constants');
 const config = require('../config');
 const helpers = require('./utils/helpers');
 
-const buildAndPrintScores = helpers.buildAndPrintScores;
-const updateMessage = helpers.updateMessage;
+const { buildAndPrintScores, updateMessage } = helpers;
 
 const footballRequest = request.defaults({
   baseUrl: URLS.API_URL,

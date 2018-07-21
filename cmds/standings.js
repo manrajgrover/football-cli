@@ -5,8 +5,7 @@ const config = require('../config');
 const helpers = require('./utils/helpers');
 const leagueIds = require('../leagueIds');
 
-const updateMessage = helpers.updateMessage;
-const buildAndPrintStandings = helpers.buildAndPrintStandings;
+const { updateMessage, buildAndPrintStandings } = helpers;
 
 const footballRequest = request.defaults({
   baseUrl: URLS.API_URL,
@@ -43,7 +42,7 @@ exports.handler = function handler(yargs) {
 
   const spinner = ora('Fetching data').start();
 
-  const league = standings.league;
+  const { league } = standings;
   const outData = {
     json: standings.json,
     csv: standings.csv,
@@ -55,7 +54,7 @@ exports.handler = function handler(yargs) {
     updateMessage('LEAGUE_ERR');
   }
 
-  const id = leagueIds[league].id;
+  const { id } = leagueIds[league];
 
   footballRequest(`competitions/${id}/leagueTable`, (err, _, body) => {
     spinner.stop();

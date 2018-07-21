@@ -1,10 +1,10 @@
 const fs = require('fs');
+const inquirer = require('inquirer');
 const path = require('path');
 const config = require('../config');
 const helpers = require('./utils/helpers');
-const inquirer = require('inquirer');
 
-const updateMessage = helpers.updateMessage;
+const { updateMessage } = helpers;
 
 exports.command = 'config';
 

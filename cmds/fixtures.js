@@ -5,8 +5,7 @@ const config = require('../config');
 const helpers = require('./utils/helpers');
 const leagueIds = require('../leagueIds');
 
-const buildAndPrintFixtures = helpers.buildAndPrintFixtures;
-const updateMessage = helpers.updateMessage;
+const { buildAndPrintFixtures, updateMessage } = helpers;
 
 const footballRequest = request.defaults({
   baseUrl: URLS.API_URL,
@@ -61,7 +60,7 @@ exports.handler = (yargs) => {
   /** @const {!number} days Number of days for which data needs to be fetched */
   const days = fixtures.days || 10;
   /** @const {?string} league League code for which data needs to be fetched */
-  const league = fixtures.league;
+  const { league } = fixtures;
   /** @const {!string} team Team for which fixtures is requested */
   const team = fixtures.team || '';
   /** @const {!string} time Past or present depending on flag `n` set */
@@ -80,7 +79,7 @@ exports.handler = (yargs) => {
       updateMessage('LEAGUE_ERR');
     }
 
-    const id = leagueIds[league].id;
+    const { id } = leagueIds[league];
     const name = leagueIds[league].caption;
 
     footballRequest(`competitions/${id}/fixtures?timeFrame=${timeFrame}`, (err, res, body) => {
