@@ -3,7 +3,7 @@ const moment = require('moment');
 const request = require('request');
 const URLS = require('../constants');
 const config = require('../config');
-const helpers = require('../helpers');
+const helpers = require('./utils/helpers');
 
 const buildAndPrintScores = helpers.buildAndPrintScores;
 const updateMessage = helpers.updateMessage;

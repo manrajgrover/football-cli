@@ -2,7 +2,7 @@ const ora = require('ora');
 const request = require('request');
 const URLS = require('../constants');
 const config = require('../config');
-const helpers = require('../helpers');
+const helpers = require('./utils/helpers');
 const leagueIds = require('../leagueIds');
 
 const updateMessage = helpers.updateMessage;

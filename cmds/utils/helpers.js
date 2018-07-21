@@ -1,10 +1,10 @@
 'use strict';
 
-const leagueIds = require('./leagueIds');
+const leagueIds = require('../../leagueIds');
 const Table = require('cli-table3');
 const chalk = require('chalk');
 const moment = require('moment');
-const URLS = require('./constants');
+const URLS = require('../../constants');
 const fs = require('fs');
 const path = require('path');
 const mkdir = require('mkdirp');

@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const config = require('../config');
-const helpers = require('../helpers');
+const helpers = require('./utils/helpers');
 const inquirer = require('inquirer');
 
 const updateMessage = helpers.updateMessage;

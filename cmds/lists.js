@@ -5,7 +5,7 @@ const request = require('request');
 const leagueIds = require('../leagueIds');
 const Table = require('cli-table3');
 const chalk = require('chalk');
-const helpers = require('../helpers');
+const helpers = require('./utils/helpers');
 const URLS = require('../constants');
 
 const updateMessage = helpers.updateMessage;
