@@ -38,7 +38,7 @@ exports.handler = function handler(yargs) {
       json: true,
     }, (err, res, body) => {
       spinner.stop();
-      if (err) {
+      if (err || res.statusCode !== 200) {
         updateMessage('REQ_ERROR');
       } else {
         const newLeagueIDs = Buffer.from(body.content, 'base64').toString('utf8');

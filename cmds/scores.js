@@ -70,7 +70,7 @@ exports.handler = function handler(yargs) {
   /** Creates request to fetch fixtures and show them */
   footballRequest(url, (err, res, body) => {
     spinner.stop();
-    if (err) {
+    if (err || res.statusCode !== 200) {
       updateMessage('REQ_ERROR');
     } else {
       buildAndPrintScores(scores.live, team, body, outData);
