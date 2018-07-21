@@ -4,6 +4,7 @@ node_js:
 install:
   - npm install
 cache:
-  - npm
+  directories:
+    - node_modules
 script:
 - npm run lint
