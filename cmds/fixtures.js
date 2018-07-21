@@ -84,7 +84,7 @@ exports.handler = (yargs) => {
 
     footballRequest(`competitions/${id}/fixtures?timeFrame=${timeFrame}`, (err, res, body) => {
       spinner.stop();
-      if (err) {
+      if (err || res.statusCode !== 200) {
         updateMessage('REQ_ERROR');
       } else {
         buildAndPrintFixtures(league, name, team, body, outData);
@@ -93,7 +93,7 @@ exports.handler = (yargs) => {
   } else {
     footballRequest(`fixtures?timeFrame=${timeFrame}`, (err, res, body) => {
       spinner.stop();
-      if (err) {
+      if (err || res.statusCode !== 200) {
         updateMessage('REQ_ERROR');
       } else {
         buildAndPrintFixtures(league, undefined, team, body, outData);
