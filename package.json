@@ -4,7 +4,7 @@
   "description": "Command Line Interface for next fixtures, live scores and more",
   "main": "cli.js",
   "scripts": {
-    "lint": "eslint ./cli.js ./helpers.js ./cmds/*.js"
+    "lint": "eslint ./cli.js ./cmds/*.js"
   },
   "bin": {
     "football": "./cli.js"
