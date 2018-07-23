@@ -3,6 +3,9 @@ node_js:
   - 7.10.1
 install:
   - npm install
+cache:
+  directories:
+    - $HOME/.npm
 script:
   - npm link
   - npm run test
