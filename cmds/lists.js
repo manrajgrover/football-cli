@@ -6,10 +6,14 @@ const Table = require('cli-table3');
 const chalk = require('chalk');
 const leagueIds = require('../leagueIds');
 const helpers = require('./utils/helpers');
+const logging = require('./utils/logging');
 const URLS = require('../constants');
 
 const { updateMessage } = helpers;
+const { getLogger } = logging;
 const { LEAGUE_IDS_URL } = URLS;
+
+const log = getLogger();
 
 exports.command = 'lists';
 exports.desc = 'List of codes of various competitions';
@@ -69,6 +73,6 @@ exports.handler = function handler(yargs) {
     }
 
     spinner.stop();
-    console.log(table.toString());
+    log(table.toString());
   }
 };
