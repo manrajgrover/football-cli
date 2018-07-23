@@ -1,22 +1,25 @@
 'use strict';
 
-const leagueIds = require('../../leagueIds');
 const Table = require('cli-table3');
 const chalk = require('chalk');
 const moment = require('moment');
-const URLS = require('../../constants');
 const fs = require('fs');
 const path = require('path');
 const mkdir = require('mkdirp');
 const jsonexport = require('jsonexport');
 
+const URLS = require('../../constants');
+const leagueIds = require('../../leagueIds');
+
 const getDirName = path.dirname;
 
-const BUGS_URL = URLS.BUGS_URL;
+const { BUGS_URL } = URLS;
 
-const buildScore = ({ leagueName, homeTeam, goalsHomeTeam, goalsAwayTeam, awayTeam, time }) => (
-  `${chalk.green.bold(leagueName)}  ${chalk.cyan.bold(homeTeam)} ${chalk.cyan.bold(goalsHomeTeam)} vs. ` +
-  `${chalk.red.bold(goalsAwayTeam)} ${chalk.red.bold(awayTeam)} ${chalk.yellow.bold(time)}`
+const buildScore = ({
+  leagueName, homeTeam, goalsHomeTeam, goalsAwayTeam, awayTeam, time
+}) => (
+  `${chalk.green.bold(leagueName)}  ${chalk.cyan.bold(homeTeam)} ${chalk.cyan.bold(goalsHomeTeam)} vs. `
+  + `${chalk.red.bold(goalsAwayTeam)} ${chalk.red.bold(awayTeam)} ${chalk.yellow.bold(time)}`
 );
 
 const writeFile = (writePath, content, cb) => {
@@ -79,7 +82,8 @@ const exportData = (output, data) => {
             chalk.bold.cyan(`Data has been successfully saved as ${jsonFileName}.json`)
           );
         }
-      });
+      }
+    );
   }
   if (output.csv !== undefined) {
     const csvFileName = (output.csv.length > 0) ? output.csv : 'footballOut';
@@ -159,8 +163,8 @@ const buildAndPrintFixtures = (league, name, team, body, outData = {}) => {
     };
 
     if (team !== undefined) {
-      if ((homeTeam.toLowerCase()).indexOf((team).toLowerCase()) !== -1 ||
-          (awayTeam.toLowerCase()).indexOf((team).toLowerCase()) !== -1) {
+      if ((homeTeam.toLowerCase()).indexOf((team).toLowerCase()) !== -1
+          || (awayTeam.toLowerCase()).indexOf((team).toLowerCase()) !== -1) {
         results.push(result);
         console.log(buildScore(result));
       }
@@ -214,12 +218,12 @@ const buildAndPrintScores = (isLive, team, body, outData = {}) => {
     let homeTeam = (fixture.homeTeamName).toLowerCase();
     let awayTeam = (fixture.awayTeamName).toLowerCase();
 
-    if (fixture.status === 'IN_PLAY' && (homeTeam.indexOf(team) !== -1 ||
-                                          awayTeam.indexOf(team) !== -1)) {
+    if (fixture.status === 'IN_PLAY' && (homeTeam.indexOf(team) !== -1
+                                          || awayTeam.indexOf(team) !== -1)) {
       live.push(fixture);
       scores.push(fixture);
-    } else if (fixture.status === 'FINISHED' && (homeTeam.indexOf(team) !== -1 ||
-                                                  awayTeam.indexOf(team) !== -1)) {
+    } else if (fixture.status === 'FINISHED' && (homeTeam.indexOf(team) !== -1
+                                                  || awayTeam.indexOf(team) !== -1)) {
       scores.push(fixture);
     }
   }
