@@ -1,18 +1,11 @@
 const ora = require('ora');
-const request = require('request');
-const URLS = require('../constants');
-const config = require('../config');
+
 const helpers = require('./utils/helpers');
+const requests = require('./utils/requests');
 const leagueIds = require('../leagueIds');
 
 const { buildAndPrintFixtures, updateMessage } = helpers;
-
-const footballRequest = request.defaults({
-  baseUrl: URLS.API_URL,
-  headers: {
-    'X-Auth-Token': config.API_KEY,
-  },
-});
+const { footballRequest } = requests;
 
 exports.command = 'fixtures';
 exports.desc = 'Get upcoming and past fixtures of a league and team';

@@ -8,12 +8,12 @@ const path = require('path');
 const mkdir = require('mkdirp');
 const jsonexport = require('jsonexport');
 
-const URLS = require('../../constants');
+const constants = require('../../constants');
 const leagueIds = require('../../leagueIds');
 
 const getDirName = path.dirname;
 
-const { BUGS_URL } = URLS;
+const { BUGS_URL } = constants;
 
 const buildScore = ({
   leagueName, homeTeam, goalsHomeTeam, goalsAwayTeam, awayTeam, time
