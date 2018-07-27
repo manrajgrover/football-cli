@@ -129,7 +129,7 @@ const getLeagueName = (fixture) => {
 
 const buildAndPrintFixtures = (league, name, team, body, outData = {}) => {
   let data = JSON.parse(body);
-  let fixtures = data.fixtures;
+  let { fixtures } = data;
 
   if ('error' in data) {
     updateMessage('CUSTOM_ERR', data.error);
@@ -203,7 +203,7 @@ const printScores = (fixtures, isLive) => {
 
 const buildAndPrintScores = (isLive, team, body, outData = {}) => {
   let data = JSON.parse(body);
-  let fixtures = data.fixtures;
+  let { fixtures } = data;
   let live = [];
   let scores = [];
 
@@ -259,7 +259,7 @@ const buildAndPrintStandings = (body, outData = {}) => {
   }
 
   if (data.standing !== undefined) {
-    let standing = data.standing;
+    let { standing } = data;
 
     table = new Table({
       head: [
