@@ -10,14 +10,12 @@ exports.command = 'config';
 
 exports.desc = 'Change configuration and defaults';
 
-exports.builder = function builder(yargs) {
-  return yargs
-    .usage('Usage: sudo $0 config')
-    .example('sudo $0 config')
-    .argv;
-};
+exports.builder = yargs => yargs
+  .usage('Usage: sudo $0 config')
+  .example('sudo $0 config')
+  .argv;
 
-exports.handler = function handler(yargs) {
+exports.handler = (yargs) => {
   /**  Get all the options set for `config` command */
   const configs = yargs;
 

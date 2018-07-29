@@ -14,17 +14,15 @@ const { LEAGUE_IDS_URL } = URLS;
 exports.command = 'lists';
 exports.desc = 'List of codes of various competitions';
 
-exports.builder = function builder(yargs) {
-  return yargs
-    .usage('Usage: sudo $0 lists [options]')
-    .alias('r', 'refresh')
-    .describe('r', 'Refresh league ids')
-    .boolean('r')
-    .example('sudo $0 lists -r')
-    .argv;
-};
+exports.builder = yargs => yargs
+  .usage('Usage: sudo $0 lists [options]')
+  .alias('r', 'refresh')
+  .describe('r', 'Refresh league ids')
+  .boolean('r')
+  .example('sudo $0 lists -r')
+  .argv;
 
-exports.handler = function handler(yargs) {
+exports.handler = (yargs) => {
   /** Get all the options set for `lists` command */
   const lists = yargs;
 

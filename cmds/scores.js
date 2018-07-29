@@ -11,29 +11,27 @@ exports.command = 'scores';
 
 exports.desc = 'Get scores of past and live fixtures';
 
-exports.builder = function builder(yargs) {
-  return yargs
-    .usage('Usage: $0 scores [options]')
-    .alias('l', 'live')
-    .describe('l', 'Live scores')
-    .boolean('l')
-    .alias('t', 'team')
-    .describe('t', 'Select team')
-    .string('t')
-    .alias('j', 'json')
-    .describe('j', 'Output results as JSON file')
-    .string('j')
-    .alias('c', 'csv')
-    .describe('c', 'Output results as CSV file')
-    .string('c')
-    .alias('o', 'dir')
-    .describe('o', 'Output directory for files')
-    .string('o')
-    .example('$0 scores -t "Manchester United" -l')
-    .argv;
-};
+exports.builder = yargs => yargs
+  .usage('Usage: $0 scores [options]')
+  .alias('l', 'live')
+  .describe('l', 'Live scores')
+  .boolean('l')
+  .alias('t', 'team')
+  .describe('t', 'Select team')
+  .string('t')
+  .alias('j', 'json')
+  .describe('j', 'Output results as JSON file')
+  .string('j')
+  .alias('c', 'csv')
+  .describe('c', 'Output results as CSV file')
+  .string('c')
+  .alias('o', 'dir')
+  .describe('o', 'Output directory for files')
+  .string('o')
+  .example('$0 scores -t "Manchester United" -l')
+  .argv;
 
-exports.handler = function handler(yargs) {
+exports.handler = (yargs) => {
   /** Get all the options set for `scores` command */
   const scores = yargs;
 
