@@ -1,8 +1,8 @@
 # football-cli
-[![Build Status](https://travis-ci.org/ManrajGrover/football-cli.svg?branch=master)](https://travis-ci.org/ManrajGrover/football-cli) [![npm version](https://badge.fury.io/js/footballcli.svg)](https://www.npmjs.com/package/footballcli) [![npm](https://img.shields.io/npm/dt/footballcli.svg?maxAge=2592000?style=flat-square)](https://www.npmjs.com/package/footballcli) ![awesome](https://img.shields.io/badge/awesome-yes-green.svg)
+[![Build Status](https://travis-ci.org/manrajgrover/football-cli.svg?branch=master)](https://travis-ci.org/manrajgrover/football-cli) [![npm version](https://badge.fury.io/js/footballcli.svg)](https://www.npmjs.com/package/footballcli) [![npm](https://img.shields.io/npm/dt/footballcli.svg?maxAge=2592000?style=flat-square)](https://www.npmjs.com/package/footballcli) ![awesome](https://img.shields.io/badge/awesome-yes-green.svg)
 > Command line interface for Hackers who love football ⚽
 
-![Standings](https://raw.githubusercontent.com/ManrajGrover/football-cli/master/assets/football-standings.gif)
+![Standings](https://raw.githubusercontent.com/manrajgrover/football-cli/master/assets/football-standings.gif)
 
 ## Installation
 
@@ -38,7 +38,7 @@ Options:
 #### Command `scores`
 Get scores of past and live fixtures
 
-![Standings](https://raw.githubusercontent.com/ManrajGrover/football-cli/master/assets/football-livescores.gif)
+![Standings](https://raw.githubusercontent.com/manrajgrover/football-cli/master/assets/football-livescores.gif)
 
 ```shell
 Usage: football scores [options]
@@ -71,7 +71,7 @@ Examples:
 
 ```
 
-![Fixtures](https://raw.githubusercontent.com/ManrajGrover/football-cli/master/assets/football-fixtures.gif)
+![Fixtures](https://raw.githubusercontent.com/manrajgrover/football-cli/master/assets/football-fixtures.gif)
 
 #### Command `standings`
 Get standings of particular league
@@ -126,7 +126,7 @@ For World Cup fixtures, you need to specify `league` flag with value as `WC`. AP
 Run:
 
 ```sh
-$ git clone https://github.com/ManrajGrover/football-cli.git
+$ git clone https://github.com/manrajgrover/football-cli.git
 $ cd football-cli
 $ npm link
 ```
@@ -141,11 +141,11 @@ $ npm run lint
 
 ## Get in touch
 
-Say hi on [twitter](https://twitter.com/manrajsgrover) and share this project by clicking [here](https://twitter.com/home?status=Checkout%20command%20line%20tool%20for%20checking%20live%20%23scores,%20%23fixtures%20and%20more%20on%20%23Github%20by%20%40manrajsgrover%20%23cli%20https%3A//github.com/ManrajGrover/football-cli)
+Say hi on [twitter](https://twitter.com/manrajsgrover) and share this project by clicking [here](https://twitter.com/home?status=Checkout%20command%20line%20tool%20for%20checking%20live%20%23scores,%20%23fixtures%20and%20more%20on%20%23Github%20by%20%40manrajsgrover%20%23cli%20https%3A//github.com/manrajgrover/football-cli)
 
 ## Related
 You may find similar packages [here](http://api.football-data.org/libraries)
 
 ## License
 
-[MIT](https://github.com/ManrajGrover/football-cli/blob/master/LICENSE) © ManrajGrover
+[MIT](https://github.com/manrajgrover/football-cli/blob/master/LICENSE) © manrajgrover
