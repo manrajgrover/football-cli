@@ -7,4 +7,6 @@ cache:
   directories:
     - $HOME/.npm
 script:
-- npm run lint
+  - npm link
+  - npm run test
+  - npm run lint
