@@ -56,9 +56,9 @@ exports.handler = function handler(yargs) {
       colWidths: [40, 20]
     });
 
-    for (const league of Object.keys(leagueIds)) {
+    Object.keys(leagueIds).forEach(league => {
       table.push([chalk.bold.cyan(leagueIds[league].caption), chalk.bold.green(league)]);
-    }
+    });
 
     spinner.stop();
     console.log(table.toString());

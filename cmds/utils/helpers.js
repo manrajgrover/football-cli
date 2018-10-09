@@ -29,9 +29,7 @@ const writeFile = (writePath, content, cb) => {
   });
 };
 
-const updateMessage = (TYPE, message) => {
-  message = message || '';
-
+const updateMessage = (TYPE, message = '') => {
   switch (TYPE) {
     case 'REQ_ERROR':
       console.log(
@@ -105,17 +103,14 @@ const exportData = (output, data) => {
 };
 
 const getLeagueName = fixture => {
+  // eslint-disable-next-line no-underscore-dangle
   const compUrl = fixture._links.competition.href;
   const parts = compUrl.split('/');
   const id = parts[parts.length - 1];
 
-  for (const league in leagueIds) {
-    if (leagueIds[league].id === id) {
-      return leagueIds[league].caption;
-    }
-  }
+  const league = Object.values(leagueIds).filter(leagueId => leagueId.id === id);
 
-  return '';
+  return league.length !== 0 ? leagueIds[league[0]].caption : '';
 };
 
 const buildAndPrintFixtures = (league, name, team, body, outData = {}) => {
@@ -173,7 +168,7 @@ const buildAndPrintFixtures = (league, name, team, body, outData = {}) => {
 };
 
 const printScores = (fixtures, isLive) => {
-  for (const fixture of fixtures) {
+  Object.keys(fixtures).forEach(fixture => {
     const leagueName = getLeagueName(fixture);
     const homeTeam = fixture.homeTeamName;
     const awayTeam = fixture.awayTeamName;
@@ -181,17 +176,10 @@ const printScores = (fixtures, isLive) => {
     const goalsAwayTeam = fixture.result.goalsAwayTeam === null ? '' : fixture.result.goalsAwayTeam;
     const time = isLive === true ? 'LIVE' : moment(fixture.date).calendar();
 
-    const result = {
-      leagueName,
-      homeTeam,
-      goalsHomeTeam,
-      goalsAwayTeam,
-      awayTeam,
-      time
-    };
+    const result = { leagueName, homeTeam, goalsHomeTeam, goalsAwayTeam, awayTeam, time };
 
     console.log(buildScore(result));
-  }
+  });
 };
 
 const buildAndPrintScores = (isLive, team, body, outData = {}) => {
@@ -272,7 +260,7 @@ const buildAndPrintStandings = (body, outData = {}) => {
       colWidths: [7, 30]
     });
 
-    for (const team of standing) {
+    Object.values(standing).forEach(team => {
       table.push([
         chalk.bold.magenta(team.position),
         chalk.bold.cyan(team.teamName),
@@ -285,7 +273,7 @@ const buildAndPrintStandings = (body, outData = {}) => {
         chalk.bold.cyan(team.goalDifference),
         chalk.bold.green(team.points)
       ]);
-    }
+    });
 
     console.log(table.toString());
 
