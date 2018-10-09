@@ -34,11 +34,10 @@ exports.builder = function builder(yargs) {
     .alias('o', 'dir')
     .describe('o', 'Output directory for files')
     .string('o')
-    .example('$0 fixtures -l PL -d 5 -t "Manchester United" -n')
-    .argv;
+    .example('$0 fixtures -l PL -d 5 -t "Manchester United" -n').argv;
 };
 
-exports.handler = (yargs) => {
+exports.handler = yargs => {
   /** Get all the options set for `fixtures` command */
   const fixtures = yargs;
 
@@ -57,7 +56,7 @@ exports.handler = (yargs) => {
   /** @const {!string} team Team for which fixtures is requested */
   const team = fixtures.team || '';
   /** @const {!string} time Past or present depending on flag `n` set */
-  const time = (fixtures.next === true) ? 'n' : 'p';
+  const time = fixtures.next === true ? 'n' : 'p';
 
   if (days < 0) {
     updateMessage('FIX_INPUT_ERR');

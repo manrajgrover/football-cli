@@ -25,8 +25,7 @@ exports.builder = function builder(yargs) {
     .alias('o', 'dir')
     .describe('o', 'Output directory for files')
     .string('o')
-    .example('$0 standings -l PL')
-    .argv;
+    .example('$0 standings -l PL').argv;
 };
 
 exports.handler = function handler(yargs) {

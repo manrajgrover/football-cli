@@ -1,15 +1,20 @@
 {
-  "extends": "airbnb",
+  "extends": ["airbnb", "prettier"],
+  "plugins": ["prettier"],
   "rules": {
-    "no-unused-vars": "off",
-    "no-console": "off",
-    "strict": "off",
-    "comma-dangle": "off",
-    "no-restricted-syntax": "off",
-    "prefer-const": "off",
-    "no-underscore-dangle": "off",
-    "no-param-reassign": "off",
-    "guard-for-in": "off",
-    "no-lonely-if": "off"
+    "prettier/prettier": [
+      "error",
+      {
+        "printWidth": 100,
+        "semi": true,
+        "useTabs": false,
+        "tabWidth": 2,
+        "trailingComma": "none",
+        "bracketSpacing": true,
+        "arrowParens": "avoid",
+        "singleQuote": true
+      }
+    ],
+    "no-console": "off"
   }
 }

@@ -1,17 +1,7 @@
 {
-  "eslint.enable": true,
-  "eslint.options": {
-    "extensions": [
-      ".js",
-    ]
+  "[javascript]": {
+    "editor.formatOnSave": false
   },
-  "eslint.validate": [
-    {
-      "language": "javascript",
-      "autoFix": true
-    }
-  ],
-  // Run the linter on save (onSave) or on type (onType)
-  "eslint.run": "onSave",
-  "eslint.autoFixOnSave": true //Autofix any fixable errors when linting
+  "editor.formatOnSave": true,
+  "eslint.autoFixOnSave": true
 }
