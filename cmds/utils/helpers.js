@@ -1,5 +1,3 @@
-'use strict';
-
 const Table = require('cli-table3');
 const chalk = require('chalk');
 const moment = require('moment');
@@ -15,15 +13,14 @@ const getDirName = path.dirname;
 
 const { BUGS_URL } = constants;
 
-const buildScore = ({
-  leagueName, homeTeam, goalsHomeTeam, goalsAwayTeam, awayTeam, time
-}) => (
-  `${chalk.green.bold(leagueName)}  ${chalk.cyan.bold(homeTeam)} ${chalk.cyan.bold(goalsHomeTeam)} vs. `
-  + `${chalk.red.bold(goalsAwayTeam)} ${chalk.red.bold(awayTeam)} ${chalk.yellow.bold(time)}`
-);
+const buildScore = ({ leagueName, homeTeam, goalsHomeTeam, goalsAwayTeam, awayTeam, time }) =>
+  `${chalk.green.bold(leagueName)}  ${chalk.cyan.bold(homeTeam)} ${chalk.cyan.bold(
+    goalsHomeTeam
+  )} vs. ` +
+  `${chalk.red.bold(goalsAwayTeam)} ${chalk.red.bold(awayTeam)} ${chalk.yellow.bold(time)}`;
 
 const writeFile = (writePath, content, cb) => {
-  mkdir(getDirName(writePath), (err) => {
+  mkdir(getDirName(writePath), err => {
     if (err) {
       return cb(err);
     }
@@ -32,9 +29,7 @@ const writeFile = (writePath, content, cb) => {
   });
 };
 
-const updateMessage = (TYPE, message) => {
-  message = message || '';
-
+const updateMessage = (TYPE, message = '') => {
   switch (TYPE) {
     case 'REQ_ERROR':
       console.log(
@@ -53,14 +48,14 @@ const updateMessage = (TYPE, message) => {
       break;
 
     case 'LEAGUE_ERR':
-      throw new Error(chalk.red.bold(
-        'No league found. Please check the League Code entered with the list `football lists`.'
-      ));
+      throw new Error(
+        chalk.red.bold(
+          'No league found. Please check the League Code entered with the list `football lists`.'
+        )
+      );
 
     case 'FIX_INPUT_ERR':
-      throw new Error(
-        chalk.red.bold('Days cannot be a negative value.')
-      );
+      throw new Error(chalk.red.bold('Days cannot be a negative value.'));
 
     default:
       console.log('ERROR OCCURED.');
@@ -68,43 +63,37 @@ const updateMessage = (TYPE, message) => {
 };
 
 const exportData = (output, data) => {
-  const outputDir = (output.dir && output.dir.length > 0) ? output.dir : undefined;
+  const outputDir = output.dir && output.dir.length > 0 ? output.dir : undefined;
   if (output.json !== undefined) {
-    const jsonFileName = (output.json.length > 0) ? output.json : 'footballOut';
+    const jsonFileName = output.json.length > 0 ? output.json : 'footballOut';
     writeFile(
       path.resolve(outputDir || process.cwd(), `${jsonFileName}.json`),
       JSON.stringify(data, null, 4),
-      (err) => {
+      err => {
         if (err) {
           updateMessage('CUSTOM_ERR', 'Error creating JSON file');
         } else {
-          console.log(
-            chalk.bold.cyan(`Data has been successfully saved as ${jsonFileName}.json`)
-          );
+          console.log(chalk.bold.cyan(`Data has been successfully saved as ${jsonFileName}.json`));
         }
       }
     );
   }
   if (output.csv !== undefined) {
-    const csvFileName = (output.csv.length > 0) ? output.csv : 'footballOut';
+    const csvFileName = output.csv.length > 0 ? output.csv : 'footballOut';
     try {
       jsonexport(data, (err, csv) => {
         if (err) {
           throw new Error(err);
         } else {
-          writeFile(
-            path.resolve(outputDir || process.cwd(), `${csvFileName}.csv`),
-            csv,
-            (error) => {
-              if (error) {
-                throw new Error(error);
-              } else {
-                console.log(
-                  chalk.bold.cyan(`Data has been successfully saved as ${csvFileName}.csv`)
-                );
-              }
+          writeFile(path.resolve(outputDir || process.cwd(), `${csvFileName}.csv`), csv, error => {
+            if (error) {
+              throw new Error(error);
+            } else {
+              console.log(
+                chalk.bold.cyan(`Data has been successfully saved as ${csvFileName}.csv`)
+              );
             }
-          );
+          });
         }
       });
     } catch (err) {
@@ -113,23 +102,20 @@ const exportData = (output, data) => {
   }
 };
 
-const getLeagueName = (fixture) => {
-  let compUrl = fixture._links.competition.href;
-  let parts = compUrl.split('/');
-  let id = parts[parts.length - 1];
+const getLeagueName = fixture => {
+  // eslint-disable-next-line no-underscore-dangle
+  const compUrl = fixture._links.competition.href;
+  const parts = compUrl.split('/');
+  const id = parts[parts.length - 1];
 
-  for (let league in leagueIds) {
-    if (leagueIds[league].id === id) {
-      return leagueIds[league].caption;
-    }
-  }
+  const league = Object.values(leagueIds).filter(leagueId => leagueId.id === id);
 
-  return '';
+  return league.length !== 0 ? leagueIds[league[0]].caption : '';
 };
 
 const buildAndPrintFixtures = (league, name, team, body, outData = {}) => {
-  let data = JSON.parse(body);
-  let { fixtures } = data;
+  const data = JSON.parse(body);
+  const { fixtures } = data;
 
   if ('error' in data) {
     updateMessage('CUSTOM_ERR', data.error);
@@ -143,28 +129,23 @@ const buildAndPrintFixtures = (league, name, team, body, outData = {}) => {
 
   const results = [];
 
-  for (let fixture of fixtures) {
-    let homeTeam = (fixture.homeTeamName === '' ? 'TBD' : fixture.homeTeamName);
-    let awayTeam = (fixture.awayTeamName === '' ? 'TBD' : fixture.awayTeamName);
-    let goalsHomeTeam = (fixture.result.goalsHomeTeam === null) ? '' : fixture.result.goalsHomeTeam;
-    let goalsAwayTeam = (fixture.result.goalsAwayTeam === null) ? '' : fixture.result.goalsAwayTeam;
+  Object.values(fixtures).forEach(fixture => {
+    const homeTeam = fixture.homeTeamName === '' ? 'TBD' : fixture.homeTeamName;
+    const awayTeam = fixture.awayTeamName === '' ? 'TBD' : fixture.awayTeamName;
+    const goalsHomeTeam = fixture.result.goalsHomeTeam === null ? '' : fixture.result.goalsHomeTeam;
+    const goalsAwayTeam = fixture.result.goalsAwayTeam === null ? '' : fixture.result.goalsAwayTeam;
 
-    const leagueName = (league === undefined) ? getLeagueName(fixture) : name;
+    const leagueName = league === undefined ? getLeagueName(fixture) : name;
 
-    let time = (fixture.status === 'IN_PLAY') ? 'LIVE' : moment(fixture.date).calendar();
+    const time = fixture.status === 'IN_PLAY' ? 'LIVE' : moment(fixture.date).calendar();
 
-    const result = {
-      leagueName,
-      homeTeam,
-      goalsHomeTeam,
-      goalsAwayTeam,
-      awayTeam,
-      time,
-    };
+    const result = { leagueName, homeTeam, goalsHomeTeam, goalsAwayTeam, awayTeam, time };
 
     if (team !== undefined) {
-      if ((homeTeam.toLowerCase()).indexOf((team).toLowerCase()) !== -1
-          || (awayTeam.toLowerCase()).indexOf((team).toLowerCase()) !== -1) {
+      if (
+        homeTeam.toLowerCase().indexOf(team.toLowerCase()) !== -1 ||
+        awayTeam.toLowerCase().indexOf(team.toLowerCase()) !== -1
+      ) {
         results.push(result);
         console.log(buildScore(result));
       }
@@ -172,7 +153,7 @@ const buildAndPrintFixtures = (league, name, team, body, outData = {}) => {
       results.push(result);
       console.log(buildScore(result));
     }
-  }
+  });
 
   if (outData.json !== undefined || outData.csv !== undefined) {
     exportData(outData, fixtures);
@@ -180,53 +161,50 @@ const buildAndPrintFixtures = (league, name, team, body, outData = {}) => {
 };
 
 const printScores = (fixtures, isLive) => {
-  for (let fixture of fixtures) {
-    let leagueName = getLeagueName(fixture);
-    let homeTeam = fixture.homeTeamName;
-    let awayTeam = fixture.awayTeamName;
-    let goalsHomeTeam = (fixture.result.goalsHomeTeam === null) ? '' : fixture.result.goalsHomeTeam;
-    let goalsAwayTeam = (fixture.result.goalsAwayTeam === null) ? '' : fixture.result.goalsAwayTeam;
-    let time = (isLive === true) ? 'LIVE' : moment(fixture.date).calendar();
+  Object.keys(fixtures).forEach(fixture => {
+    const leagueName = getLeagueName(fixture);
+    const homeTeam = fixture.homeTeamName;
+    const awayTeam = fixture.awayTeamName;
+    const goalsHomeTeam = fixture.result.goalsHomeTeam === null ? '' : fixture.result.goalsHomeTeam;
+    const goalsAwayTeam = fixture.result.goalsAwayTeam === null ? '' : fixture.result.goalsAwayTeam;
+    const time = isLive === true ? 'LIVE' : moment(fixture.date).calendar();
 
-    const result = {
-      leagueName,
-      homeTeam,
-      goalsHomeTeam,
-      goalsAwayTeam,
-      awayTeam,
-      time,
-    };
+    const result = { leagueName, homeTeam, goalsHomeTeam, goalsAwayTeam, awayTeam, time };
 
     console.log(buildScore(result));
-  }
+  });
 };
 
 const buildAndPrintScores = (isLive, team, body, outData = {}) => {
-  let data = JSON.parse(body);
-  let { fixtures } = data;
-  let live = [];
-  let scores = [];
+  const data = JSON.parse(body);
+  const { fixtures } = data;
+  const live = [];
+  const scores = [];
 
   if ('error' in data) {
     updateMessage('CUSTOM_ERR', data.error);
     return;
   }
 
-  team = team.toLowerCase();
+  const teamName = team.toLowerCase();
 
-  for (let fixture of fixtures) {
-    let homeTeam = (fixture.homeTeamName).toLowerCase();
-    let awayTeam = (fixture.awayTeamName).toLowerCase();
+  Object.values(fixtures).forEach(fixture => {
+    const homeTeam = fixture.homeTeamName.toLowerCase();
+    const awayTeam = fixture.awayTeamName.toLowerCase();
 
-    if (fixture.status === 'IN_PLAY' && (homeTeam.indexOf(team) !== -1
-                                          || awayTeam.indexOf(team) !== -1)) {
+    if (
+      fixture.status === 'IN_PLAY' &&
+      (homeTeam.indexOf(teamName) !== -1 || awayTeam.indexOf(teamName) !== -1)
+    ) {
       live.push(fixture);
       scores.push(fixture);
-    } else if (fixture.status === 'FINISHED' && (homeTeam.indexOf(team) !== -1
-                                                  || awayTeam.indexOf(team) !== -1)) {
+    } else if (
+      fixture.status === 'FINISHED' &&
+      (homeTeam.indexOf(teamName) !== -1 || awayTeam.indexOf(teamName) !== -1)
+    ) {
       scores.push(fixture);
     }
-  }
+  });
 
   if (isLive) {
     if (live.length !== 0) {
@@ -237,20 +215,18 @@ const buildAndPrintScores = (isLive, team, body, outData = {}) => {
     } else {
       updateMessage('UPDATE', 'Sorry, no live matches right now');
     }
-  } else {
-    if (scores.length !== 0) {
-      printScores(scores, false);
-      if (outData.json !== undefined || outData.csv !== undefined) {
-        exportData(outData, scores);
-      }
-    } else {
-      updateMessage('UPDATE', 'Sorry, no scores to show right now');
+  } else if (scores.length !== 0) {
+    printScores(scores, false);
+    if (outData.json !== undefined || outData.csv !== undefined) {
+      exportData(outData, scores);
     }
+  } else {
+    updateMessage('UPDATE', 'Sorry, no scores to show right now');
   }
 };
 
 const buildAndPrintStandings = (body, outData = {}) => {
-  let data = JSON.parse(body);
+  const data = JSON.parse(body);
   let table;
 
   if ('error' in data) {
@@ -259,7 +235,7 @@ const buildAndPrintStandings = (body, outData = {}) => {
   }
 
   if (data.standing !== undefined) {
-    let { standing } = data;
+    const { standing } = data;
 
     table = new Table({
       head: [
@@ -272,12 +248,12 @@ const buildAndPrintStandings = (body, outData = {}) => {
         chalk.bold.white.bgBlue(' GF '),
         chalk.bold.white.bgBlue(' GA '),
         chalk.bold.white.bgBlue(' GD '),
-        chalk.bold.white.bgBlue(' Pts '),
+        chalk.bold.white.bgBlue(' Pts ')
       ],
-      colWidths: [7, 30],
+      colWidths: [7, 30]
     });
 
-    for (let team of standing) {
+    Object.values(standing).forEach(team => {
       table.push([
         chalk.bold.magenta(team.position),
         chalk.bold.cyan(team.teamName),
@@ -288,9 +264,9 @@ const buildAndPrintStandings = (body, outData = {}) => {
         chalk.bold.green(team.goals),
         chalk.bold.magenta(team.goalsAgainst),
         chalk.bold.cyan(team.goalDifference),
-        chalk.bold.green(team.points),
+        chalk.bold.green(team.points)
       ]);
-    }
+    });
 
     console.log(table.toString());
 
@@ -298,12 +274,12 @@ const buildAndPrintStandings = (body, outData = {}) => {
       exportData(outData, standing);
     }
   } else {
-    let groupStandings = data.standings;
+    const groupStandings = data.standings;
 
-    for (let groupCode in groupStandings) {
+    Object.keys(groupStandings).forEach(groupCode => {
       console.log(chalk.bgBlue.bold.white(` Group: ${groupCode} `));
 
-      let group = groupStandings[groupCode];
+      const group = groupStandings[groupCode];
 
       table = new Table({
         head: [
@@ -313,12 +289,12 @@ const buildAndPrintStandings = (body, outData = {}) => {
           chalk.bold.white.bgBlue(' GF '),
           chalk.bold.white.bgBlue(' GA '),
           chalk.bold.white.bgBlue(' GD '),
-          chalk.bold.white.bgBlue(' Pts '),
+          chalk.bold.white.bgBlue(' Pts ')
         ],
-        colWidths: [7, 30],
+        colWidths: [7, 30]
       });
 
-      for (let team of group) {
+      Object.values(group).forEach(team => {
         table.push([
           chalk.bold.magenta(team.rank),
           chalk.bold.cyan(team.team),
@@ -326,11 +302,12 @@ const buildAndPrintStandings = (body, outData = {}) => {
           chalk.bold.green(team.goals),
           chalk.bold.magenta(team.goalsAgainst),
           chalk.bold.cyan(team.goalDifference),
-          chalk.bold.green(team.points),
+          chalk.bold.green(team.points)
         ]);
-      }
+      });
       console.log(table.toString());
-    }
+    });
+
     if (outData.json !== undefined || outData.csv !== undefined) {
       exportData(outData, groupStandings);
     }

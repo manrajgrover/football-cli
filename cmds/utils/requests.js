@@ -5,8 +5,8 @@ const constants = require('../../constants');
 const footballRequest = request.defaults({
   baseUrl: constants.API_URL,
   headers: {
-    'X-Auth-Token': config.API_KEY,
-  },
+    'X-Auth-Token': config.API_KEY
+  }
 });
 
 module.exports = {

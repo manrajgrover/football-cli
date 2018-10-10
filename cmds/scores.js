@@ -29,8 +29,7 @@ exports.builder = function builder(yargs) {
     .alias('o', 'dir')
     .describe('o', 'Output directory for files')
     .string('o')
-    .example('$0 scores -t "Manchester United" -l')
-    .argv;
+    .example('$0 scores -t "Manchester United" -l').argv;
 };
 
 exports.handler = function handler(yargs) {
@@ -44,16 +43,20 @@ exports.handler = function handler(yargs) {
   };
 
   const spinner = ora('Fetching data').start();
-  const team = (scores.team === undefined) ? '' : (scores.team).toLowerCase();
+  const team = scores.team === undefined ? '' : scores.team.toLowerCase();
 
   /**
    * @const {!string} timeFrameStart Set start date from which fixtures is to be fetch
    */
-  const timeFrameStart = moment().subtract(1, 'days').format('YYYY-MM-DD');
+  const timeFrameStart = moment()
+    .subtract(1, 'days')
+    .format('YYYY-MM-DD');
   /**
    * @const {!string} timeFrameEnd Set end date till which fixtures is to be fetch
    */
-  const timeFrameEnd = moment().add(1, 'days').format('YYYY-MM-DD');
+  const timeFrameEnd = moment()
+    .add(1, 'days')
+    .format('YYYY-MM-DD');
   /**
    * @const {!string} url End Point for fetching all fixtures between `timeFrameStart`
    *                      and `timeFrameEnd`
