@@ -129,7 +129,7 @@ const buildAndPrintFixtures = (league, name, team, body, outData = {}) => {
 
   const results = [];
 
-  for (const fixture of fixtures) {
+  Object.values(fixtures).forEach(fixture => {
     const homeTeam = fixture.homeTeamName === '' ? 'TBD' : fixture.homeTeamName;
     const awayTeam = fixture.awayTeamName === '' ? 'TBD' : fixture.awayTeamName;
     const goalsHomeTeam = fixture.result.goalsHomeTeam === null ? '' : fixture.result.goalsHomeTeam;
@@ -139,14 +139,7 @@ const buildAndPrintFixtures = (league, name, team, body, outData = {}) => {
 
     const time = fixture.status === 'IN_PLAY' ? 'LIVE' : moment(fixture.date).calendar();
 
-    const result = {
-      leagueName,
-      homeTeam,
-      goalsHomeTeam,
-      goalsAwayTeam,
-      awayTeam,
-      time
-    };
+    const result = { leagueName, homeTeam, goalsHomeTeam, goalsAwayTeam, awayTeam, time };
 
     if (team !== undefined) {
       if (
@@ -160,7 +153,7 @@ const buildAndPrintFixtures = (league, name, team, body, outData = {}) => {
       results.push(result);
       console.log(buildScore(result));
     }
-  }
+  });
 
   if (outData.json !== undefined || outData.csv !== undefined) {
     exportData(outData, fixtures);
@@ -193,25 +186,25 @@ const buildAndPrintScores = (isLive, team, body, outData = {}) => {
     return;
   }
 
-  team = team.toLowerCase();
+  const teamName = team.toLowerCase();
 
-  for (const fixture of fixtures) {
+  Object.values(fixtures).forEach(fixture => {
     const homeTeam = fixture.homeTeamName.toLowerCase();
     const awayTeam = fixture.awayTeamName.toLowerCase();
 
     if (
       fixture.status === 'IN_PLAY' &&
-      (homeTeam.indexOf(team) !== -1 || awayTeam.indexOf(team) !== -1)
+      (homeTeam.indexOf(teamName) !== -1 || awayTeam.indexOf(teamName) !== -1)
     ) {
       live.push(fixture);
       scores.push(fixture);
     } else if (
       fixture.status === 'FINISHED' &&
-      (homeTeam.indexOf(team) !== -1 || awayTeam.indexOf(team) !== -1)
+      (homeTeam.indexOf(teamName) !== -1 || awayTeam.indexOf(teamName) !== -1)
     ) {
       scores.push(fixture);
     }
-  }
+  });
 
   if (isLive) {
     if (live.length !== 0) {
@@ -283,7 +276,7 @@ const buildAndPrintStandings = (body, outData = {}) => {
   } else {
     const groupStandings = data.standings;
 
-    for (const groupCode in groupStandings) {
+    Object.keys(groupStandings).forEach(groupCode => {
       console.log(chalk.bgBlue.bold.white(` Group: ${groupCode} `));
 
       const group = groupStandings[groupCode];
@@ -301,7 +294,7 @@ const buildAndPrintStandings = (body, outData = {}) => {
         colWidths: [7, 30]
       });
 
-      for (const team of group) {
+      Object.values(group).forEach(team => {
         table.push([
           chalk.bold.magenta(team.rank),
           chalk.bold.cyan(team.team),
@@ -311,9 +304,10 @@ const buildAndPrintStandings = (body, outData = {}) => {
           chalk.bold.cyan(team.goalDifference),
           chalk.bold.green(team.points)
         ]);
-      }
+      });
       console.log(table.toString());
-    }
+    });
+
     if (outData.json !== undefined || outData.csv !== undefined) {
       exportData(outData, groupStandings);
     }
