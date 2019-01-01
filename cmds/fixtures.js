@@ -1,5 +1,6 @@
 const ora = require('ora');
 
+const moment = require('moment');
 const helpers = require('./utils/helpers');
 const requests = require('./utils/requests');
 const leagueIds = require('../leagueIds');
@@ -56,14 +57,20 @@ exports.handler = yargs => {
   /** @const {!string} team Team for which fixtures is requested */
   const team = fixtures.team || '';
   /** @const {!string} time Past or present depending on flag `n` set */
-  const time = fixtures.next === true ? 'n' : 'p';
+  // const time = fixtures.next === true ? 'n' : 'p';
 
   if (days < 0) {
     updateMessage('FIX_INPUT_ERR');
   }
 
   /** @const {!string} timeFrame Combination of `time` and `days` as per API requirements */
-  const timeFrame = `${time}${days}`;
+  const timeFrame = moment()
+    .add(days, 'days')
+    .format('YYYY-MM-DD');
+
+  const timeFrameStart = moment()
+    .subtract(1, 'days')
+    .format('YYYY-MM-DD');
 
   if (league !== undefined) {
     if (leagueIds[league] === undefined) {
@@ -74,16 +81,19 @@ exports.handler = yargs => {
     const { id } = leagueIds[league];
     const name = leagueIds[league].caption;
 
-    footballRequest(`competitions/${id}/fixtures?timeFrame=${timeFrame}`, (err, res, body) => {
-      spinner.stop();
-      if (err || res.statusCode !== 200) {
-        updateMessage('REQ_ERROR');
-      } else {
-        buildAndPrintFixtures(league, name, team, body, outData);
+    footballRequest(
+      `competitions/${id}/matches?dateFrom=${timeFrameStart}&dateTo=${timeFrame}`,
+      (err, res, body) => {
+        spinner.stop();
+        if (err || res.statusCode !== 200) {
+          updateMessage('REQ_ERROR');
+        } else {
+          buildAndPrintFixtures(league, name, team, body, outData);
+        }
       }
-    });
+    );
   } else {
-    footballRequest(`fixtures?timeFrame=${timeFrame}`, (err, res, body) => {
+    footballRequest(`matches?dateFrom=${timeFrameStart}&dateTo=${timeFrame}`, (err, res, body) => {
       spinner.stop();
       if (err || res.statusCode !== 200) {
         updateMessage('REQ_ERROR');

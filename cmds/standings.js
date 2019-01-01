@@ -48,7 +48,7 @@ exports.handler = function handler(yargs) {
 
   const { id } = leagueIds[league];
 
-  footballRequest(`competitions/${id}/leagueTable`, (err, res, body) => {
+  footballRequest(`competitions/${id}/standings`, (err, res, body) => {
     spinner.stop();
     if (err || res.statusCode !== 200) {
       updateMessage('REQ_ERROR');
