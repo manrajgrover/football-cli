@@ -1,74 +1,50 @@
 {
   "BSA": {
-    "id": 444,
-    "caption": "Campeonato Brasileiro da Série A"
+    "id": 2013,
+    "caption": "Brazil Série A"
   },
   "PL": {
-    "id": 445,
-    "caption": "Premier League 2017/18"
+    "id": 2021,
+    "caption": "English Premier League"
   },
-  "ELC": {
-    "id": 446,
-    "caption": "Championship 2017/18"
+  "EC": {
+    "id": 2016,
+    "caption": "English Championship"
   },
-  "EL1": {
-    "id": 447,
-    "caption": "League One 2017/18"
-  },
-  "EL2": {
-    "id": 448,
-    "caption": "League Two 2017/18"
-  },
-  "DED": {
-    "id": 449,
-    "caption": "Eredivisie 2017/18"
-  },
-  "FL1": {
-    "id": 450,
-    "caption": "Ligue 1 2017/18"
-  },
-  "FL2": {
-    "id": 451,
-    "caption": "Ligue 2 2017/18"
-  },
-  "BL1": {
-    "id": 452,
-    "caption": "1. Bundesliga 2017/18"
-  },
-  "BL2": {
-    "id": 453,
-    "caption": "2. Bundesliga 2017/18"
-  },
-  "PD": {
-    "id": 455,
-    "caption": "Primera Division 2017"
-  },
-  "SA": {
-    "id": 456,
-    "caption": "Serie A 2017/18"
-  },
-  "PPL": {
-    "id": 457,
-    "caption": "Primeira Liga 2017/18"
-  },
-  "DFB": {
-    "id": 458,
-    "caption": "DFB-Pokal 2017/18"
-  },
-  "SB": {
-    "id": 459,
-    "caption": "Serie B 2017/18"
+  "EUC": {
+    "id": 2018,
+    "caption": "European Championship"
   },
   "CL": {
-    "id": 464,
-    "caption": "Champions League 2017/18"
+    "id": 2001,
+    "caption": "UEFA Champions League"
   },
-  "AAL": {
-    "id": 466,
-    "caption": "Australian A-League"
+  "FL1": {
+    "id": 2015,
+    "caption": "French Ligue 1"
+  },
+  "GB": {
+    "id": 2002,
+    "caption": "German Bundesliga"
+  },
+  "ISA": {
+    "id": 2019,
+    "caption": "Italy Serie A"
+  },
+  "NE": {
+    "id": 2003,
+    "caption": "Netherlands Eredivisie"
+  },
+  "PPL": {
+    "id": 2017,
+    "caption": "Portugal Primeira Liga"
+  },
+  "SPD": {
+    "id": 2014,
+    "caption": "Spain Primera Division"
   },
   "WC": {
-    "id": 467,
-    "caption": "World Cup"
+    "id": 2000,
+    "caption": "FIFA World Cup"
   }
 }

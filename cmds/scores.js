@@ -20,6 +20,9 @@ exports.builder = function builder(yargs) {
     .alias('t', 'team')
     .describe('t', 'Select team')
     .string('t')
+    .alias('n', 'league')
+    .describe('n', 'League to be searched')
+    .string('l')
     .alias('j', 'json')
     .describe('j', 'Output results as JSON file')
     .string('j')
@@ -35,6 +38,7 @@ exports.builder = function builder(yargs) {
 exports.handler = function handler(yargs) {
   /** Get all the options set for `scores` command */
   const scores = yargs;
+  // console.log(scores);
 
   const outData = {
     json: scores.json,
@@ -61,7 +65,7 @@ exports.handler = function handler(yargs) {
    * @const {!string} url End Point for fetching all fixtures between `timeFrameStart`
    *                      and `timeFrameEnd`
    */
-  const url = `fixtures?timeFrameStart=${timeFrameStart}&timeFrameEnd=${timeFrameEnd}`;
+  const url = `matches?dateFrom=${timeFrameStart}&dateTo=${timeFrameEnd}`;
 
   /** Creates request to fetch fixtures and show them */
   footballRequest(url, (err, res, body) => {
@@ -73,3 +77,7 @@ exports.handler = function handler(yargs) {
     }
   });
 };
+
+// Searching wrt v2/matches/dateFrom....
+// Search limit of 10 days here
+// Using /competition/id/matches ... gives more limit
